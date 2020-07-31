@@ -49,7 +49,7 @@ async function msgHandler (client, message) {
         const { id, pushname } = sender
         const { name } = chat
         const time = moment(t * 1000).format('DD/MM HH:mm:ss')
-        const commands = ['#sticker', '#stiker', '#hello','#info','#commands','#God','#Thank you','#I love you','#seasonal anime',]
+        const commands = ['#sticker', '#stiker', '#hello','#info','#commands','#God','#Thank you','#I love you','#seasonal anime', '#Best girl']
         const cmds = commands.map(x => x + '\\b').join('|')
         const cmd = type === 'chat' ? body.match(new RegExp(cmds, 'gi')) : type === 'image' && caption ? caption.match(new RegExp(cmds, 'gi')) : ''
 
@@ -99,8 +99,12 @@ async function msgHandler (client, message) {
                 case '#Thank you':
                         client.sendText(from, 'Its not like I like you or anything, baka!') 
                     break
+                case '#Best girl':
+                        client.sendText(from, 'I am the best girl UwU') 
+                    break
                 case '#info':
                         client.sendText(from, 'This is an open-source program written in Javascript. \n \nBy using the bot you agreeing to our Terms and Conditions \n \nTerms and conditions \n \nYour texts and your whatsapp username will be stored on our servers as long as the bot is active, your data will be erased when the bot goes offline. We do NOT store the images, videos, audio files and documents you send. We will never ask you to sign up or ask you for any of your passwords, OTPs or PINs. \n \n Thank you, Have a great day!') 
+
             }
         } else {
             if (!isGroupMsg) console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname))

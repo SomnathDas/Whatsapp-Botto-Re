@@ -1,22 +1,33 @@
-# Whatsapp-Botto-Re
-Hello fellow users, Whatsapp Botto: Re is whatsapp automation script or more like a bot that responds to particular keywords and few other features that we are working on.
+# Whatsapp Bot - sticker creator
 
-This is an open-source program written in Javascript. 
+## Getting Started
 
+This project require NodeJS v12.
 
-## Terms & Condition
-By using the bot you agreeing to our Terms and Conditions 
-### Terms and conditions
-Your texts and your whatsapp username will be stored on our servers as long as the bot is active, your data will be erased when the bot goes offline. We do NOT store the images, videos, audio files and documents you send. We will never ask you to sign up or ask you for any of your passwords, OTPs or PINs. Thank you, Have a great day! 
+### Install
+Clone this project
 
-### If you want to contribute more please contact us on Discord. 
-Support Channels coming soon!
+```bash
+> git clone https://github.com/YogaSakti/imageToSticker.git
+> cd imageToSticker
 
-## Prerequisites
-1. Brain
-2. Node.js
+```
 
-## Special Thanks
-For Basic Implementation:
-Open-Wa : https://github.com/open-wa/wa-automate-nodejs.git
-imageToSticker : https://github.com/YogaSakti/imageToSticker
+Install the dependencies:
+
+```bash
+> npm i
+```
+
+### Usage
+1. run the Whatsapp bot
+
+```bash
+> npm start
+```
+
+after running it you need to scan the qr
+
+### Troubleshooting
+Make sure all the necessary dependencies are installed.
+https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md

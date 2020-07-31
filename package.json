@@ -1,18 +1,19 @@
 {
-  "name": "whatsapp-botto-re",
-  "version": "4.1.0",
-  "description": "Whatsapp Botto: Re",
+  "name": "bot-wa",
+  "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Somnath Das and Alen Yohannan",
-  "license": "OpenSource",
+  "author": "Yoga Sakti",
+  "license": "ISC",
   "dependencies": {
-    "@open-wa/wa-automate": "^1.9.105",
+    "@open-wa/wa-automate": "^1.9.103",
     "fs-extra": "^9.0.1",
+    "mal-api": "^2.0.0",
     "moment": "^2.27.0",
-    "node-fetch": "^2.6.0",
-    "tiktok-scraper": "^1.3.0"
+    "wa-decrypt": "^1.0.4"
   }
 }

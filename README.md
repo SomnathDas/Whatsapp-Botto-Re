@@ -17,6 +17,6 @@ Support Channels coming soon!
 2. Node.js
 
 ## Special Thanks
-For Basic Implementation
-https://github.com/open-wa/wa-automate-nodejs.git
-https://github.com/YogaSakti/imageToSticker
+For Basic Implementation:
+Open-Wa : https://github.com/open-wa/wa-automate-nodejs.git
+imageToSticker : https://github.com/YogaSakti/imageToSticker

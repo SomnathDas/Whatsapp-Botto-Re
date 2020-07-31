@@ -16,6 +16,6 @@ Support Channels coming soon!
 1. Brain
 2. Node.js
 
-##Special Thanks
+## Special Thanks
 For Basic Implementation
 https://github.com/YogaSakti/imageToSticker

@@ -1,13 +1,13 @@
 {
-  "name": "whatsapp-bot-sticker-creator",
+  "name": "whatsapp-botto-re",
   "version": "4.1.0",
-  "description": "Whatsapp Bot - sticker creator",
+  "description": "Whatsapp Botto: Re",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
-  "author": "Yoga Sakti",
-  "license": "ISC",
+  "author": "Somnath Das and Alen Yohannan",
+  "license": "OpenSource",
   "dependencies": {
     "@open-wa/wa-automate": "^1.9.105",
     "fs-extra": "^9.0.1",

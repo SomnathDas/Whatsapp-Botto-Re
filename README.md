@@ -18,4 +18,5 @@ Support Channels coming soon!
 
 ## Special Thanks
 For Basic Implementation
+https://github.com/open-wa/wa-automate-nodejs.git
 https://github.com/YogaSakti/imageToSticker

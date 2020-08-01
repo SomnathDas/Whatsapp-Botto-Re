@@ -2,7 +2,28 @@
 Hello fellow users, Whatsapp Botto: Re is whatsapp automation script or more like a bot that responds to particular keywords and few other features that we are working on.
 
 This is an open-source program written in Javascript. 
+This project require NodeJS v12.
 
+## Clone this project
+
+```bash
+> git clone https://github.com/SomnathDas/Whatsapp-Botto-Re.git
+```
+
+## Install the dependencies:
+Before running the below command, make sure you're in the project directory that
+you've just cloned!!
+
+```bash
+> npm i
+```
+
+### Usage
+Run the Whatsapp bot
+
+```bash
+> npm start
+```
 
 ## Terms & Condition
 By using the bot you agreeing to our Terms and Conditions 
@@ -16,7 +37,12 @@ Support Channels coming soon!
 1. Brain
 2. Node.js
 
+### Troubleshooting
+Make sure all the necessary dependencies are installed.
+https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md
+
 ## Special Thanks
 For Basic Implementation:
-Open-Wa : https://github.com/open-wa/wa-automate-nodejs.git
-imageToSticker : https://github.com/YogaSakti/imageToSticker
+1. Open-Wa : https://github.com/open-wa/wa-automate-nodejs.git
+2. imageToSticker : https://github.com/YogaSakti/imageToSticker
+

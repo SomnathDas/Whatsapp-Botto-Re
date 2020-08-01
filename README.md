@@ -4,12 +4,13 @@ Hello fellow users, Whatsapp Botto: Re is whatsapp automation script or more lik
 This is an open-source program written in Javascript. 
 This project require NodeJS v12.
 
-# Clone this project
+## Clone this project
 
 ```bash
 > git clone https://github.com/SomnathDas/Whatsapp-Botto-Re.git
+```
 
-# Install the dependencies:
+## Install the dependencies:
 Before running the below command, make sure you're in the project directory that
 you've just cloned!!
 

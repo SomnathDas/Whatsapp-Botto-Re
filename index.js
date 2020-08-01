@@ -49,7 +49,7 @@ async function msgHandler (client, message) {
         const { id, pushname } = sender
         const { name } = chat
         const time = moment(t * 1000).format('DD/MM HH:mm:ss')
-        const commands = ['#sticker', '#stiker', '#hello','#info','#commands','#God','#Thank you','#I love you','#seasonal anime', '#Best girl']
+        const commands = ['#sticker', '#stiker', '#hello','#info','#commands','#God','#Thank you','#I love you','#Seasonal anime','#fuck','#Fuck','#sex','#Sex','#nudes']
         const cmds = commands.map(x => x + '\\b').join('|')
         const cmd = type === 'chat' ? body.match(new RegExp(cmds, 'gi')) : type === 'image' && caption ? caption.match(new RegExp(cmds, 'gi')) : ''
 
@@ -85,11 +85,23 @@ async function msgHandler (client, message) {
                         client.sendText(from, 'Hello there, How can I help?')
                     break
 		case '#I love you':
-                        client.sendText(from, 'Aww, I love you too')
+                        client.sendText(from, 'T-Thanks I-I mean *looks away blushing*')
 		    break
                 case '#God':
                         client.sendText(from, '@Hooman|Neko is God')
+                case '#Do you love me?':
+                        client.sendText(from, 'U-Uh... n-no! *blushes* O-Of course not, idiot!')
 		    break
+                case '#Fuck' :
+                case '#fuck' :
+                        client.sendText(from, 'Hmph! *crosses arms* Take that back!')
+                    break
+                case '#sex' :
+                case '#Sex' :
+                case '#nudes' :
+                case '#porn' :
+                        client.sendText(from, 'Go home, you are horny!')
+                    break
 		case '#commands':
                         client.sendText(from, 'Hi there, These are the usable commands \n #sticker - turns images into stickers \n #Sesonal anime - Displays the anime titles currently airing')
                     break
@@ -97,15 +109,11 @@ async function msgHandler (client, message) {
                         client.sendText(from, 'Summer 2020 \n Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season \n Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan \n The God of High School \n Sword Art Online: Alicization - War of Underworld 2nd Season \n Enen no Shouboutai: Ni no Shou \n Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e \n Kanojo, Okarishimasu \n Deca-Dence \n Uzaki-chan wa Asobitai! \n Monster Musume no Oishasan')
 		    break
                 case '#Thank you':
-                        client.sendText(from, 'Its not like I like you or anything, baka!') 
-                    break
-                case '#Best girl':
-                        client.sendText(from, 'I am the best girl UwU') 
+                        client.sendText(from, 'Whatever... *smiles*') 
                     break
                 case '#info':
-                        client.sendText(from, 'This is an open-source program written in Javascript. \n \nBy using the bot you agreeing to our Terms and Conditions \n \nTerms and conditions \n \nYour texts and your whatsapp username will be stored on our servers as long as the bot is active, your data will be erased when the bot goes offline. We do NOT store the images, videos, audio files and documents you send. We will never ask you to sign up or ask you for any of your passwords, OTPs or PINs. \n \n Thank you, Have a great day!') 
-
-            }
+                        client.sendText(from, 'This is an open-source program written in Javascript. \n \nBy using the bot you agreeing to our Terms and Conditions \n \nTerms and conditions \n \nYour texts and your whatsapp username will be stored on our servers as long as the bot is active, your data will be erased when the bot goes offline. We do NOT store the images, videos, audio files and documents you send. We will never ask you to sign up or ask you for any of your passwords, OTPs or PINs. \n \n Thank you, Have a great day! \n \n Learn More about the bot: https://shorturl.at/kHIMW')    
+                     }
         } else {
             if (!isGroupMsg) console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname))
             if (isGroupMsg) console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname), 'in', color(name))

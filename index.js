@@ -90,7 +90,7 @@ async function msgHandler (client, message) {
                 case '#God':
                         client.sendText(from, '@Hooman|Neko is God')
                 case '#Do you love me?':
-                        client.sendText(from, 'U-Uh... n-no! *blushes* O-Of course not, idiot!')
+                        client.sendText(from, 'U-Uh... n-no! *blushes* O-Of course not, bakka!')
 		    break
                 case '#Fuck' :
                 case '#fuck' :
@@ -112,7 +112,7 @@ async function msgHandler (client, message) {
                         client.sendText(from, 'Whatever... *smiles*') 
                     break
                 case '#info':
-                        client.sendText(from, 'This is an open-source program written in Javascript. \n \nBy using the bot you agreeing to our Terms and Conditions \n \nTerms and conditions \n \nYour texts and your whatsapp username will be stored on our servers as long as the bot is active, your data will be erased when the bot goes offline. We do NOT store the images, videos, audio files and documents you send. We will never ask you to sign up or ask you for any of your passwords, OTPs or PINs. \n \n Thank you, Have a great day! \n \n Learn More about the bot: https://shorturl.at/kHIMW')    
+                        client.sendText(from, 'This is an open-source program written in Javascript. \n \nBy using the bot you agreeing to our Terms and Conditions \n \nTerms and conditions \n \nYour texts and your whatsapp username will be stored on our servers as long as the bot is active, your data will be erased when the bot goes offline. We do NOT store the images, videos, audio files and documents you send. We will never ask you to sign up or ask you for any of your passwords, OTPs or PINs. \n \n Thank you, Have a great day! \n \n Learn More about the bot: https://bit.ly/39Ld2L8 \n \n - Developers')    
                      }
         } else {
             if (!isGroupMsg) console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname))

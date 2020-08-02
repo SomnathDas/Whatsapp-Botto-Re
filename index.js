@@ -1,15 +1,12 @@
-<<<<<<< HEAD
 //Engine
 
 const { create, decryptMedia } = require('@open-wa/wa-automate');
 const fs = require('fs-extra');
-const moment = require('moment');
-=======
-const { create, decryptMedia } = require('@open-wa/wa-automate')
-const fs = require('fs-extra')
 const moment = require('moment')
-const fbvid = require('fbvideos');
->>>>>>> 36756bc43404532ca0d09db1309a2eab324be72e
+const fbvid = require('fbvideos'); //npm install --save fbvideos
+const malScraper = require('mal-scraper');
+const anime_Name = 'Sakura Trick'
+var hEY;
 
 const serverOption = {
     headless: true,
@@ -52,11 +49,10 @@ create('Imperial', serverOption)
         });
 }
 
-<<<<<<< HEAD
+
 // Message Handler || Recieving and Replying
-=======
+
 freedomurl = "https://i.ibb.co/6J9ST0d/IMG-20200731-WA0791.jpg"
->>>>>>> 36756bc43404532ca0d09db1309a2eab324be72e
 
 async function msgHandler (client, message) {
     try {
@@ -65,11 +61,7 @@ async function msgHandler (client, message) {
         const { id, pushname } = sender
         const { name } = chat
         const time = moment(t * 1000).format('DD/MM HH:mm:ss')
-<<<<<<< HEAD
-        const commands = ['#sticker', '#stiker', 'Make me a coffee' , '#hello','#info','#commands','#God','#Thank you','#I love you','#Seasonal anime','#fuck','#Fuck','#sex','#Sex','#nudes']
-=======
-        const commands = ['#sticker', '#stiker', '#hello','#info','#commands','#God','#Thank you','#I love you','#Seasonal anime','fuck','Fuck','sex','Sex','nudes','Link','Zelda','#Best girl','#S-1','#Do you love me','tsundere','Tsundere','Ora ora ora ora','ora ora ora ora','Ora Ora Ora Ora','Muda Muda Muda Muda','muda muda muda muda','Muda muda muda muda','yo','freedom','Freedom','#Zelda Timeline','#Botw','I love Rem','i love rem','I Love Rem','i love Rem','El Psy Congroo','Tuturu','Indeed','Can you beat Goku though','Se no','Mou','Kokoro','#neko','#wallpaper','#source','#sauce','#fb','Heave ho','Heave ho!','Make me a coffee','#Mystery Video','Never gonna','never gonna','never gonna run around','#Pokemon','#waifu','#waifu']
->>>>>>> 36756bc43404532ca0d09db1309a2eab324be72e
+        const commands = ['#sticker', '#anime', '#stiker', '#hello','#info','#commands','#God','#Thank you','#I love you','#Seasonal anime','fuck','Fuck','sex','Sex','nudes','Link','Zelda','#Best girl','#S-1','#Do you love me','tsundere','Tsundere','Ora ora ora ora','ora ora ora ora','Ora Ora Ora Ora','Muda Muda Muda Muda','muda muda muda muda','Muda muda muda muda','yo','freedom','Freedom','#Zelda Timeline','#Botw','I love Rem','i love rem','I Love Rem','i love Rem','El Psy Congroo','Tuturu','Indeed','Can you beat Goku though','Se no','Mou','Kokoro','#neko','#wallpaper','#source','#sauce','#fb','Heave ho','Heave ho!','Make me a coffee','#Mystery Video','Never gonna','never gonna','never gonna run around','#Pokemon','#waifu','#waifu']
         const cmds = commands.map(x => x + '\\b').join('|')
         const cmd = type === 'chat' ? body.match(new RegExp(cmds, 'gi')) : type === 'image' && caption ? caption.match(new RegExp(cmds, 'gi')) : ''
 
@@ -104,22 +96,18 @@ async function msgHandler (client, message) {
                 case '#hello':
                         await client.simulateTyping(from, true)
                         client.sendText(from, 'Hello there, How can I help?')
-<<<<<<< HEAD
                         await client.simulateTyping(from, false)
                         break
                 case '#I love you':
-=======
                     break
                 case 'Make me a coffee':
                         client.sendText(from, 'Make it yourslef, lazy baka *hmph*')
                     break
-		case '#I love you':
->>>>>>> 36756bc43404532ca0d09db1309a2eab324be72e
+        case '#I love you':
                         client.sendText(from, 'T-Thanks I-I mean *looks away blushing*')
                         break
                 case '#God':
                         client.sendText(from, '@Hooman|Neko is God')
-<<<<<<< HEAD
                 case '#Do you love me?':
                         client.sendText(from, 'U-Uh... n-no! *blushes* O-Of course not, bakka!')
                         break
@@ -137,7 +125,6 @@ async function msgHandler (client, message) {
                         client.sendText(from, 'Hi there, These are the usable commands \n #sticker - turns images into stickers \n #Sesonal anime - Displays the anime titles currently airing')
                         break
                 case '#Seasonal anime':
-=======
                     break
                  case 'Se no':
                         client.sendText(from, 'Demo sonnan ja dame')
@@ -202,7 +189,7 @@ async function msgHandler (client, message) {
                 case '#Waifu':
                 case '#waifu': 
                         q8 = q2 = Math.floor(Math.random() * 98) + 10;
-                        client.sendFileFromUrl(from, 'http://randomwaifu.altervista.org/images/00'+q8+'.png', 'Waifu.png', 'How is she?')
+                        client.sendFileFromUrl(from, 'http://randomwaifu.altervista.org/images/00'+q8+'.png', 'Waifu.png', 'How is she?') // UwU)/ Working Fine
                     break
                 case 'Heave ho':
                 case 'Heave ho!':
@@ -227,7 +214,7 @@ async function msgHandler (client, message) {
                     break
                 case '#Mystery Video':
                         client.sendText(from, 'https://youtu.be/dQw4w9WgXcQ')
-		    break
+            break
                 case 'Fuck' :
                 case 'fuck' :
                         client.sendText(from, 'Hmph! *crosses arms* Take that back!')
@@ -264,31 +251,29 @@ async function msgHandler (client, message) {
                 case 'muda muda muda muda' :
                         client.sendText(from, 'Ora Ora Ora Ora')
                     break
-		case '#commands':
+        case '#commands':
                         client.sendText(from, '👋️Hi there\n\nKey:\n\n#example \n-Function\n\n💻️Commands\n\n#sticker \nTurns sticker to images⛩️ \n\n#neko\nRetruns a random cat image🐈️\n\n#Pokemon Displays picture of a random pokemon \n \n#wallpaper \nSends a random anime wallpapers (beta) 🌌️\n\n#Seasonal anime \nReturns a list of seasonal animes🌆️\n\n#info \nDisplays the the terms and conditions📒️')
                     break
-		case '#Seasonal anime':
->>>>>>> 36756bc43404532ca0d09db1309a2eab324be72e
+        case '#Seasonal anime':
                         client.sendText(from, 'Summer 2020 \n Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season \n Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan \n The God of High School \n Sword Art Online: Alicization - War of Underworld 2nd Season \n Enen no Shouboutai: Ni no Shou \n Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e \n Kanojo, Okarishimasu \n Deca-Dence \n Uzaki-chan wa Asobitai! \n Monster Musume no Oishasan')
                         break
-
                 case '#Thank you':
                         client.sendText(from, 'Whatever... *smiles*') 
                         break
                 case '#info':
-<<<<<<< HEAD
                         client.sendText(from, 'This is an open-source program written in Javascript. \n \nBy using the bot you agreeing to our Terms and Conditions \n \nTerms and conditions \n \nYour texts and your whatsapp username will be stored on our servers as long as the bot is active, your data will be erased when the bot goes offline. We do NOT store the images, videos, audio files and documents you send. We will never ask you to sign up or ask you for any of your passwords, OTPs or PINs. \n \n Thank you, Have a great day! \n \n Learn More about the bot: https://bit.ly/39Ld2L8 \n \n - Developers')   
                         break
-
                 case 'Make me a coffee':
                         await client.simulateTyping(from, true)
                         client.sendText(from, 'Do it yourself, lazy ass *hmph*')
                         await client.simulateTyping(from, false)
                         break
+                /*case '#anime':                        
+                        malScraper.getInfoFromName(name)
+                            .then((data) => console.log(data))
+                            .catch((err) => console.log(err))*/
+                            
 
-=======
-                        client.sendText(from, 'This is an open-source program written in Javascript. \n \nBy using the bot you agreeing to our Terms and Conditions \n \nTerms and conditions \n \nYour texts and your whatsapp username will be stored on our servers as long as the bot is active, your data will be erased when the bot goes offline. We do NOT store the images, videos, audio files and documents you send. We will never ask you to sign up or ask you for any of your passwords, OTPs or PINs. \n \n Thank you, Have a great day! \n \n Learn More about the bot:  https://bit.ly/39Ld2L8 ')    
->>>>>>> 36756bc43404532ca0d09db1309a2eab324be72e
                      }
         } else {
             if (!isGroupMsg) console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname))

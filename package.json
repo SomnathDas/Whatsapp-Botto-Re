@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Somnath Das and Alen Yohannan",
-  "license": "OpenSource",
+  "license": "Apache-2.0",
   "dependencies": {
     "@open-wa/wa-automate": "^1.9.103",
     "anime-scraper": "^3.1.1",

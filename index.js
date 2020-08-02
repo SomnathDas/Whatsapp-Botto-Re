@@ -1,6 +1,8 @@
-const { create, decryptMedia } = require('@open-wa/wa-automate')
-const fs = require('fs-extra')
-const moment = require('moment')
+//Engine
+
+const { create, decryptMedia } = require('@open-wa/wa-automate');
+const fs = require('fs-extra');
+const moment = require('moment');
 
 const serverOption = {
     headless: true,
@@ -16,6 +18,7 @@ const serverOption = {
     ]
 }
 
+// To find OS platform to locate browser
 const opsys = process.platform;
 if (opsys == "win32" || opsys == "win64") {
 serverOption['executablePath'] = 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe';
@@ -34,13 +37,15 @@ create('Imperial', serverOption)
             client.onStateChanged(state => {
                 console.log('[State Changed]', state)
                 if (state === 'CONFLICT') client.forceRefocus()
-            })
+            });
 
             client.onMessage((message) => {
                 msgHandler(client, message)
-            })
-        })
+            });
+        });
 }
+
+// Message Handler || Recieving and Replying
 
 async function msgHandler (client, message) {
     try {
@@ -49,7 +54,7 @@ async function msgHandler (client, message) {
         const { id, pushname } = sender
         const { name } = chat
         const time = moment(t * 1000).format('DD/MM HH:mm:ss')
-        const commands = ['#sticker', '#stiker', '#hello','#info','#commands','#God','#Thank you','#I love you','#Seasonal anime','#fuck','#Fuck','#sex','#Sex','#nudes']
+        const commands = ['#sticker', '#stiker', 'Make me a coffee' , '#hello','#info','#commands','#God','#Thank you','#I love you','#Seasonal anime','#fuck','#Fuck','#sex','#Sex','#nudes']
         const cmds = commands.map(x => x + '\\b').join('|')
         const cmd = type === 'chat' ? body.match(new RegExp(cmds, 'gi')) : type === 'image' && caption ? caption.match(new RegExp(cmds, 'gi')) : ''
 
@@ -82,37 +87,48 @@ async function msgHandler (client, message) {
                     }
                     break
                 case '#hello':
+                        await client.simulateTyping(from, true)
                         client.sendText(from, 'Hello there, How can I help?')
-                    break
-		case '#I love you':
+                        await client.simulateTyping(from, false)
+                        break
+                case '#I love you':
                         client.sendText(from, 'T-Thanks I-I mean *looks away blushing*')
-		    break
+                        break
                 case '#God':
                         client.sendText(from, '@Hooman|Neko is God')
                 case '#Do you love me?':
                         client.sendText(from, 'U-Uh... n-no! *blushes* O-Of course not, bakka!')
-		    break
+                        break
                 case '#Fuck' :
                 case '#fuck' :
                         client.sendText(from, 'Hmph! *crosses arms* Take that back!')
-                    break
-                case '#sex' :
-                case '#Sex' :
-                case '#nudes' :
-                case '#porn' :
+                        break
+                case '#sex':
+                case '#Sex':
+                case '#nudes':
+                case '#porn':
                         client.sendText(from, 'Go home, you are horny!')
-                    break
-		case '#commands':
+                        break
+                case '#commands':
                         client.sendText(from, 'Hi there, These are the usable commands \n #sticker - turns images into stickers \n #Sesonal anime - Displays the anime titles currently airing')
-                    break
-		case '#Seasonal anime':
+                        break
+                case '#Seasonal anime':
                         client.sendText(from, 'Summer 2020 \n Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season \n Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan \n The God of High School \n Sword Art Online: Alicization - War of Underworld 2nd Season \n Enen no Shouboutai: Ni no Shou \n Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e \n Kanojo, Okarishimasu \n Deca-Dence \n Uzaki-chan wa Asobitai! \n Monster Musume no Oishasan')
-		    break
+                        break
+
                 case '#Thank you':
                         client.sendText(from, 'Whatever... *smiles*') 
-                    break
+                        break
                 case '#info':
-                        client.sendText(from, 'This is an open-source program written in Javascript. \n \nBy using the bot you agreeing to our Terms and Conditions \n \nTerms and conditions \n \nYour texts and your whatsapp username will be stored on our servers as long as the bot is active, your data will be erased when the bot goes offline. We do NOT store the images, videos, audio files and documents you send. We will never ask you to sign up or ask you for any of your passwords, OTPs or PINs. \n \n Thank you, Have a great day! \n \n Learn More about the bot: https://bit.ly/39Ld2L8 \n \n - Developers')    
+                        client.sendText(from, 'This is an open-source program written in Javascript. \n \nBy using the bot you agreeing to our Terms and Conditions \n \nTerms and conditions \n \nYour texts and your whatsapp username will be stored on our servers as long as the bot is active, your data will be erased when the bot goes offline. We do NOT store the images, videos, audio files and documents you send. We will never ask you to sign up or ask you for any of your passwords, OTPs or PINs. \n \n Thank you, Have a great day! \n \n Learn More about the bot: https://bit.ly/39Ld2L8 \n \n - Developers')   
+                        break
+
+                case 'Make me a coffee':
+                        await client.simulateTyping(from, true)
+                        client.sendText(from, 'Do it yourself, lazy ass *hmph*')
+                        await client.simulateTyping(from, false)
+                        break
+
                      }
         } else {
             if (!isGroupMsg) console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname))
@@ -123,6 +139,7 @@ async function msgHandler (client, message) {
     }
 }
 
+// Handling Error Here 
 process.on('Something went wrong', function (err) {
     console.log('Caught exception: ', err);
   });
@@ -135,4 +152,5 @@ function color (text, color) {
   }
 }
 
-startServer()
+//Starting Server
+startServer();

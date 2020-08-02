@@ -98,16 +98,15 @@ async function msgHandler (client, message) {
                         client.sendText(from, 'Hello there, How can I help?');
                         await client.simulateTyping(from, false);
                         break;
-                case '#I love you':
-                    break;
                 case 'Make me a coffee':
                         client.sendText(from, 'Make it yourself, lazy baka *hmph*');
                     break;
-        case '#I love you':
+                case '#I love you':
                         client.sendText(from, 'T-Thanks I-I mean *looks away blushing*');
                         break;
                 case '#God':
                         client.sendText(from, '@Hooman|Neko is God');
+                        break;
                 case '#Do you love me?':
                         client.sendText(from, 'U-Uh... n-no! *blushes* O-Of course not, bakka!');
                         break;
@@ -227,12 +226,6 @@ async function msgHandler (client, message) {
                     } else {
                         client.reply(from,"The format is #fb [URL Video]",message)
                     }
-                    break;
-                case 'sex' :
-                case 'Sex' :
-                case 'nudes' :
-                case 'porn' :
-                        client.sendText(from, 'Go home, you are horny!')
                     break;
                 case 'ora ora ora ora' :
                 case 'Ora Ora Ora Ora' :

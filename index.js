@@ -7,7 +7,8 @@ const fbvid = require('fbvideos'); //npm install --save fbvideos
 const malScraper = require('mal-scraper');
 const anime_Name = 'Sakura Trick'
 var quote_Array = ["“You know you’re in love when you can’t fall asleep because reality is finally better than your dreams.”– Dr. Suess", "“I’m selfish, impatient and a little insecure. I make mistakes, I am out of control and at times hard to handle. But if you can’t handle me at my worst, then you sure as hell don’t deserve me at my best.”– Marilyn Monroe", "“Get busy living or get busy dying.”– Stephen King", '"Time moves in one direction, memory in another." \n~ William Gibson', '"The sky above the port was the color of television, tuned to a dead station." \n~ William Gibson', '"Before you diagnose yourself with depression or low self-esteem, first make sure that you are not, in fact, just surrounded by assholes." \n~ William Gibson', '"When you want to know how things really work, study them when they\'re coming apart." \n~ William Gibson', '"Anything that can be done to a rat can be done to a human being. And we can do most anything to rats. This is a hard thing to think about, but it\'s the truth. It won\'t go away because we cover our eyes. THAT is cyberpunk." \n~ Bruce Sterling', '"Japan is a wonderful country, a strange mixture of ancient mystique and cyberpunk saturation. It\'s a monolith of society\'s achievements, yet maintains a foothold in the past, creating an amazing backdrop for tourings and natives alive. Japan captures the imagination like no other. You never feel quite so far from home as you do in Japan, yet there are no other people on the planet that make you feel as comfortable." \n~ Corey Taylor', '“Twenty years from now you will be more disappointed by the things that you didn’t do than by the ones you did do.” \n– Mark Twain', '“When I dare to be powerful – to use my strength in the service of my vision, then it becomes less and less important whether I am afraid.” \n– Audre Lorde', '“Those who dare to fail miserably can achieve greatly.” \n– John F. Kennedy', '“Love yourself first and everything else falls into line. You really have to love yourself to get anything done in this world.” \n– Lucille Ball', '“It is our choices, that show what we truly are, far more than our abilities.”\n– J. K Rowling', '“If you want to be happy, be.” \n– Leo Tolstoy', '“If you want to live a happy life, tie it to a goal, not to people or things.” \n– Albert Einstein', '“I never knew how to worship until I knew how to love.” \n– Henry Ward Beecher', '“Life is trying things to see if they work.” \n– Ray Bradbury', '“If life were predictable it would cease to be life, and be without flavor.” \n– Eleanor Roosevelt', '“Yesterday is history, tomorrow is a mystery, today is a gift of God, which is why we call it the present.” \n– Bil Keane', '“You miss 100 percent of the shots you never take.” \n– Wayne Gretzky', '“Always forgive your enemies; nothing annoys them so much.” \n– Oscar Wilde']
-var nsfw_Codes = []; // MAKE IT WORK LMAO
+
+
 
 const serverOption = {
     headless: true,
@@ -62,7 +63,7 @@ async function msgHandler (client, message) {
         const { id, pushname } = sender
         const { name } = chat
         const time = moment(t * 1000).format('DD/MM HH:mm:ss')
-        const commands = ['#sticker', '#TnC', '#You are idiot', '#you are idiot', '#you are baka', '#you are bakka', '#YOU ARE IDIOT', '#You are bakka','#quotes', "#Quotes", '#stiker', '#hello','#info','#commands','#God','#Thank you','#I love you','#Seasonal anime','fuck','Fuck','sex','Sex','nudes','Link','Zelda','#Best girl','#S-1','#Do you love me','#tsundere','#Tsundere','Ora ora ora ora','ora ora ora ora','Ora Ora Ora Ora','Muda Muda Muda Muda','muda muda muda muda','Muda muda muda muda','yo','freedom','Freedom','#Zelda Timeline','#Botw','I love Rem','i love rem','I Love Rem','i love Rem','El Psy Congroo','Tuturu','Indeed','Can you beat Goku though','Se no','Mou','Kokoro','#neko','#wallpaper','#source','#sauce','#fb','Heave ho','Heave ho!','Make me a coffee','#Mystery Video','Never gonna','never gonna','never gonna run around','#Pokemon','#waifu','#waifu']
+        const commands = ['#sticker', '#TnC', '#You are idiot', '#you are idiot', '#you are baka', '#you are bakka', '#YOU ARE IDIOT', '#You are bakka','#quotes', "#Quotes", '#stiker', '#hello','#info','#commands','#God','#Thank you','#I love you','#Seasonal anime','fuck','Fuck','sex','Sex','nudes','Link','Zelda','#Best girl','#S-1','#Do you love me','#tsundere','#Tsundere','Ora ora ora ora','ora ora ora ora','Ora Ora Ora Ora','Muda Muda Muda Muda','muda muda muda muda','Muda muda muda muda','yo','freedom','Freedom','#Zelda Timeline','#Botw','I love Rem','i love rem','I Love Rem','i love Rem','El Psy Congroo','Tuturu','Indeed','Can you beat Goku though','Se no','Mou','Kokoro','#neko','#wallpaper','#source','#sauce','#fb','Heave ho','Heave ho!','Make me a coffee','#Mystery Video','Never gonna','never gonna','never gonna run around','#Pokemon','#waifu','#waifu','Mily x Yagu','#Pokewall','#pokewall']
         const cmds = commands.map(x => x + '\\b').join('|')
         const cmd = type === 'chat' ? body.match(new RegExp(cmds, 'gi')) : type === 'image' && caption ? caption.match(new RegExp(cmds, 'gi')) : ''
 
@@ -99,16 +100,18 @@ async function msgHandler (client, message) {
                         client.sendText(from, 'Hello there, How can I help?');
                         await client.simulateTyping(from, false);
                         break;
+                case '#I love you':
+                    break;
                 case 'Make me a coffee':
                         client.sendText(from, 'Make it yourself, lazy baka *hmph*');
                     break;
-                case '#I love you':
+        case '#I love you':
                         client.sendText(from, 'T-Thanks I-I mean *looks away blushing*');
                         break;
                 case '#God':
                         client.sendText(from, '@Hooman|Neko is God');
+                case '#Do you love me?':           
                         break;
-                case '#Do you love me?':
                         client.sendText(from, 'U-Uh... n-no! *blushes* O-Of course not, bakka!');
                         break;
                 case '#Fuck' :
@@ -125,6 +128,9 @@ async function msgHandler (client, message) {
                     break;
                  case 'Se no':
                         client.sendText(from, 'Demo sonnan ja dame')
+                    break;
+                 case 'Mily x Yagu':
+                        client.sendText(from, 'Mily x Yagu Forever✨️')
                     break;
                  case 'Mou':
                         client.sendText(from, 'sonnan ja hora')
@@ -147,6 +153,12 @@ async function msgHandler (client, message) {
                case 'Can you beat Goku though' :
                         client.sendText(from, '*I can and I will*')
                     break;
+                case '#pokewall' :
+                case '#Pokewall' :
+                       q9 = Math.floor(Math.random() * 199) + 1
+                       client.sendFileFromUrl(from, 'http://localhost:8082/Pokemon/wallpapersanimesv.blogspot.com-('+q9+').jpg', 'Pokemon.jpg','Here is your Pokemon Wallpaper')
+                    break
+              
                 case 'freedom' :
                         client.sendFileFromUrl(from, 'https://i.ibb.co/6J9ST0d/IMG-20200731-WA0791.jpg','freedom.jpg','...')
                     break;
@@ -198,12 +210,13 @@ async function msgHandler (client, message) {
                         client.sendFileFromUrl(from, 'http://placekitten.com/'+q3+'/'+q2, 'neko.png','Neko ');
                     break;
                  case '#Pokemon':
+                 case '#pokemon':
                         q7 = Math.floor(Math.random() * 890) + 1;
                         client.sendFileFromUrl(from, 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/'+q7+'.png','Pokemon.png',);
                     break;
                 case '#wallpaper' :
-                       q4 = Math.floor(Math.random() * 800) + 100;
-                       client.sendFileFromUrl(from, 'https://wallpaperaccess.com/download/anime-'+q4,'Anime.png','Here is your wallpaper');
+                       q4 = Math.floor(Math.random() * 150) + 1;
+                       client.sendFileFromUrl(from, 'http://localhost:8082/150%20Wallpapers/Wallpaper---'+q4+'.jpg','Anime.jpg','Here is your wallpaper');
                     break;
                 case '#Tsundere' :
                 case '#tsundere' : 
@@ -227,6 +240,12 @@ async function msgHandler (client, message) {
                     } else {
                         client.reply(from,"The format is #fb [URL Video]",message)
                     }
+                    break;
+                case 'sex' :
+                case 'Sex' :
+                case 'nudes' :
+                case 'porn' :
+                        client.sendText(from, 'Go home, you are horny!')
                     break;
                 case 'ora ora ora ora' :
                 case 'Ora Ora Ora Ora' :

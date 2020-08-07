@@ -13,8 +13,9 @@ This project require NodeJS v12.
 5) Can return random anime wallpapers.
 6) Can return a list of seasonal anime.
 
-### :wink:  Also added some hidden keywords and commands
+### :wink:  Also there are some hidden commands and keywords.
 
+Any contribution to this project is welcome.
 Thanks, Have a great day!  :smile: 
 
 ## Clone this project

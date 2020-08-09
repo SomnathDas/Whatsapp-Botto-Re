@@ -12,6 +12,9 @@ This project require NodeJS v12.
 4) Can return random pokemon images.
 5) Can return random anime wallpapers.
 6) Can return a list of seasonal anime.
+7) Can return information about anime.
+8) Can return COVID-INFO for any country.
+9) Can return subreddit posts.
 
 ### :wink:  Also there are some hidden commands and keywords.
 

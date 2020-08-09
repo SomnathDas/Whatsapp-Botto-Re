@@ -15,6 +15,7 @@ This project require NodeJS v12.
 7) Can return information about anime.
 8) Can return COVID-INFO for any country.
 9) Can return subreddit posts.
+10) Can return memes.
 
 ### :wink:  Also there are some hidden commands and keywords.
 

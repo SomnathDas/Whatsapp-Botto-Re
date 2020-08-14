@@ -1,13 +1,14 @@
 const { create, decryptMedia } = require('@open-wa/wa-automate')
 const moment = require('moment')
-const {tiktok, instagram, twitter, facebook} = require('./lib/dl-video')
-const urlShortener = require('./lib/shortener')
 const color = require("./lib/color")
 const malScraper = require('mal-scraper')
+const randomAnimeWallpapers = require('random-anime-wallpapers')
+const config = require('./config.json')
+const jikanjs  = require('jikanjs');
 const axios = require('axios')
-const { video } = require('tiktok-scraper')
+const akaneko = require('akaneko');
 
-
+var randomAnime = require("random-anime")
 var info = require('./info')
 var culture_code; //IGNORE THESE LINES THESE LINES ARE ONLY FOR MY FELLO MEN OF CULTURE DEVs
 var sauce_Yaknow = "https://nhentai.net/g/" + culture_code; // IGNORE THESE LINES
@@ -55,13 +56,13 @@ create('Imperial', serverOption)
 
 async function msgHandler (client, message) {
     try {
-        const { type, body, id, from, t, sender, isGroupMsg, chat, caption, isMedia, mimetype, quotedMsg } = message
+        const { type, body, id, from, t, sender, isGroupMsg, chat, caption, isMedia, mimetype, quotedMsg, chatId, ContactId } = message
         const { pushname } = sender
         const { formattedTitle } = chat
         const time = moment(t * 1000).format('DD/MM HH:mm:ss')
-        const commands = ['#menu','#help','#sticker','#sauceyaknow','#Sauceyaknow','#codesyaknow' ,'#Codesyaknow', '#TnC', '#You are idiot', '#you are idiot', '#you are baka', '#you are bakka', '#YOU ARE IDIOT', '#You are bakka','#quotes', "#Quotes", '#stiker', '#hello','#info','#commands','#God','#Thank you','#I love you','#Seasonal anime','#anime','#Anime','fuck','Fuck','sex','Sex','nudes','Link','Zelda','#Best girl','#S-1','#Do you love me','#tsundere','#Tsundere','Ora ora ora ora','ora ora ora ora','Ora Ora Ora Ora','Muda Muda Muda Muda','muda muda muda muda','Muda muda muda muda','yo','freedom','Freedom','#Zelda Timeline','#Botw','I love Rem','i love rem','I Love Rem','i love Rem','El Psy Congroo','Tuturu','Indeed','Can you beat Goku though','Se no','Mou','Kokoro','#neko','#wallpaper','#source','#sauce','Heave ho','Heave ho!','Make me a coffee','#Mystery Video','Never gonna','never gonna','never gonna run around','#Pokemon','#waifu','#waifu','Mily x Yagu','#Pokewall','#pokewall','#wiki','Prepare for trouble','To protect the world from devastation','To denounce the evils of truth and love','#R','Team Rocket blasts off at the speed of light','#Emilia','#emilia','#sauce','#Sauce','#Rem','#rem', '#tiktok', '#ig', '#instagram', '#twt', '#twitter', '#fb', '#facebook','#grouplink','#meme','#covid','#sr','#SR','#Sr']
+        const commands = ['#menu','#help','#sticker','#sauceyaknow','#Sauceyaknow','#codesyaknow' ,'#Codesyaknow', '#TnC', '#You are idiot', '#you are idiot', '#you are baka', '#you are bakka', '#YOU ARE IDIOT', '#You are bakka','#quotes', "#Quotes", '#stiker', '#hello','#info','#commands','#God','#Thank you','#I love you','#Seasonal anime','#anime','#Anime','fuck','Fuck','sex','Sex','nudes','Link','Zelda','#Best girl','#S-1','#Do you love me','#tsundere','#Tsundere','Ora ora ora ora','ora ora ora ora','Ora Ora Ora Ora','Muda Muda Muda Muda','muda muda muda muda','Muda muda muda muda','yo','freedom','Freedom','#Zelda Timeline','#Botw','I love Rem','i love rem','I Love Rem','i love Rem','El Psy Congroo','Tuturu','Indeed','Can you beat Goku though','Se no','Mou','Kokoro','#neko','#wallpaper','#source','#sauce','Heave ho','Heave ho!','Make me a coffee','#Mystery Video','Never gonna','never gonna','never gonna run around','#Pokemon','#waifu','#waifu','Mily x Yagu','#Pokewall','#pokewall','#wiki','Prepare for trouble','To protect the world from devastation','To denounce the evils of truth and love','#R','Team Rocket blasts off at the speed of light','#Emilia','#emilia','#sauce','#Sauce','#Rem','#rem', '#tiktok', '#ig', '#instagram', '#twt', '#twitter', '#fb', '#facebook','#groupinfo','#meme','#covid','#sr','#SR','#Sr','#Test','#manga','#user','#TestGif','#kick','#leave','#add','#FAQ','#Faq','#profile','And the silence remains','and the silence remains','#flip','#roll','#animeneko']
         const cmds = commands.map(x => x + '\\b').join('|')
-        const cmd = type === 'chat' ? body.match(new RegExp(cmds, 'gi')) : type === 'image' && caption ? caption.match(new RegExp(cmds, 'gi')) : ''
+        const cmd = type === 'chat' ? body.match(new RegExp(cmds, 'gi')) : type === 'image' && caption ? caption.match(new RegExp(cmds, 'gi')) : '' 
 
         if (cmd) {
             if (!isGroupMsg) console.log(color('[EXEC]'), color(time, 'yellow'), color(cmd[0]), 'from', color(pushname))
@@ -71,45 +72,78 @@ async function msgHandler (client, message) {
             switch (cmd[0]) {
                 case '#menu':
                 case '#help':
-                    client.sendText(from,'👋️Hi there, I\'m Emilia! \n\nPrefix = #\n\nUsable Commands!✨\n\nCMD: #sticker\nDescription: Converts images into stickers\n\nCMD: #neko\nDescription Returns a random cat image\n\nCMD: #meme\nDescription: Displays and anime meme from r\/wholesomeanimememes\n\nCMD: #sr <subreddit>\nDescription: Returns a post from the given subreddit\n\nCMD: #covid <country name>\nDescription: Displays the live stats Covid-19 of the given country\n\nCMD: #quotes\nDescription: Returns a quote that will either give you existential crises or wisdom\n\nCMD #pokemon\nDescription: Displays picture of a random pokemon\n \nCMD: #wallpaper [Beta]\nDisplays a random anime wallpapers\n\n\nCMD: #Seasonal anime\nDescription: Returns a list of seasonal animes\n\nCMD: #info\nDescription: Displays the information\n\n CMD: #TnC\nDescription: Displays the Terms and Conditions\n\nThere are many hidden and fun keywords ;)\n\nIf yore having any trouble with the bot, please join our support group and state your issue\n\n\nSupport: https:\/\/chat.whatsapp.com\/CQc92njMrOpI0sBbYYSoAr\n\n\nHope you have a great day!✨')
+                    client.sendText(from,`👋️Hi *${pushname}*, I\'m Emilia!\n\n*Prefix = #* 💎\n\n*Usable Commands!*✨\n\n*_CMD: #sticker_*\n*Description: Converts images into stickers*\n\n*_CMD: #anime <anime name>_*\n*Description: Displays the information of the given anime*\n\n*_CMD: #flip_*\n*Description: Flips a coin fo you*\n\n*_CMD: #roll_*\n*Description: Rolls a dice*\n\n*_CMD: #neko_*\n*Description Returns a random cat image*\n\n*_CMD: #meme_*\n*Description: Displays and anime meme from r\/wholesomeanimememes*\n\n*_CMD: #sr <subreddit>_*\n*Description: Returns a post from the given subreddit*\n\n*_CMD: #waifu_*\n*Description: Returns a picture of a waifu*\n\n*_CMD: #covid <country name>_*\n*Description: Displays the live stats Covid-19 of the given country*\n\n*_CMD: #quotes_*\n*Description: Returns a quote that will either give you existential crises or wisdom*\n\n*_CMD #pokemon_*\n*Description: Displays picture of a random pokemon*\n\n*_CMD: #wallpaper [Beta]_*\n*Displays a random anime wallpapers*\n\n*_CMD: #Seasonal anime_* [Bugged]\n*Description: Returns a list of seasonal animes*\n\n*_CMD: #info_*\n*Description: Displays the information of the bot*\n\n*_CMD: #TnC_*\n*Description: Displays the Terms and Conditions*\n\nThere are many hidden and fun keywords ;)\n\nIf yore having any trouble with the bot, please join our support group and state your issue\n\n*Support: https://bit.ly/2CaPFyk*\n\nHope you have a great day!✨\n\n`)
                     break;
                 case '#hello':
                         await client.simulateTyping(from, true);
                         client.sendText(from, 'Hello there, How can I help?');
                         await client.simulateTyping(from, false);
                         break;
-                case '#grouplink':
-                     if (!isGroupMsg) {
-                        const inviteLink = await client.getGroupInviteLink(chat.id)
-                        client.sendText(from, inviteLink)
+              	case '#grouplink':
+			if(isGroupMsg){
+			        const inviteLink = await client.getGroupInviteLink(chat.id);
+				client.sendLinkWithAutoPreview(from, inviteLink)
 }
+                      break;
+                case '#groupinfo':
+                         const groupchat = await client.getChatById(chatId);
+                         const {owner, user, desc} = groupchat.groupMetadata
+                             client.sendText(from, '*'+formattedTitle+'*\n🌠️\n✨️ Description:\n '+`${desc}`)
                     break;
+               		case '#leave':
+			if(isGroupMsg){
+                             if (`${ContactId}` == '919744375687@c.us') {
+				client.sendText(from,'Sayonara')
+				client.leaveGroup(from)
+ }
+}
+               break;
                 case 'Make me a coffee':
-                        client.sendText(from, 'Make it yourself, lazy baka *hmph*');
+                        client.reply(from, 'Make it yourself, lazy baka *hmph*');
                     break;
                 case '#I love you':
-                        client.sendText(from, 'T-Thanks I-I mean *looks away blushing*');
+                        client.reply(from, 'T-Thanks I-I mean *looks away blushing*');
                         break;
+                case '#animeneko':
+                        client.sendFileFromUrl(from, akaneko.neko(), 'neko.jpg', 'Neko *Nyaa*~')
+                        break
+                case '#roll':
+                        const dice = Math.floor(Math.random() * 6) + 1
+                        await client.sendStickerfromUrl(from, 'https://www.random.org/dice/dice'+dice+'.png')  
+                        break;
+                case '#flip':
+                       const side = Math.floor(Math.random() * 2) + 1
+                      if (side == 1){
+                        client.sendStickerfromUrl(from, 'https://i.ibb.co/LJjkVK5/heads.png')
+                        }
+                       else {
+                            client.sendStickerfromUrl(from, 'https://i.ibb.co/wNnZ4QD/tails.png')
+                          }
+             break;
+                       case '#add':
+                        await client.addParticipant('919744375687-1596199727@g.us', `${ContactId}`)
+                        break
                 case '#God':
                         client.sendText(from, '@Hooman|Neko is God');
+                        break
                 case '#Do you love me?':           
                         client.sendText(from, 'U-Uh... n-no! *blushes* O-Of course not, bakka!');
+                        break;
+                 case 'And the silence remains':   
+                 case 'and the silence remains':        
+                        client.sendText(from, 'As always');
                         break;
                 case '#Fuck' :
                 case '#fuck' :
                         client.sendText(from, 'Hmph! *crosses arms* Take that back!');
                         break;
-                case '#sex':
-                case '#Sex':
-                case '#nudes':
-                case '#porn':
-                        client.sendText(from, 'Go home, you are horny!');
-                        break;
-               break
                 case '#Seasonal anime':
                     break;
                  case 'Se no':
                         client.sendText(from, 'Demo sonnan ja dame')
+                 case '#profile':
+                           const {image_url, gender} = await jikanjs.loadUser('Bantakahiro01')
+                           await client.sendFileFromUrl(from, `${image_url}`, 'profile.png', `${pushname}`+'Profile Test one')
                     break;
                  case 'Mily x Yagu':
                         client.sendText(from, 'Mily x Yagu Forever✨️')
@@ -119,9 +153,16 @@ async function msgHandler (client, message) {
                     break;
                  case 'Kokoro':
                         client.sendText(from, 'wa shinka suru yo Motto motto')
+                    break
+                 case '#Test':
+                        client.sendImageAsStickerGif(from, 'https://i.imgur.com/31zUM5g.gif')
                     break;
                 case '#Best girl':
                         client.sendText(from, '*Blushes*')
+                   break;
+                case '#TestGif' :
+                        client.sendStickerfromUrl(from, 'https://media.tenor.com/images/62c4b269d97c2412c4f364945f62afae/tenor.gif', {method: 'get'})
+                     
                     break;
                 case 'Zelda' :
                         client.sendText(from, 'Link')
@@ -131,6 +172,16 @@ async function msgHandler (client, message) {
                     break;
                 case 'Link' :
                         client.sendText(from, 'Zelda')
+                    break;
+                case '#user':
+                     const username = 'BanTakahiro01'
+                     const after = 25
+                     const type = 'anime' // can be either `anime` or `manga`
+ 
+                     // Get you an object containing all the entries with status, score... from this user's watch list
+                    malScraper.getWatchListFromUser(username, after, type)
+                    .then((data) => console.log(data))
+                    .catch((err) => console.log(err))
                     break;
                 case '#anime':
                       if (args.length >=5) {
@@ -167,19 +218,32 @@ async function msgHandler (client, message) {
  }
 
 
+                     break;'#manga'
+                     if (args.length >=2) {
+                         const name = args[1]
+                         const type = 'manga'
+                         malScraper.getInfoFromName(name)
+                         .then((data) => console.log(data))
+                         .catch((err) => console.log(err))
+}
+                     
                      break;
                 case '#wiki':
                       if (args.length >=2) { 
                          const query = args[1]
                    wiki()
-            .page(query)
-            .then(page => page.info())
-            .then(console.log); // Bruce Wayne 
+                      .page(query)
+                      .then(page => page.info())
+                      .then(console.log); 
  
                        }
                      break
                 case 'Can you beat Goku though' :
                         client.sendText(from, '*I can and I will*')
+                case '#Faq' :
+                case '#faq' :
+                case '#FAQ' :
+                        client.sendText(from, '👋️Hello '+`${pushname}`+'\n\nSupport Group; https:\/\/bit.ly\/2CaPFyk\nGithub: https:\/\/bit.ly\/39Ld2L8\n\nThese are some of the frequently asked questions\n\nQ: Why was this bot created?\nA: We the developers wanted to increase our knowledge in JavaScript at the same time giving bac to the community\n\nQ: Will the bot ban you if you use unlisted commands?\nA: No, we\'ll not ban you if you use unlisted commands because every person isn\'t perfect, a person will make a typo or two, so we do not punish you\n\nQ: Will the bot ban you if you call the bot?\nA: No, But the bot can\'t pickup the call. Humans make mistake. we are not gonna punish you for that. Our bot is able to ban as well as block people but we won\'t do that. \n\nQ: How to make a bot like \"Emilia\"?\nA: You need to know JavaScript and Node.js If you want to, you can use our code for creating your bot. It\'d be great if you credit us if you do so, it is not necessary though.\n\nQ: Does the bot go offline?\nA: Yes, The bot services will go down for 6 or so hours because our servers are limited. The bot will be able to run for 24\/7 soon.\n \nQ: How to use the bot?\nA: Send \"#help\" to see the usable commands.\n\nQ: Who are \"Link\" and \"Zelda\"?\nA: Link and Zelda are the main charterers from The Legend of Zelda Video Game series. \n\n✨️Hope you have fun using our bot! Have a great day\n\n')
                     break;
                 case '#pokewall' :
                 case '#Pokewall' :
@@ -221,19 +285,19 @@ async function msgHandler (client, message) {
                          const rs = args[2]                  
                          const tr = args[3]
                          const response = await axios.get('https://meme-api.herokuapp.com/gimme/'+sr+'_'+rs+'_'+tr+'/');
-                         const { postlink, title, subreddit, url, nsfw, spoiler } = response.data
-                     await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}`)
+                         const { postLink, title, subreddit, url, nsfw, spoiler } = response.data
+                     await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}`+'\n\nPostlink:'+`${postLink}`)
                     } else if (args.length >=3) {
                          const sr = args[1]
                          const rs = args[2]
                          const response = await axios.get('https://meme-api.herokuapp.com/gimme/'+sr+'_'+rs+'/');
-                         const { postlink, title, subreddit, url, nsfw, spoiler } = response.data
-                     await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}`)
+                         const { postLink, title, subreddit, url, nsfw, spoiler } = response.data
+                     await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}`+'\n\nPostlink:'+`${postLink}`)
                    } else if (args.length >=2) {
                          const sr = args[1]
                          const response = await axios.get('https://meme-api.herokuapp.com/gimme/'+sr+'/');
-                         const { postlink, title, subreddit, url, nsfw, spoiler } = response.data
-                     await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}`)
+                         const { postLink, title, subreddit, url, nsfw, spoiler } = response.data
+                     await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}`+'\n\nPostlink:'+`${postLink}`)
                     }
                     break;
                 case '#covid':
@@ -242,7 +306,7 @@ async function msgHandler (client, message) {
                          const cn = args[1]             
                          const response = await axios.get('https://coronavirus-19-api.herokuapp.com/countries/'+cn+'/');
                          const { cases, todayCases, deaths, todayDeaths, recovered, active } = response.data
-                         await client.sendText(from, '🌎️Covid Info🌍️\n\n✨️Total Cases: '+`${cases}`+'\n📆️Today\'s Cases: '+`${todayCases}`+'\n☣️Total Deaths: '+`${deaths}`+'\n☢️Today\'s Deaths: '+`${todayDeaths}`+'\n⛩️Active Cases: '+`${active}`+'.')
+                         await client.sendText(from, '🌎️Covid Info -'+cn+' 🌍️\n\n✨️Total Cases: '+`${cases}`+'\n📆️Today\'s Cases: '+`${todayCases}`+'\n☣️Total Deaths: '+`${deaths}`+'\n☢️Today\'s Deaths: '+`${todayDeaths}`+'\n⛩️Active Cases: '+`${active}`+'.')
 }
                 break;
                 case 'El Psy Congroo':
@@ -289,9 +353,11 @@ async function msgHandler (client, message) {
                         client.sendFileFromUrl(from, 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/'+q7+'.png','Pokemon.png',);
                     break;
                 case '#wallpaper' :
-                       q4 = Math.floor(Math.random() * 150) + 1;
-                       client.sendFileFromUrl(from, 'http://localhost:8082/150%20Wallpapers/Wallpaper---'+q4+'.jpg','Anime.jpg','Here is your wallpaper');
-                    break;
+                     { const response1 = await axios.get('https://meme-api.herokuapp.com/gimme/Animewallpaper');
+                      const { postLink, title, subreddit, url, nsfw, spoiler } = response1.data
+                      await client.sendFileFromUrl(from, `${url}`, 'meme.jpg', `${title}`)
+                      break;
+}
                 case '#Tsundere' :
                 case '#tsundere' : 
                         client.sendText(from, 'I am not a tsundere, baka!');     
@@ -316,7 +382,7 @@ async function msgHandler (client, message) {
                         client.sendText(from, 'Ora Ora Ora Ora')
                     break;
         case '#commands':
-                        client.sendText(from, '👋️Hi there, I\'m Emilia! \n\nPrefix = #\n\nUsable Commands!✨\n\nCMD: #sticker\nDescription: Converts images into stickers\n\nCMD: #neko\nDescription Returns a random cat image\n\nCMD: #meme\nDescription: Displays and anime meme from r\/wholesomeanimememes\n\nCMD: #sr <subreddit>\nDescription: Returns a post from the given subreddit\n\nCMD: #covid <country name>\nDescription: Displays the live stats Covid-19 of the given country\n\nCMD: #quotes\nDescription: Returns a quote that will either give you existential crises or wisdom\n\nCMD #pokemon\nDescription: Displays picture of a random pokemon\n \nCMD: #wallpaper [Beta]\nDisplays a random anime wallpapers\n\n\nCMD: #Seasonal anime\nDescription: Returns a list of seasonal animes\n\nCMD: #info\nDescription: Displays the information\n\n CMD: #TnC\nDescription: Displays the Terms and Conditions\n\nThere are many hidden and fun keywords ;)\n\nIf yore having any trouble with the bot, please join our support group and state your issue\n\n\nSupport: https:\/\/chat.whatsapp.com\/CQc92njMrOpI0sBbYYSoAr\n\n\nHope you have a great day!✨')
+                        client.sendText(from,`👋️Hi *${pushname}*, I\'m Emilia!\n\n*Prefix = #* 💎\n\n*Usable Commands!*✨\n\n*_CMD: #sticker_*\n*Description: Converts images into stickers*\n\n*_CMD: #anime <anime name>_*\n*Description: Displays the information of the given anime*\n\n*_CMD: #flip_*\n*Description: Flips a coin fo you*\n\n*_CMD: #roll_*\n*Description: Rolls a dice*\n\n*_CMD: #neko_*\n*Description Returns a random cat image*\n\n*_CMD: #meme_*\n*Description: Displays and anime meme from r\/wholesomeanimememes*\n\n*_CMD: #sr <subreddit>_*\n*Description: Returns a post from the given subreddit*\n\n*_CMD: #waifu_*\n*Description: Returns a picture of a waifu*\n\n*_CMD: #covid <country name>_*\n*Description: Displays the live stats Covid-19 of the given country*\n\n*_CMD: #quotes_*\n*Description: Returns a quote that will either give you existential crises or wisdom*\n\n*_CMD #pokemon_*\n*Description: Displays picture of a random pokemon*\n\n*_CMD: #wallpaper [Beta]_*\n*Displays a random anime wallpapers*\n\n*_CMD: #Seasonal anime_* [Bugged]\n*Description: Returns a list of seasonal animes*\n\n*_CMD: #info_*\n*Description: Displays the information of the bot*\n\n*_CMD: #TnC_*\n*Description: Displays the Terms and Conditions*\n\nThere are many hidden and fun keywords ;)\n\nIf yore having any trouble with the bot, please join our support group and state your issue\n\n*Support: https://bit.ly/2CaPFyk*\n\nHope you have a great day!✨\n\n`)
                     break;
         case '#Seasonal anime':
                         client.sendText(from, 'Summer 2020 \n Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season \n Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan \n The God of High School \n Sword Art Online: Alicization - War of Underworld 2nd Season \n Enen no Shouboutai: Ni no Shou \n Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e \n Kanojo, Okarishimasu \n Deca-Dence \n Uzaki-chan wa Asobitai! \n Monster Musume no Oishasan')
@@ -328,7 +394,7 @@ async function msgHandler (client, message) {
                         client.sendText(from, 'This is an open-source program written in Javascript. \n \nBy using the bot you agreeing to our Terms and Conditions \n \n We do not store any of your data in our servers. We are not responsebale for the stickers you create using the bot.  The wallpapers and other pictues are not hosted on our servers (expect the pokemon ones).\nUse #License to see the enitire license argreement ')
                         break;
                 case '#info':
-                        client.sendText(from, '👋️Hi there, I\'m Emilia\nThis project is open source, built using Javascript || Node.js and is available at GitHub https:\/\/bit.ly\/39Ld2L8. If you are willing to contribute to our project please refer to the mentioned url.\n \n\nDevelopers✨\n \n _Alen Yohannan_ \n_Somnath Das_\n\nContributors💫\n\n_Miliana Blue_\n_Aman Sakuya_')   
+                        client.sendText(from, '👋️Hi there, I\'m Emilia\nThis project is open source, built using Javascript || Node.js and is available at GitHub https:\/\/bit.ly\/39Ld2L8. If you are willing to contribute to our project please refer to the mentioned url.\n \n\nDevelopers✨\n \n _Alen Yohannan_ \n_Somnath Das_\n\nContributors💫\n\n_Miliana Blue_\n_Aman Sakuya_\n_Mystery_')   
                         break;
                 case 'Make me a coffee':
                         await client.simulateTyping(from, true)
@@ -398,7 +464,7 @@ async function msgHandler (client, message) {
                         const url = args[1]
                         if (url.match(isUrl)) {
                             await client.sendStickerfromUrl(from, url, {method: 'get'})
-                                .then(r => { if (!r) client.sendText(from, 'Maaf, link yang kamu kirim tidak memuat gambar.') })
+                                .then(r => { if (!r) client.sendText(from, 'The URL is not walid') })
                                 .catch(err => console.log('Caught exception: ', err))
                         } else {
                             client.sendText(from, 'Sorry The URL is not valid')
@@ -407,100 +473,10 @@ async function msgHandler (client, message) {
                         client.sendText(from, 'You did not quote a picture, Baka! To make a sticker, send an image with "#sticker" as caption')
                     }
                     break
-                case '#tiktok':
-                    if (args.length == 2) {
-                        const url = args[1]
-                        if (!url.match(isUrl) && !url.includes('tiktok.com')) return client.sendText(from, 'The URL is not valid')
-                        await tiktok(url)
-                            .then((videoMeta) => {
-                                const filename = videoMeta.authorMeta.name + '.mp4'
-                                const caps = `*Metadata:*\nUsername: ${videoMeta.authorMeta.name} \nMusic: ${videoMeta.musicMeta.musicName} \nView: ${videoMeta.playCount.toLocaleString()} \nLike: ${videoMeta.diggCount.toLocaleString()} \nComment: ${videoMeta.commentCount.toLocaleString()} \nShare: ${videoMeta.shareCount.toLocaleString()} \nCaption: ${videoMeta.text.trim() ? videoMeta.text : '-'} \n\nDonasi: kamu dapat membantuku beli dimsum dengan menyawer melalui https://saweria.co/donate/yogasakti atau mentrakteer melalui https://trakteer.id/red-emperor \nTerimakasih.`
-                                client.sendFileFromUrl(from,videoMeta.url, filename, videoMeta.NoWaterMark ? caps : `...\n\n${caps}`)
-                                    .catch(err => console.log('Caught exception: ', err))
-                            }).catch((err) => {
-                                client.sendText(from, 'Error Code 404')
-                            });
-                    }
-                    break
-                case '#ig':
-                case '#instagram':
-                    if (args.length == 2) {
-                        const url = args[1]
-                        if (!url.match(isUrl) && !url.includes('instagram.com')) return client.sendText(from, 'The URL is not valid')
-                        instagram(url)
-                            .then(async (videoMeta) => {
-                                const content = []
-                                for (var i = 0; i < videoMeta.length; i++) {
-                                    await urlShortener(videoMeta[i].video)
-                                        .then((result) => {
-                                            console.log('Shortlink: ' + result)
-                                            content.push(`${i+1}. ${result}`)
-                                        }).catch((err) => {
-                                            client.sendText(from, `Error, ` + err)
-                                        });
-                                }
-                                client.sendText(from, `Link Download:\n${content.join('\n')} \n\n...`)
-                            }).catch((err) => {
-                                console.error(err)
-                                if (err == 'Not a video') return client.sendText(from, `Not a Video`)
-                                client.sendText(from, `Error, Can't send this video`)
-                            });
-                    }
-                    break
-                case '#twt':
-                case '#twitter':
-                    if (args.length == 2) {
-                        const url = args[1]
-                        if (!url.match(isUrl) && !url.includes('twitter.com') || url.includes('t.co')) return client.sendText(from, 'URL is not valid')
-                        twitter(url)
-                            .then(async (videoMeta) => {
-                                try {
-                                    if (videoMeta.type == 'video') {
-                                        const content = videoMeta.variants.filter(x => x.content_type !== 'application/x-mpegURL').sort((a, b) => b.bitrate - a.bitrate)
-                                        const result = await urlShortener(content[0].url)
-                                        console.log('Shortlink: ' + result)
-                                        client.sendFileFromUrl(from, content[0].url, 'TwitterVideo.mp4', `Link Download: ${result} \n\n...`)
-                                    } else if (videoMeta.type == 'photo') {
-                                        for (var i = 0; i < videoMeta.variants.length; i++) {
-                                            await client.sendFileFromUrl(from, videoMeta.variants[i], videoMeta.variants[i].split('/media/')[1], '')
-                                        }
-                                    }
-                                } catch (err) {
-                                    client.sendText(from, `Error, ` + err)
-                                }
-                            }).catch((err) => {
-                                console.log(err)
-                                client.sendText(from, `Error Code 404`)
-                            });
-                    }
-                    break
-                case '#fb':
-                case '#facebook':
-                        if (args.length == 2) {
-                            const url = args[1]
-                            if (!url.match(isUrl) && !url.includes('facebook.com')) return client.sendText(from, 'URL is not valid')
-                            facebook(url)
-                                .then(async (videoMeta) => {
-                                    console.log(videoMeta)
-                                    try {
-                                        const shorthd = videoMeta.hd ? await urlShortener(videoMeta.hd) : '1'
-                                        console.log('Shortlink: ' + shorthd)
-                                        const shortsd = videoMeta.sd ? await urlShortener(videoMeta.sd) : '2'
-                                        console.log('Shortlink: ' + shortsd)
-                                        client.sendText(from, `Title: ${videoMeta.title} \nLink Download: \nHD Quality: ${shorthd} \nSD Quality: ${shortsd} \n\n...`)
-                                    } catch (err) {
-                                        client.sendText(from, `Error, ` + err)
-                                    }
-                                })
-                                .catch((err) => {
-                                    client.sendText(from, `Error ${err}`)
-                                })
-                        }
-                        break
             }
         } else {
             if (!isGroupMsg) console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname))
-            if (isGroupMsg) console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname), 'in', color(formattedTitle))
+            if (isGroupMsg) console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname), 'in', color(formattedTitle) , color(chatId), color(ContactId))
         }
     } catch (err) {
         console.log(color('[ERROR]', 'red'), err)

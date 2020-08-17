@@ -51,11 +51,11 @@ const startServer = async () => {
 
 async function msgHandler (client, message) {
   try {
-    const { type, body, from, t, sender, isGroupMsg, chat, caption, isMedia, mimetype, quotedMsg, chatId, ContactId } = message
+    const { type, body, from, t, sender, isGroupMsg, chat, caption, isMedia, mimetype, quotedMsg, chatId, Contact, author } = message
     const { pushname } = sender
     const { formattedTitle } = chat
     const time = moment(t * 1000).format('DD/MM HH:mm:ss')
-    const commands = ['#menu', '#help', '#sticker', '#sauceyaknow', '#codesyaknow', '#tnc', '#you are idiot', '#you are baka', '#you are idiot', '#You are bakka', '#quotes', '#stiker', '#hello', '#info', '#commands', '#god', '#thank you', '#i love you', '#Seasonal anime', '#anime', '#anime', 'fuck', 'sex', 'nudes', 'link', 'zelda', '#best girl', '#S-1', '#do you love me', '#tsundere', 'ora ora ora ora', 'Ora Ora Ora Ora', 'muda muda muda muda', 'yo', 'freedom', '#zelda Timeline', '#botw', 'i love rem', 'I Love Rem', 'el Psy Congroo', 'tuturu', 'indeed', 'can you beat goku though', 'Se no', 'mou', 'kokoro', '#neko', '#wallpaper', '#source', '#sauce', 'heave ho', 'have ho!', 'make me a coffee', '#Mystery Video', 'Never gonna', 'never gonna', 'never gonna run around', '#pokemon', '#waifu', '#waifu', 'mily x yagu', '#pokewall', '#wiki', 'prepare for trouble', 'to protect the world from devastation', 'to denounce the evils of truth and love', '#r', 'team rocket blasts off at the speed of light', '#emilia', '#sauce', '#rem', '#rem', '#tiktok', '#ig', '#instagram', '#twt', '#twitter', '#fb', '#facebook', '#groupinfo', '#meme', '#covid', '#sr', '#test', '#manga', '#user', '#TestGif', '#kick', '#leave', '#add', '#Faq', '#profile', 'and the silence remains', '#flip', '#roll', '#animeneko']
+    const commands = ['#menu', '#help', '#sticker', '#sauceyaknow', '#codesyaknow', '#tnc', '#you are idiot', '#you are baka', '#you are idiot', '#You are bakka', '#quotes', '#stiker', '#hello', '#info', '#commands', '#god', '#thank you', '#i love you', '#Seasonal anime', '#anime', '#anime', 'fuck', 'sex', 'nudes', 'link', 'zelda', '#best girl', '#S-1', '#do you love me', '#tsundere', 'ora ora ora ora', 'Ora Ora Ora Ora', 'muda muda muda muda', 'yo', 'freedom', '#zelda Timeline', '#botw', 'i love rem', 'I Love Rem', 'el Psy Congroo', 'tuturu', 'indeed', 'can you beat goku though', 'Se no', 'mou', 'kokoro', '#neko', '#wallpaper', '#source', '#sauce', 'heave ho', 'have ho!', 'make me a coffee', '#Mystery Video', 'Never gonna', 'never gonna', 'never gonna run around', '#pokemon', '#waifu', '#waifu', 'mily x yagu', '#pokewall', '#wiki', 'prepare for trouble', 'to protect the world from devastation', 'to denounce the evils of truth and love', '#r', 'team rocket blasts off at the speed of light', '#emilia', '#sauce', '#rem', '#rem', '#tiktok', '#ig', '#instagram', '#twt', '#twitter', '#fb', '#facebook', '#groupinfo', '#meme', '#covid', '#sr', '#test', '#manga', '#user', '#TestGif', '#kick', '#leave', '#add', '#Faq', '#profile', 'and the silence remains', '#flip', '#roll', '#animeneko','chat.whatsapp.com']
     const cmds = commands.map(x => x + '\\b').join('|')
     const cmd = type === 'chat' ? body.match(new RegExp(cmds, 'gi')) : type === 'image' && caption ? caption.match(new RegExp(cmds, 'gi')) : ''
 
@@ -119,6 +119,12 @@ async function msgHandler (client, message) {
           break
         case '#god':
           client.sendText(from, '@Hooman|Neko is God')
+          break
+        case 'chat.whatsapp.com':
+          if (args[1] == client.getGroupInviteLink(chat.id)) {
+          break
+          }
+          else await client.removeParticipant(from, author)
           break
         case '#do you love me?':
           client.sendText(from, 'U-Uh... n-no! *blushes* O-Of course not, bakka!')
@@ -257,20 +263,44 @@ async function msgHandler (client, message) {
           break
         case '#sr':
 
-          if (args.length >= 4) {
-            const response = await axios.get('https://meme-api.herokuapp.com/gimme/' + args[1] + '_' + args[2] + '_' + args[3] + '/')
-            const { postLink, title, url } = response.data
-            await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}` + '\n\nPostlink:' + `${postLink}`)
-          } else if (args.length >= 3) {
-            const response = await axios.get('https://meme-api.herokuapp.com/gimme/' + args[1] + '_' + args[2] + '/')
-            const { postLink, title, url } = response.data
-            await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}` + '\n\nPostlink:' + `${postLink}`)
-          } else {
-            const response = await axios.get('https://meme-api.herokuapp.com/gimme/' + args[1] + '/')
-            const { postLink, title, url } = response.data
-            await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}` + '\n\nPostlink:' + `${postLink}`)
-          }
-          break
+           if (args.length >=4) {
+           const sr = args[1]
+           const rs = args[2]                 
+           const tr = args[3]
+           const response = await axios.get('https://meme-api.herokuapp.com/gimme/'+sr+'_'+rs+'_'+tr+'/');
+           const { postLink, title, subreddit, url, nsfw, spoiler } = response.data
+           if (`${nsfw}` == 'true'){
+               if (isGroupMsg) {
+                 if (`${chatId}` == '919744375687-1596550546@g.us'){
+                          await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}`+'\n\nPostlink:'+`${postLink}`)
+                  } else client.sendText(from, 'NSFW contents can\'t be displayed on groups')
+                } else await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}`+'\n\nPostlink:'+`${postLink}`)
+              } else await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}`+'\n\nPostlink:'+`${postLink}`)
+         } else if (args.length >=3) {
+           const sr = args[1]
+           const rs = args[2]
+           const response = await axios.get('https://meme-api.herokuapp.com/gimme/'+sr+'_'+rs+'/');
+           const { postLink, title, subreddit, url, nsfw, spoiler } = response.data
+           if (`${nsfw}` == 'true'){
+               if (isGroupMsg) {
+                 if (`${chatId}` == '919744375687-1596550546@g.us'){
+                          await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}`+'\n\nPostlink:'+`${postLink}`)
+                  } else client.sendText(from, 'NSFW contents can\'t be displayed on groups')
+                } else await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}`+'\n\nPostlink:'+`${postLink}`)
+              } else await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}`+'\n\nPostlink:'+`${postLink}`)
+          } else if (args.length >=2) {
+            const sr = args[1]
+            const response = await axios.get('https://meme-api.herokuapp.com/gimme/'+sr+'/');
+            const { postLink, title, subreddit, url, nsfw, spoiler } = response.data
+                if (`${nsfw}` == 'true'){
+                   if (isGroupMsg) {
+                     if (`${chatId}` == '919744375687-1596550546@g.us'){
+                     await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}`+'\n\nPostlink:'+`${postLink}`)
+                  } else client.sendText(from, 'NSFW contents can\'t be displayed on groups')
+                } else await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}`+'\n\nPostlink:'+`${postLink}`)
+              } else await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}`+'\n\nPostlink:'+`${postLink}`)
+                    }
+                break;
         case '#covid':
           if (args.length >= 2) {
             const response = await axios.get('https://coronavirus-19-api.herokuapp.com/countries/' + args[1] + '/')
@@ -348,7 +378,7 @@ async function msgHandler (client, message) {
           client.sendText(from, 'This is an open-source program written in Javascript. \n \nBy using the bot you agreeing to our Terms and Conditions \n \n We do not store any of your data in our servers. We are not responsebale for the stickers you create using the bot.  The wallpapers and other pictues are not hosted on our servers (expect the pokemon ones).\nUse #License to see the enitire license argreement ')
           break
         case '#info':
-          client.sendText(from, '👋️Hi there, I\'m Emilia\nThis project is open source, built using Javascript || Node.js and is available at GitHub https:\/\/bit.ly\/39Ld2L8. If you are willing to contribute to our project please refer to the mentioned url.\n \n\nDevelopers✨\n \n _Alen Yohannan_ \n_Somnath Das_\n\nContributors💫\n\n_Miliana Blue_\n_Aman Sakuya_\n_Mystery_')
+          client.sendText(from, '👋️Hi there, I\'m Emilia\nThis project is open source, built using Javascript || Node.js and is available at GitHub https:\/\/bit.ly\/39Ld2L8. If you are willing to contribute to our project please refer to the mentioned url.\n \n\nDevelopers✨\n \n _Alen Yohannan_ \n_Somnath Das_\n\nContributors💫\n\n_Miliana Blue_\n_Aman Sakuya_\n_Mystery_\n_ShellTear_')
           break
         case '#you are idiot':
           client.sendText(from, 'Shut up, douchebag')
@@ -416,7 +446,7 @@ async function msgHandler (client, message) {
           break
       }
     } else {
-      !isGroupMsg ? console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname)) : console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname), 'in', color(formattedTitle), color(chatId), color(ContactId))
+      !isGroupMsg ? console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname)) : console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname), 'in', color(formattedTitle), color(chatId), color(author))
     }
   } catch (err) {
     console.log(color('[ERROR]', 'red'), err)

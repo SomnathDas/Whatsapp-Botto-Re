@@ -42,20 +42,18 @@ const startServer = async () => {
         console.log('[Client State]', state)
         if (state === 'CONFLICT') client.forceRefocus()
       })
-
-      client.onMessage((message) => {
-        msgHandler(client, message)
-      })
+      client.onMessage(async (message) => msgHandler(client, message))
     })
 }
 
-async function msgHandler (client, message) {
+const msgHandler = async (client, message) => {
+
   try {
-    const { type, body, from, t, sender, isGroupMsg, chat, caption, isMedia, mimetype, quotedMsg, chatId, ContactId } = message
+    const { type, body, from, t, sender, isGroupMsg, chat, caption, isMedia, mimetype, quotedMsg, chatId, Contact, author } = message
     const { pushname } = sender
     const { formattedTitle } = chat
     const time = moment(t * 1000).format('DD/MM HH:mm:ss')
-    const commands = ['#menu', '#help', '#sticker', '#sauceyaknow', '#codesyaknow', '#tnc', '#you are idiot', '#you are baka', '#you are idiot', '#You are bakka', '#quotes', '#stiker', '#hello', '#info', '#commands', '#god', '#thank you', '#i love you', '#Seasonal anime', '#anime', '#anime', 'fuck', 'sex', 'nudes', 'link', 'zelda', '#best girl', '#S-1', '#do you love me', '#tsundere', 'ora ora ora ora', 'Ora Ora Ora Ora', 'muda muda muda muda', 'yo', 'freedom', '#zelda Timeline', '#botw', 'i love rem', 'I Love Rem', 'el Psy Congroo', 'tuturu', 'indeed', 'can you beat goku though', 'Se no', 'mou', 'kokoro', '#neko', '#wallpaper', '#source', '#sauce', 'heave ho', 'have ho!', 'make me a coffee', '#Mystery Video', 'Never gonna', 'never gonna', 'never gonna run around', '#pokemon', '#waifu', '#waifu', 'mily x yagu', '#pokewall', '#wiki', 'prepare for trouble', 'to protect the world from devastation', 'to denounce the evils of truth and love', '#r', 'team rocket blasts off at the speed of light', '#emilia', '#sauce', '#rem', '#rem', '#tiktok', '#ig', '#instagram', '#twt', '#twitter', '#fb', '#facebook', '#groupinfo', '#meme', '#covid', '#sr', '#test', '#manga', '#user', '#TestGif', '#kick', '#leave', '#add', '#Faq', '#profile', 'and the silence remains', '#flip', '#roll', '#animeneko']
+    const commands = ['#menu', '#help', '#sticker', '#sauceyaknow', '#codesyaknow', '#tnc', '#you are idiot', '#you are baka', '#You are bakka', '#quotes', '#stiker', '#hello', '#info', '#commands', '#god', '#thank you', '#i love you', '#easonal anime', '#anime', 'fuck', 'sex', 'nudes', 'link', 'zelda', '#best girl', '#s-1', '#do you love me', '#tsundere', 'ora ora ora ora', 'muda muda muda muda', 'yo', 'freedom', '#zelda timeline', '#botw', 'i love rem', 'el Psy Congroo', 'tuturu', 'indeed', 'can you beat goku though', 'se no', 'mou', 'kokoro', '#neko', '#wallpaper', '#source', '#sauce', 'heave ho', 'have ho!', 'make me a coffee', '#mystery video', 'never gonna', 'never gonna run around', '#pokemon', '#waifu', '#waifu', 'mily x yagu', '#pokewall', '#wiki', 'prepare for trouble', 'to protect the world from devastation', 'to denounce the evils of truth and love', '#r', 'team rocket blasts off at the speed of light', '#emilia', '#sauce', '#rem', '#rem', '#tiktok', '#ig', '#instagram', '#twt', '#twitter', '#fb', '#facebook', '#groupinfo', '#meme', '#covid', '#sr', '#test', '#manga', '#user', '#testgif', '#kick', '#leave', '#add', '#Faq', '#profile', 'and the silence remains', '#flip', '#roll', '#animeneko', 'chat.whatsapp.com']
     const cmds = commands.map(x => x + '\\b').join('|')
     const cmd = type === 'chat' ? body.match(new RegExp(cmds, 'gi')) : type === 'image' && caption ? caption.match(new RegExp(cmds, 'gi')) : ''
 
@@ -108,17 +106,20 @@ async function msgHandler (client, message) {
           break
         case '#flip':
           const side = Math.floor(Math.random() * 2) + 1
-          if (side == 1) {
-            client.sendStickerfromUrl(from, 'https://i.ibb.co/LJjkVK5/heads.png')
-          } else {
-            client.sendStickerfromUrl(from, 'https://i.ibb.co/wNnZ4QD/tails.png')
-          }
+          side === 1 ? client.sendStickerfromUrl(from, 'https://i.ibb.co/LJjkVK5/heads.png') : client.sendStickerfromUrl(from, 'https://i.ibb.co/wNnZ4QD/tails.png')
           break
         case '#add':
           await client.addParticipant('919744375687-1596199727@g.us', `${ContactId}`)
           break
         case '#god':
           client.sendText(from, '@Hooman|Neko is God')
+          break
+        case 'chat.whatsapp.com':
+          try {
+          if (args[1] == client.getGroupInviteLink(chat.id)) {
+            break
+          } else await client.removeParticipant(from, author)
+        } catch (error) { console.log(error) }
           break
         case '#do you love me?':
           client.sendText(from, 'U-Uh... n-no! *blushes* O-Of course not, bakka!')
@@ -153,7 +154,7 @@ async function msgHandler (client, message) {
         case '#best girl':
           client.sendText(from, '*Blushes*')
           break
-        case '#testGif' :
+        case '#testgif' :
           client.sendStickerfromUrl(from, 'https://media.tenor.com/images/62c4b269d97c2412c4f364945f62afae/tenor.gif', { method: 'get' })
 
           break
@@ -177,27 +178,17 @@ async function msgHandler (client, message) {
             .catch((err) => console.log(err))
           break
         case '#anime':
-          if (args.length >= 5) {
-            const { title, picture, score, synopsis, episodes, aired, rating, status } = await malScraper.getInfoFromName(args[1] + '-' + args[2] + '-' + args[3] + '-' + args[4])
+          let arguments = ''
 
-            await client.sendFileFromUrl(from, `${picture}`, 'Anime.png', '⛩️Title:' + `${title}` + '\n\n🎼️Score:' + `${score}` + '\n\n📙️Status:' + `${status}` + '\n\n🖼️Episodes:' + `${episodes}` + '\n\n✨️Rating:' + `${rating}` + '\n\n🌠️Synopsis:' + `${synopsis}` + '\n\n📆️Aired:' + `${aired}` + '.')
-          } else if (args.length >= 4) {
-            const { title, picture, score, synopsis, episodes, aired, rating, status } = await malScraper.getInfoFromName(args[1] + '-' + args[2] + '-' + args[3])
+          for (const arg of args) {
 
-            await client.sendFileFromUrl(from, `${picture}`, 'Anime.png', '⛩️Title:' + `${title}` + '\n\n🎼️Score:' + `${score}` + '\n\n📙️Status:' + `${status}` + '\n\n🖼️Episodes:' + `${episodes}` + '\n\n✨️Rating:' + `${rating}` + '\n\n🌠️Synopsis:' + `${synopsis}` + '\n\n📆️Aired:' + `${aired}` + '.')
-          } else if (args.length >= 3) {
-            const { title, picture, score, synopsis, episodes, aired, rating, status } = await malScraper.getInfoFromName(args[1] + '-' + args[2])
+            arguments += arguments.concat(`-${arg}`)
 
-            await client.sendFileFromUrl(from, `${picture}`, 'Anime.png', '⛩️Title:' + `${title}` + '\n\n🎼️Score:' + `${score}` + '\n\n📙️Status:' + `${status}` + '\n\n🖼️Episodes:' + `${episodes}` + '\n\n✨️Rating:' + `${rating}` + '\n\n🌠️Synopsis:' + `${synopsis}` + '\n\n📆️Aired:' + `${aired}` + '.')
-          } else {
-            malScraper.getInfoFromName(args[1])
-              .then((data) => console.log(data))
-              .catch((err) => console.log(err))
-
-            const { title, picture, score, synopsis, episodes, aired, rating, status } = await malScraper.getInfoFromName(args[1])
-
-            await client.sendFileFromUrl(from, `${picture}`, 'Anime.png', '⛩️Title:' + `${title}` + '\n\n🎼️Score:' + `${score}` + '\n\n📙️Status:' + `${status}` + '\n\n🖼️Episodes:' + `${episodes}` + '\n\n✨️Rating:' + `${rating}` + '\n\n🌠️Synopsis:' + `${synopsis}` + '\n\n📆️Aired:' + `${aired}` + '.')
           }
+
+          const { title, picture, score, synopsis, episodes, aired, rating, status } = await malScraper.getInfoFromName(arguments)
+
+          await client.sendFileFromUrl(from, `${picture}`, 'Anime.png', '⛩️Title:' + `${title}` + '\n\n🎼️Score:' + `${score}` + '\n\n📙️Status:' + `${status}` + '\n\n🖼️Episodes:' + `${episodes}` + '\n\n✨️Rating:' + `${rating}` + '\n\n🌠️Synopsis:' + `${synopsis}` + '\n\n📆️Aired:' + `${aired}` + '.')
           break
 
         case '#manga':
@@ -220,7 +211,7 @@ async function msgHandler (client, message) {
               .then(console.log)
           }
           break
-        case 'Can you beat Goku though' :
+        case 'can you beat goku though' :
           client.sendText(from, '*I can and I will*')
           break
         case '#faq' :
@@ -244,33 +235,38 @@ async function msgHandler (client, message) {
         case '#botw' :
           client.sendFileFromUrl(from, 'https://mocah.org/uploads/posts/197514-princess-zelda-2350x1175.png', 'BOTW.jpg', '...')
           break
-        case '#zelda Timeline' :
+        case '#zelda timeline' :
           client.sendFileFromUrl(from, 'https://gamepedia.cursecdn.com/zelda_gamepedia_en/b/b8/E_Timeline.png', 'Zelda Timeline.png', '...')
           break
-        case '#S-1':
+        case '#s-1':
           client.sendText(from, 'Connection Status = Active')
           break
         case '#meme':
           const response = await axios.get('https://meme-api.herokuapp.com/gimme/wholesomeanimemes')
-          const { title, url } = response.data
-          await client.sendFileFromUrl(from, `${url}`, 'meme.jpg', `${title}`)
+          const { Title, url } = response.data
+          await client.sendFileFromUrl(from, `${url}`, 'meme.jpg', `${Title}`)
           break
         case '#sr':
 
-          if (args.length >= 4) {
-            const response = await axios.get('https://meme-api.herokuapp.com/gimme/' + args[1] + '_' + args[2] + '_' + args[3] + '/')
-            const { postLink, title, url } = response.data
-            await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}` + '\n\nPostlink:' + `${postLink}`)
-          } else if (args.length >= 3) {
-            const response = await axios.get('https://meme-api.herokuapp.com/gimme/' + args[1] + '_' + args[2] + '/')
-            const { postLink, title, url } = response.data
-            await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}` + '\n\nPostlink:' + `${postLink}`)
-          } else {
-            const response = await axios.get('https://meme-api.herokuapp.com/gimme/' + args[1] + '/')
-            const { postLink, title, url } = response.data
-            await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}` + '\n\nPostlink:' + `${postLink}`)
+          let Arguments = ''
+          var i
+
+          for (i = 0; i < args.length; i++) {
+            if (i == 1) Arguments += Arguments.concat(`${args[i]}`);
+             else if (i >= 2)
+               Arguments += Arguments.concat(`_${args[i]}`)
+            if (i == 4) break
           }
-          break
+
+          const Response = await axios.get('https://meme-api.herokuapp.com/gimme/' + Arguments + '/')
+          const { postLink, title, url, nsfw } = Response.data
+
+          if (isGroupMsg && !`${chatId}` == '919744375687-1596550546@g.us' && `${nsfw}` == 'true')
+            client.sendText(from, 'NSFW contents can\'t be displayed on groups')
+          else
+            await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}` + '\n\nPostlink:' + `${postLink}`)
+            break
+
         case '#covid':
           if (args.length >= 2) {
             const response = await axios.get('https://coronavirus-19-api.herokuapp.com/countries/' + args[1] + '/')
@@ -338,7 +334,7 @@ async function msgHandler (client, message) {
         case '#commands':
           client.sendText(from, `👋️Hi *${pushname}*, I\'m Emilia!\n\n*Prefix = #* 💎\n\n*Usable Commands!*✨\n\n*_CMD: #sticker_*\n*Description: Converts images into stickers*\n\n*_CMD: #anime <anime name>_*\n*Description: Displays the information of the given anime*\n\n*_CMD: #flip_*\n*Description: Flips a coin fo you*\n\n*_CMD: #roll_*\n*Description: Rolls a dice*\n\n*_CMD: #neko_*\n*Description Returns a random cat image*\n\n*_CMD: #meme_*\n*Description: Displays and anime meme from r\/wholesomeanimememes*\n\n*_CMD: #sr <subreddit>_*\n*Description: Returns a post from the given subreddit*\n\n*_CMD: #waifu_*\n*Description: Returns a picture of a waifu*\n\n*_CMD: #covid <country name>_*\n*Description: Displays the live stats Covid-19 of the given country*\n\n*_CMD: #quotes_*\n*Description: Returns a quote that will either give you existential crises or wisdom*\n\n*_CMD #pokemon_*\n*Description: Displays picture of a random pokemon*\n\n*_CMD: #wallpaper [Beta]_*\n*Displays a random anime wallpapers*\n\n*_CMD: #Seasonal anime_* [Bugged]\n*Description: Returns a list of seasonal animes*\n\n*_CMD: #info_*\n*Description: Displays the information of the bot*\n\n*_CMD: #TnC_*\n*Description: Displays the Terms and Conditions*\n\nThere are many hidden and fun keywords ;)\n\nIf yore having any trouble with the bot, please join our support group and state your issue\n\n*Support: https://bit.ly/2CaPFyk*\n\nHope you have a great day!✨\n\n`)
           break
-        case '#Seasonal anime':
+        case '#seasonal anime':
           client.sendText(from, 'Summer 2020 \n Re:Zero kara Hajimeru Isekai Seikatsu 2nd Season \n Yahari Ore no Seishun Love Comedy wa Machigatteiru. Kan \n The God of High School \n Sword Art Online: Alicization - War of Underworld 2nd Season \n Enen no Shouboutai: Ni no Shou \n Maou Gakuin no Futekigousha: Shijou Saikyou no Maou no Shiso, Tensei shite Shison-tachi no Gakkou e \n Kanojo, Okarishimasu \n Deca-Dence \n Uzaki-chan wa Asobitai! \n Monster Musume no Oishasan')
           break
         case '#thank you':
@@ -348,7 +344,7 @@ async function msgHandler (client, message) {
           client.sendText(from, 'This is an open-source program written in Javascript. \n \nBy using the bot you agreeing to our Terms and Conditions \n \n We do not store any of your data in our servers. We are not responsebale for the stickers you create using the bot.  The wallpapers and other pictues are not hosted on our servers (expect the pokemon ones).\nUse #License to see the enitire license argreement ')
           break
         case '#info':
-          client.sendText(from, '👋️Hi there, I\'m Emilia\nThis project is open source, built using Javascript || Node.js and is available at GitHub https:\/\/bit.ly\/39Ld2L8. If you are willing to contribute to our project please refer to the mentioned url.\n \n\nDevelopers✨\n \n _Alen Yohannan_ \n_Somnath Das_\n\nContributors💫\n\n_Miliana Blue_\n_Aman Sakuya_\n_Mystery_')
+          client.sendText(from, '👋️Hi there, I\'m Emilia\nThis project is open source, built using Javascript || Node.js and is available at GitHub https:\/\/bit.ly\/39Ld2L8. If you are willing to contribute to our project please refer to the mentioned url.\n \n\nDevelopers✨\n \n _Alen Yohannan_ \n_Somnath Das_\n\nContributors💫\n\n_Miliana Blue_\n_Aman Sakuya_\n_Mystery_\n_ShellTear_')
           break
         case '#you are idiot':
           client.sendText(from, 'Shut up, douchebag')
@@ -367,19 +363,19 @@ async function msgHandler (client, message) {
           client.sendText(from, quote_Array[a2])
           break
           // MAKE SURE TO USE ; at the end of statement :)
-        case 'prepare for trouble' :
+        case 'prepare for trouble':
           client.sendText(from, 'And make it double!')
           break
-        case 'To protect the world from devastation':
+        case 'to protect the world from devastation':
           client.sendText(from, 'To unite all peoples within our nation!')
           break
-        case 'To denounce the evils of truth and love':
+        case 'to denounce the evils of truth and love':
           client.sendText(from, 'To extend our reach to the stars above!')
           break
         case '#r':
           client.sendText(from, 'Emilia')
           break
-        case 'Team Rocket blasts off at the speed of light':
+        case 'team Rocket blasts off at the speed of light':
           client.sendText(from, 'Surrender now, or prepare to fight!')
           break
 
@@ -416,7 +412,7 @@ async function msgHandler (client, message) {
           break
       }
     } else {
-      !isGroupMsg ? console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname)) : console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname), 'in', color(formattedTitle), color(chatId), color(ContactId))
+      !isGroupMsg ? console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname)) : console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname), 'in', color(formattedTitle), color(chatId), color(author))
     }
   } catch (err) {
     console.log(color('[ERROR]', 'red'), err)

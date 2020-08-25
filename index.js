@@ -409,6 +409,9 @@ async function msgHandler (client, message) {
         case '#r':
           client.sendText(from, 'Emilia')
           break
+        case '#omae wa mou shindeiru':
+          client.sendText(from, '*nani!*')
+          break
         case 'Team Rocket blasts off at the speed of light':
           client.sendText(from, 'Surrender now, or prepare to fight!')
           break

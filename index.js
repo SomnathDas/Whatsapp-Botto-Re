@@ -324,7 +324,7 @@ async function msgHandler (client, message) {
           client.sendText(from, 'give you up')
           break
         case 'never gonna run around':
-          client.sendText(from, 'and dessert you')
+          client.sendText(from, 'and desert you')
           break
         case '#waifu':
           q8 = q2 = Math.floor(Math.random() * 98) + 10

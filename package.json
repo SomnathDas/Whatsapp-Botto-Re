@@ -7,7 +7,7 @@
     "start": "node index.js"
   },
   "author": "Ban Takahiro",
-  "homepage": "https://github.com/SomnathDas/imageToSticker",
+  "homepage": "https://github.com/SomnathDas/Whatsapp-botto-re",
   "license": "ISC",
   "dependencies": {
     "@open-wa/wa-automate": "^2.0.12",

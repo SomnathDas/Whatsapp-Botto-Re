@@ -23,7 +23,7 @@
     "tracemoe-helper": "^1.0.3",
     "translation-google": "^0.2.1",
     "util": "^0.12.3",
-    "video-url-link": "git+https://github.com/YogaSakti/video-url-link.git"
+
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

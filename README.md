@@ -4,6 +4,8 @@ Hello fellow users, Whatsapp Botto: Re is whatsapp automation script or more lik
 This is an open-source program written in Javascript. 
 This project require NodeJS v12.
 
+Test the bot now: https://wa.me/+919074161917
+
 ## :star2:  Features [Added & Working Flawlessly] :star2: 
 1) Can turn images into stickers.
 2) Can return random Cat pictures.

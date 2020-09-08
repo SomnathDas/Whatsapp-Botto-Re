@@ -7,10 +7,6 @@
   </a>
   <a href="https://github.com/SomnathDas/Whatsapp-Botto-Re/blob/master/LICENSE" target="_blank">
     <img alt="License: Apache--2.0" src="https://img.shields.io/github/license/AlenSaito1/Whatsapp-Botto-Re" />
-  </a>
-  <a href="https://twitter.com/TakahiroBan" target="_blank">
-    <img alt="Twitter: TakahiroBan" src="https://img.shields.io/twitter/follow/TakahiroBan.svg?style=social" />
-  </a>
 </p>
 
 > A whatsapp bot made using open-wa/wa-automate-nodejs library

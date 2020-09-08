@@ -22,10 +22,6 @@ const akaneko = require('akaneko');
 const axios = require('axios')
 const translate = require('google-translate-api');
 const booru = require('sfwbooru')
-const botadmin = '4915678716710@c.us'
-const botadmin2 = '919744375687@c.us'
-const botadmin3 = '4915678716710@c.us'
-const invitegrp = '919744375687-1599238855@g.us'
 const errorurl = 'https://steamuserimages-a.akamaihd.net/ugc/954087817129084207/5B7E46EE484181A676C02DFCAD48ECB1C74BC423/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false'
 const Database = require('better-sqlite3');
 const db = new Database('foobar.db', {
@@ -140,24 +136,14 @@ async function msgHandler(client, message) {
         if (isCmd && isGroupMsg) console.log(color('[EXEC]'), color(time, 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname), 'in', color(name))
 
         const botNumber = await client.getHostNumber()
-        const owners = ['9744375687@c.us', 'Sd']
-        const isowner = owners.includes(sender.id)
+        //const isowner = owners.includes(sender.id)
         const groupId = isGroupMsg ? chat.groupMetadata.id : ''
         const groupAdmins = isGroupMsg ? await client.getGroupAdmins(groupId) : ''
         const groupMembers = isGroupMsg ? await client.getGroupMembersId(groupId) : ''
         const isGroupAdmins = isGroupMsg ? groupAdmins.includes(sender.id) : false
         const isBotGroupAdmins = isGroupMsg ? groupAdmins.includes(botNumber + '@c.us') : false
-        const botadmins = await client.getGroupAdmins('919744375687-1599187760@g.us')
-        const isbotadmin = botadmins.includes(sender.id)
-
-        if (isowner && isbotadmin) {
-            const role = 'Owner'
-        } else if (isbotadmin) {
-            const role = 'Bot Admin | Helper'
-        } else if (isbotadmin == false) {
-            const role = 'User'
-        }
-
+        // const botadmins = await client.getGroupAdmins('your bot group\'s id')
+        // const isbotadmin = botadmins.includes(sender.id)
         // Checking function speed
         // const timestamp = moment()
         // const latensi = moment.duration(moment() - timestamp).asSeconds()
@@ -181,7 +167,7 @@ async function msgHandler(client, message) {
            }); */
 
         // Checking for new user
-        try {
+        /* try {
             const stmt3 = db.prepare('SELECT author FROM user WHERE author = ?')
             const row = stmt3.get(author)
             if (row === undefined) {
@@ -203,7 +189,7 @@ async function msgHandler(client, message) {
         } catch (err) {
             console.log(err)
         }
-
+                                      */
 
         switch (command) {
             case 'tnc':
@@ -510,7 +496,7 @@ Hope you have a great day!`
                 }
                 break
 
-            case 'ban':
+           /* case 'ban':
                 {
                     arg = body.trim().split(' ')
                     if (isGroupMsg) {
@@ -548,10 +534,9 @@ Hope you have a great day!`
                             }
                         }
                     }
-                }
+                } */
             case 'join':
                 arg = body.trim().split(' ')
-                if (chat.id == invitegrp) {
                     const joingrp = await client.joinGroupViaLink(arg[1])
                     console.log(joingrp)
 
@@ -570,7 +555,7 @@ Hope you have a great day!`
 
 
                 //fun commands
-            case 'dujin':
+            /* case 'nh':
                 if (args.length >= 1) {
                     const nuklir = body.split(' ')[1]
                     const nanap = require('nana-api')
@@ -604,7 +589,7 @@ Hope you have a great day!`
                             }
                         }
                     }))
-                }
+                } */
                 break
             case 'profile':
                 if (isGroupAdmins) {
@@ -612,12 +597,7 @@ Hope you have a great day!`
                 } else if (!isGroupAdmins) {
                     var adminT = 'False'
                 }
-                if (!quotedMsg) {
-                    if (isbotadmin) {
-                        var role = 'Royal Guard 👑️'
-                    } else if (isbotadmin == false) {
-                        var role = 'User'
-                    }
+        
                     const pfp = await client.getProfilePicFromServer(author)
                     console.log(pfp)
                     const status1 = await client.getStatus(author)
@@ -627,29 +607,14 @@ Hope you have a great day!`
                     } = status1
 
                     if (pfp == undefined) {
-                        await client.sendFileFromUrl(from, errorurl, 'profile.png', `🔖️ *Username: ${pushname}*\n\n✨️ *Role: ` + role + `*\n\n💌️ *User Info: ` + status + `*\n\n💔️ *Ban: False*\n\n🎆️ *Group: ${name}*\n\n👑️ *Admin: ` + adminT + '*')
+                        await client.sendFileFromUrl(from, errorurl, 'profile.png', `🔖️ *Username: ${pushname}*\n\n✨️ *Role: User *\n\n💌️ *User Info: ` + status + `*\n\n💔️ *Ban: False*\n\n🎆️ *Group: ${name}*\n\n👑️ *Admin: ` + adminT + '*')
                         break
                     } else {
-                        await client.sendFileFromUrl(from, pfp, 'profile.png', `🔖️ *Username: ${pushname}*\n\n✨️ *Role: ` + role + `*\n\n💌️ *User Info: ` + status + `*\n\n💔️ *Ban: False*\n\n🎆️ *Group: ${name}*\n\n👑️ *Admin: ` + adminT + '*')
+                        await client.sendFileFromUrl(from, pfp, 'profile.png', `🔖️ *Username: ${pushname}*\n\n✨️ *Role: User *\n\n💌️ *User Info: ` + status + `*\n\n💔️ *Ban: False*\n\n🎆️ *Group: ${name}*\n\n👑️ *Admin: ` + adminT + '*')
                         break
                     }
                 } else if (quotedMsg) {
-                    if (quotedMsgObj.sender.id == '9074161917@c.us') {
-                        await client.sendFileFromUrl(from, 'https://wallpapercave.com/wp/wp1860708.png', 'Emilia.png', `🔖️ *Username: Emilia* ✨️❤️\n\n✨️ *Role: Bot *\n\n💌️ *User Info: Serving you, for eternity*\n\n💔️ *Ban: Never!*\n\n🎆️ *Group: ${name}*\n\n👑️ *Admin:... `)
-                        break
-                    } else {
-
-
-                        const stmt7 = db.prepare('SELECT ban FROM user WHERE author = ?')
-                        const user7 = stmt7.get(quotedMsgObj.sender.id)
-                        console.log(user7);
-                        if (user7 == undefined) {
-                            var ban2 = 'False'
-                        } else if (user7.ban == true) {
-                            var ban2 = 'True'
-                        } else if (user7.ban == 0 || user7.ban == false) {
-                            var ban2 = 'False'
-                        }
+ 
 
                         if (await groupAdmins.includes(quotedMsgObj.sender.id)) {
                             var admin2 = 'True'
@@ -657,14 +622,6 @@ Hope you have a great day!`
                             var admin2 = 'False'
                         }
 
-                        if (await botadmins.includes(quotedMsgObj.sender.id)) {
-                            var role2 = 'Bot Admin | Helper'
-                        } else if (await botadmins.includes(quotedMsgObj.sender.id) == false) {
-                            var role2 = 'User'
-                        } else if (isowner) {
-                            var role2 = 'Owner'
-                        }
-                    }
                     const usr1 = quotedMsgObj.sender.formattedName
                     const status2 = await client.getStatus(quotedMsgObj.sender.id)
                     const {
@@ -672,9 +629,9 @@ Hope you have a great day!`
                     } = status2
                     const pfp2 = await client.getProfilePicFromServer(quotedMsgObj.sender.id)
                     if (pfp2 == undefined) {
-                        await client.sendFileFromUrl(from, errorurl, 'profile.png', `🔖️ *Username: ` + usr1 + `*\n\n✨️ *Role: ` + role + `*\n\n💌️ *User Info: ` + status + `*\n\n💔️ *Ban: ` + ban2 + `*\n\n🎆️ *Group: ${name}*\n\n👑️ *Admin: ` + admin2 + '*')
+                        await client.sendFileFromUrl(from, errorurl, 'profile.png', `🔖️ *Username: ` + usr1 + `*\n\n✨️ *Role: user\n\n💌️ *User Info: ` + status + `*\n\n💔️ *Ban: False*\n\n🎆️ *Group: ${name}*\n\n👑️ *Admin: ` + admin2 + '*')
                     } else {
-                        await client.sendFileFromUrl(from, pfp2, 'profile.png', `🔖️ *Username: ` + usr1 + `*\n\n✨️ *Role: ` + role + `*\n\n💌️ *User Info: ` + status + `*\n\n💔️ *Ban: ` + ban2 + `*\n\n🎆️ *Group: ${name}*\n\n👑️ *Admin: ` + admin2 + '*')
+                        await client.sendFileFromUrl(from, pfp2, 'profile.png', `🔖️ *Username: ` + usr1 + `*\n\n✨️ *Role: User*\n\n💌️ *User Info: ` + status + `*\n\n💔️ *Ban: False*\n\n🎆️ *Group: ${name}*\n\n👑️ *Admin: ` + admin2 + '*')
                     }
                 }
                 break

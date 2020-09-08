@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node index.js"
   },
-  "author": "Ban and Takeshi",
-  "homepage": "https://github.com/YogaSakti/imageToSticker",
+  "author": "Ban Takahiro",
+  "homepage": "https://github.com/SomnathDas/imageToSticker",
   "license": "ISC",
   "dependencies": {
     "@open-wa/wa-automate": "^2.0.12",

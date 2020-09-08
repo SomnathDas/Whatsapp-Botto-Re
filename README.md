@@ -1,67 +1,61 @@
-# Whatsapp-Botto-Re
-Hello fellow users, Whatsapp Botto: Re is whatsapp automation script or more like a bot that responds to particular keywords and few other features that we are working on.
+<h1 align="center">Welcome to Whatsapp-Botto-Re 👋</h1>
+<p>
+  <img src="https://img.shields.io/badge/npm-%3E%3D5.5.0-blue.svg" />
+  <img src="https://img.shields.io/badge/node-%3E%3D9.3.0-blue.svg" />
+  <a href="https://github.com/kefranabg/readme-md-generator/graphs/commit-activity" target="_blank">
+    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
+  </a>
+  <a href="https://github.com/SomnathDas/Whatsapp-Botto-Re/blob/master/LICENSE" target="_blank">
+    <img alt="License: Apache--2.0" src="https://img.shields.io/github/license/AlenSaito1/Whatsapp-Botto-Re" />
+  </a>
+  <a href="https://twitter.com/TakahiroBan" target="_blank">
+    <img alt="Twitter: TakahiroBan" src="https://img.shields.io/twitter/follow/TakahiroBan.svg?style=social" />
+  </a>
+</p>
 
-This is an open-source program written in Javascript. 
-This project require NodeJS v12.
+> A whatsapp bot made using open-wa/wa-automate-nodejs library
 
-Test the bot now: https://wa.me/+919074161917
-
-## :star2:  Features [Added & Working Flawlessly] :star2: 
-1) Can turn images into stickers.
-2) Can return random Cat pictures.
-3) Can return a random quote.
-4) Can return a random image of waifu :heart_eyes: 
-4) Can return random pokemon images.
-5) Can return random anime wallpapers.
-6) Can return a list of seasonal anime.
-7) Can return information about anime.
-8) Can return COVID-INFO for any country.
-9) Can return subreddit posts.
-10) Can return memes.
-
-### :wink:  Also there are some hidden commands and keywords.
-
-Any contribution to this project is welcome.
-Thanks, Have a great day!  :smile: 
-
-## Clone this project
-
-```bash
-> git clone https://github.com/SomnathDas/Whatsapp-Botto-Re.git
-```
-
-## Install the dependencies:
-Before running the below command, make sure you're in the project directory that
-you've just cloned!!
-
-```bash
-> npm i
-```
-
-### Usage
-Run the Whatsapp bot
-
-```bash
-> npm start
-```
-
-## Terms & Condition
-By using the bot you agreeing to our Terms and Conditions 
-### Terms and conditions
-Your texts and your whatsapp username will be stored on our servers as long as the bot is active, your data will be erased when the bot goes offline. We do NOT store the images, videos, audio files and documents you send. We will never ask you to sign up or ask you for any of your passwords, OTPs or PINs. Thank you, Have a great day! 
-
-### If you want to contribute more please contact us on Discord. 
-Support Channels coming soon!
+### 🏠 [Homepage](https://github.com/SomnathDas/Whatsapp-Botto-Re)
 
 ## Prerequisites
-1. Brain
-2. Node.js
 
-### Troubleshooting
-Make sure all the necessary dependencies are installed.
-https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md
+- npm >=5.5.0
+- node >=9.3.0
 
-## Special Thanks
-For Basic Implementation:
-1. Open-Wa : https://github.com/open-wa/wa-automate-nodejs.git
-2. imageToSticker : https://github.com/YogaSakti/imageToSticker
+## Install
+
+```sh
+npm install
+```
+
+## Usage
+
+```sh
+npm start
+```
+
+## Authors
+
+👤 **Alen Yohannan**
+
+* Twitter: [@TakahiroBan](https://twitter.com/TakahiroBan)
+* Github: [@AlenSaito1](https://github.com/AlenSaito1)
+
+👤 **Somnath Das**
+
+* Twitter: [@aksd3247](https://twitter.com/aksd3247)
+* Github: [@SomnathDas](https://github.com/SomnathDas)
+
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/SomnathDas/Whatsapp-Botto-Re/issues). You can also take a look at the [contributing guide](https://github.com/kefranabg/readme-md-generator/blob/master/CONTRIBUTING.md).
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
+
+## 📝 License
+
+This project is [Apache--2.0](https://github.com/SomnathDas/Whatsapp-Botto-Re/blob/master/LICENSE) licensed.
+
+***

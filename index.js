@@ -24,9 +24,6 @@ const translate = require('google-translate-api');
 const booru = require('sfwbooru')
 const errorurl = 'https://steamuserimages-a.akamaihd.net/ugc/954087817129084207/5B7E46EE484181A676C02DFCAD48ECB1C74BC423/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false'
 const Database = require('better-sqlite3');
-const db = new Database('foobar.db', {
-    verbose: console.log
-});
 
 const serverOption = {
     headless: true,
@@ -152,44 +149,6 @@ async function msgHandler(client, message) {
         const isUrl = new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/gi)
         const isMediaGiphy = url.match(new RegExp(/https?:\/\/media.giphy.com\/media/, 'gi'))
         const isGiphy = url.match(new RegExp(/https?:\/\/(www\.)?giphy.com/, 'gi'))
-
-        var blacklist2 = false;
-
-        // const create = "CREATE TABLE user (author string, ban bool)"
-        // db.exec(create)
-        /*   db.each("SELECT author AS id, author FROM user", function(err, row) {
-             var newrowid = row.id + '@c.us'
-             console.log(newrowid)
-             if (newrowid === author) {
-               console.log('ban')
-               blacklist2 = true;
-             }
-           }); */
-
-        // Checking for new user
-        /* try {
-            const stmt3 = db.prepare('SELECT author FROM user WHERE author = ?')
-            const row = stmt3.get(author)
-            if (row === undefined) {
-                const stmt1 = db.prepare('INSERT INTO user (author, ban) VALUES(?, ?)');
-                const info = stmt1.run(author, 'false')
-            }
-        } catch (err) {
-            console.log(err)
-        }
-        // checking for ban
-        try {
-            const stmt2 = db.prepare('SELECT ban FROM user WHERE author = ?')
-            const user = stmt2.get(author)
-            console.log(user.ban);
-            if (user.ban == true) {
-                client.sendText(from, 'You\'re banned, Baka')
-                return;
-            }
-        } catch (err) {
-            console.log(err)
-        }
-                                      */
 
         switch (command) {
             case 'tnc':
@@ -495,46 +454,6 @@ Hope you have a great day!`
                     client.removeParticipant(from, author)
                 }
                 break
-
-           /* case 'ban':
-                {
-                    arg = body.trim().split(' ')
-                    if (isGroupMsg) {
-                        if (arg.length >= 2) {
-                            const wong = arg[1]
-                            console.log(arg[1])
-                            const wongw = await wong.replace('@', '')
-                            const wongwstring = wongw.toString();
-                            if (isbotadmin == true) {
-                                if (botadmins.includes(wong + '@c.us')) {
-                                    break
-                                } else {
-                                    const stmt = await db.prepare('UPDATE user SET ban = true WHERE author = ?')
-                                    await stmt.run(wongw + '@c.us')
-                                    await client.sendTextWithMentions(from, wong + 'Is now banned!')
-                                }
-                            }
-                        }
-                    }
-                }
-                break
-
-            case 'unban':
-                {
-                    arg = body.trim().split(' ')
-                    if (isGroupMsg) {
-                        if (arg.length >= 2) {
-                            const wong = arg[1]
-                            const wongw = await wong.replace('@', '')
-                            const wongwstring = wongw.toString();
-                            if (isbotadmin == true) {
-                                const stmt = await db.prepare('UPDATE user SET ban = false WHERE author = ?')
-                                await stmt.run(wongw + '@c.us')
-                                await client.sendTextWithMentions(from, wong + ' is again allowed to use the bot')
-                            }
-                        }
-                    }
-                } */
             case 'join':
                 arg = body.trim().split(' ')
                     const joingrp = await client.joinGroupViaLink(arg[1])

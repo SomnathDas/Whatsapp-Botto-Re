@@ -163,10 +163,6 @@ My prefix is (#)
 
 🌟️ Command List 🌟️
 
-
-*_CMD: #add or #support_*
-*Description: DMs our support group link to you* 👑️
-
 *_CMD: #profile_*
 *Description: Displays the information of the user*
 
@@ -331,19 +327,6 @@ Hope you have a great day!`
                     await client.sendFileFromUrl(from, `${url}`, 'meme.jpg', `${title}`)
                     break
                 }
-            case 'support':
-            case 'add':
-                client.sendLinkWithAutoPreview(author, 'https://chat.whatsapp.com/DI6qXVdkqF2BBOeLD2sLqX', `👋️Hi *${pushname}* Here is our Support Group\' invite link. We hope you have fun ❤️ \n\n https://chat.whatsapp.com/DI6qXVdkqF2BBOeLD2sLqX`)
-                break
-                // Group Commands (group admin only)
-            case 'report':
-                arg = body.trim().split(' ')
-                var slicedArgs = Array.prototype.slice.call(arg, 1);
-                console.log(slicedArgs)
-                const text2 = await slicedArgs.join(' ')
-                await client.sendText('917638851613-1597737101@g.us', 'Bug:' + text2 + '\n\nFrom:' + author + ` ${pushname} in ${name}` + chat.id + '')
-                await client.reply(from, '✨️ Thank you for reporting', id)
-                break
             case 'kick':
                 if (!isGroupMsg) return client.reply(from, 'This command can only be used in groups, Baka!', id)
                 if (!isGroupAdmins) return client.reply(from, 'You are not an admin, Baka!', id)

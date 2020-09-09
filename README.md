@@ -30,6 +30,23 @@ npm install
 npm start
 ```
 
+## Features 
+
+| Functions                     | Status |
+|:-----------------------------:|:------:|
+| Convert Images Into Stickers  | :white_check_mark: |
+| Retrive anime info            | :white_check_mark: |
+| Display group information     | :white_check_mark: |
+| Display user profile info     | :white_check_mark: |
+| Get anime wallpapers          | :white_check_mark: |
+| Get random meme               | :white_check_mark: |
+| Get random post for specifc sr| :white_check_mark: |
+| Remove group members          | :white_check_mark: |
+| Promote and demote users      | :white_check_mark: |
+
+
+
+
 ## Authors 😳️
 
 👤 **Alen Yohannan**

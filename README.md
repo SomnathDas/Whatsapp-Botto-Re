@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to Whatsapp-Botto-Re!</h1>
+<h1 align="center">Welcome to Whatsapp-Botto-Re!<img src="https://github.com/TheDudeThatCode/TheDudeThatCode/blob/master/Assets/Hi.gif" width="29px"> </h1>
 <p>
   <img src="https://img.shields.io/badge/npm-%3E%3D5.5.0-blue.svg" />
   <img src="https://img.shields.io/badge/node-%3E%3D9.3.0-blue.svg" />

@@ -9,7 +9,7 @@
     <img alt="License: Apache--2.0" src="https://img.shields.io/github/license/AlenSaito1/Whatsapp-Botto-Re" />
 </p>
 
-> A whatsapp bot made using open-wa/wa-automate-nodejs library
+> A whatsapp bot made using open-wa/wa-automate-nodejs library flavouring with anime UwU
 
 ### 🏠 [Homepage](https://github.com/SomnathDas/Whatsapp-Botto-Re)
 
@@ -41,10 +41,11 @@ npm start
 
 * Twitter: [@aksd3247](https://twitter.com/aksd3247)
 * Github: [@SomnathDas](https://github.com/SomnathDas)
+* Instagram: [@samurai3247](https://www.instagram.com/samurai3247)
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/SomnathDas/Whatsapp-Botto-Re/issues). You can also take a look at the [contributing guide](https://github.com/kefranabg/readme-md-generator/blob/master/CONTRIBUTING.md).
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/SomnathDas/Whatsapp-Botto-Re/issues). You can also take a look at the [contributing guide](https://github.com/SomnathDas/Whatsapp-Botto-Re/edit/master/CONTRIBUTING.md).
 
 ## Show your support
 

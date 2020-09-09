@@ -43,8 +43,9 @@ npm start
 | Get random post for specifc sr| :white_check_mark: |
 | Remove group members          | :white_check_mark: |
 | Promote and demote users      | :white_check_mark: |
+| Ping all group members        | :white_check_mark: |
 
-
+* Note: All features are not listed, some minor ones are left out
 
 
 ## Authors 😳️

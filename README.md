@@ -34,9 +34,9 @@ npm start
 
 | Functions                     | Status |
 |:-----------------------------:|:------:|
-| Convert Images Into Stickers  | :red_check_mark: |
-| Retrive anime info            | :white_check_mark: |
-| Display group information     | :white_check_mark: |
+| Convert Images Into Stickers  | :heavy_check_mark: |
+| Retrive anime info            | :heavy_check_mark: |
+| Display group information     | :heavy_check_mark: |
 | Display user profile info     | :white_check_mark: |
 | Get anime wallpapers          | :white_check_mark: |
 | Get random meme               | :white_check_mark: |

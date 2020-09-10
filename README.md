@@ -34,7 +34,7 @@ npm start
 
 | Functions                     | Status |
 |:-----------------------------:|:------:|
-| Convert Images Into Stickers  | :white_check_mark: |
+| Convert Images Into Stickers  | :red_check_mark: |
 | Retrive anime info            | :white_check_mark: |
 | Display group information     | :white_check_mark: |
 | Display user profile info     | :white_check_mark: |
@@ -44,6 +44,8 @@ npm start
 | Remove group members          | :white_check_mark: |
 | Promote and demote users      | :white_check_mark: |
 | Ping all group members        | :white_check_mark: |
+| Get Waifu images              | :white_check_mark: |
+| Can return random doujin url  | :white_check_mark: |
 
 * Note: All features are not listed, some minor ones are left out
 

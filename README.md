@@ -52,12 +52,12 @@ npm start
 
 ## Authors uwu)/ 😳️
 
-👤 **Alen Yohannan**
+👤 **Alen Yohannan** ***Hero of Hyrule***
 
 * Twitter: [@TakahiroBan](https://twitter.com/TakahiroBan)
 * Github: [@AlenSaito1](https://github.com/AlenSaito1)
 
-👤 **Somnath Das**
+👤 **Somnath Das** ***Neko, God Of Culture***
 
 * Twitter: [@aksd3247](https://twitter.com/aksd3247)
 * Github: [@SomnathDas](https://github.com/SomnathDas)

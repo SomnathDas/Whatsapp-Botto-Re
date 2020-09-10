@@ -37,20 +37,20 @@ npm start
 | Convert Images Into Stickers  | :heavy_check_mark: |
 | Retrive anime info            | :heavy_check_mark: |
 | Display group information     | :heavy_check_mark: |
-| Display user profile info     | :white_check_mark: |
-| Get anime wallpapers          | :white_check_mark: |
-| Get random meme               | :white_check_mark: |
-| Get random post for specifc subreddit| :white_check_mark: |
-| Remove group members          | :white_check_mark: |
-| Promote and demote users      | :white_check_mark: |
-| Ping all group members        | :white_check_mark: |
-| Get Waifu images              | :white_check_mark: |
-| Can return random doujin url  | :white_check_mark: |
+| Display user profile info     | :heavy_check_mark: |
+| Get anime wallpapers          | :heavy_check_mark: |
+| Get random meme               | :heavy_check_mark: |
+| Get random post for specifc subreddit| :heavy_check_mark: |
+| Remove group members          | :heavy_check_mark: |
+| Promote and demote users      | :heavy_check_mark: |
+| Ping all group members        | :heavy_check_mark: |
+| Get Waifu images              | :heavy_check_mark: |
+| Can return random doujin url  | :heavy_check_mark: |
 
 * Note: All features are not listed, some minor ones are left out
 
 
-## Authors 😳️
+## Authors uwu)/ 😳️
 
 👤 **Alen Yohannan**
 

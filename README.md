@@ -9,7 +9,7 @@
     <img alt="License: Apache--2.0" src="https://img.shields.io/github/license/AlenSaito1/Whatsapp-Botto-Re" />
 </p>
 
-> A whatsapp bot made using open-wa/wa-automate-nodejs library flavouring with anime UwU 🤗️
+> A whatsapp bot made using open-wa/wa-automate-nodejs library
 
 ### 🏠 [Homepage](https://github.com/SomnathDas/Whatsapp-Botto-Re)
 

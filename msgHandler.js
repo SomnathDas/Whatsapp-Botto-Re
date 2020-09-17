@@ -9,7 +9,6 @@ const { help, info, } = require('./lib/help')
 const quotedd = require('./lib/quote')
 const msgFilter = require('./lib/msgFilter')
 const akaneko = require('akaneko');
-const invitegrp = '919744375687-1599238855@g.us'
 const ban = JSON.parse(fs.readFileSync('./lib/banned.json'))
 const errorurl = 'https://steamuserimages-a.akamaihd.net/ugc/954087817129084207/5B7E46EE484181A676C02DFCAD48ECB1C74BC423/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false'
 
@@ -43,8 +42,7 @@ module.exports = msgHandler = async (client, message) => {
         const isGroupAdmins = isGroupMsg ? groupAdmins.includes(sender.id) : false
         const isBotGroupAdmins = isGroupMsg ? groupAdmins.includes(botNumber + '@c.us') : false
         const isBanned = ban.includes(chatId)
-        const botadmins = await client.getGroupAdmins('919744375687-1599187760@g.us')
-        const isbotadmin = author.includes(botadmins)
+        const isowner = sender.id === '919744375687@c.us'
 
         msgFilter.addFilter(from)
 
@@ -152,7 +150,7 @@ module.exports = msgHandler = async (client, message) => {
             }
             break
         case 'bc':
-            if(!isbotadmin) return client.reply(from, 'Only Bot admins!', message.id)
+            if(!isowner) return client.reply(from, 'Only Bot admins!', message.id)
             let msg = body.slice(4)
             const chatz = await client.getAllChatIds()
             for (let ids of chatz) {
@@ -162,7 +160,7 @@ module.exports = msgHandler = async (client, message) => {
             client.reply(from, 'Broadcast Success!', message.id)
             break
         case 'ban':
-            if(!isbotadmin) return client.reply(from, 'Only Bot admins can use this CMD!', message.id)
+            if(!isowner) return client.reply(from, 'Only Bot admins can use this CMD!', message.id)
             for (let i = 0; i < mentionedJidList.length; i++) {
                 ban.push(mentionedJidList[i])
                 fs.writeFileSync('./lib/banned.json', JSON.stringify(ban))
@@ -206,7 +204,7 @@ module.exports = msgHandler = async (client, message) => {
             client.reply(from, 'Done!', message.id)
             break
         case 'clearall':
-            if (!isbotadmin) return client.reply(from, 'Owner only', message.id)
+            if (!isowner) return client.reply(from, 'Owner only', message.id)
             const allChatz = await client.getAllChats()
             for (let dchat of allChatz) {
                 await client.deleteChat(dchat.id)
@@ -214,7 +212,7 @@ module.exports = msgHandler = async (client, message) => {
             client.reply(from, 'Done', message.id)
             break
         case 'unban':
-            if(!isbotadmin) return client.reply(from, 'Only bot admins can use this CMD', message.id)
+            if(!isowner) return client.reply(from, 'Only bot admins can use this CMD', message.id)
             let inx = ban.indexOf(mentionedJidList[0])
             ban.splice(inx, 1)
             fs.writeFileSync('./lib/banned.json', JSON.stringify(ban))
@@ -256,7 +254,6 @@ module.exports = msgHandler = async (client, message) => {
             await client.sendTextWithMentions(from, `Demoted @${mentionedJidList[0].replace('@c.us', '')}.`)
             break
         case 'join':
-            if (chat.id == invitegrp) {
             if (args.length == 0) return client.reply(from, 'Wrong Format', message.id)
             const link = body.slice(6)
             const minMem = 30
@@ -269,7 +266,6 @@ module.exports = msgHandler = async (client, message) => {
             }).catch(error => {
                 client.reply(from, 'An error occured 💔️', message.id)
             })
-            }
             break
         case 'sauce':
             if (isMedia) {

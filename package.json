@@ -17,7 +17,7 @@
     "mal-scraper": "^2.7.1",
     "moment-timezone": "^0.5.31",
     "nana-api": "^1.1.2",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "node-gtts": "^2.0.2",
     "nyaasiscrapper": "^1.1.0",
     "sfwbooru": "0.0.2",

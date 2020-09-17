@@ -3,12 +3,6 @@ const {
     decryptMedia
 } = require('@open-wa/wa-automate')
 const moment = require('moment-timezone')
-const {
-    tiktok,
-    instagram,
-    twitter,
-    facebook
-} = require('./lib/dl-video')
 const urlShortener = require('./lib/shortener')
 const color = require('./lib/color')
 const {
@@ -17,14 +11,24 @@ const {
 const {
     getText
 } = require('./lib/ocr')
+const bent = require('bent')
 const malScraper = require('mal-scraper')
 const akaneko = require('akaneko');
 const axios = require('axios')
 const translate = require('google-translate-api');
 const booru = require('sfwbooru')
+const botadmin = '4915678716710@c.us'
+const botadmin2 = '919744375687@c.us'
+const botadmin3 = '4915678716710@c.us'
+const invitegrp = '919744375687-1599238855@g.us'
 const errorurl = 'https://steamuserimages-a.akamaihd.net/ugc/954087817129084207/5B7E46EE484181A676C02DFCAD48ECB1C74BC423/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false'
-const Database = require('better-sqlite3');
-
+const errorurl2 = 'https://pbs.twimg.com/media/DyhB6dDWoAIkO-o.jpg'
+const fs = require('fs-extra')
+const fetch = require('node-fetch');
+const { liriklagu, quotemaker } = require('./lib/functions')
+const { spawn } = require('child_process');
+let ban = JSON.parse(fs.readFileSync('./lib/banned.json'))
+let rule = JSON.parse(fs.readFileSync('./lib/rule.json'))
 const serverOption = {
     headless: true,
     qrRefreshS: 20,
@@ -72,23 +76,16 @@ const startServer = async() => {
             client.onAddedToGroup((chat) => {
                 client.sendFileFromUrl(chat.groupMetadata.id, 'https://images.alphacoders.com/692/thumb-1920-692362.png', 'welcome.png', `Hi everyone, Thanks for adding me to the group! Use '#help' to see the usable commands`)
             })
-            client.onGlobalParicipantsChanged((participantChangedEventModel) => {
-                if (participantChangedEventModel.action === 'add') {
-                    const grpic1 = client.getProfilePicFromServer(participantChangedEventModel.chat.id)
-
-                    if (grpic1 == undefined) {
-                        var gp2 = errorurl
-                    } else {
-                        var gp2 = grpic
-                    }
-                    client.sendFileFromUrl(participantChangedEventModel.chat, gp2, 'grpic.png', `Welcome to *` + participantChangedEventModel.chat.name + `* We hope you have fun here`)
-                }
-            })
-
+          
+            client.onIncomingCall((call) => {
+            client.sendText(call.peerJid, 'You are banned for calling, Join our support group to get unbanned')
+            client.contactBlock(call.peerJid)
+            ban.push(call.peerJid)
+            fs.writeFileSync('./lib/banned.json', JSON.stringify(ban))
+            client.deleteChat(call.peerJid)
         })
-        .catch((err) => {
-            console.error(err)
-        })
+
+      })
 }
 
 async function msgHandler(client, message) {
@@ -128,19 +125,42 @@ async function msgHandler(client, message) {
         const isCmd = body.startsWith(prefix)
         const time = moment(t * 1000).format('DD/MM HH:mm:ss')
         if (!isCmd && !isGroupMsg) return console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname))
-        if (!isCmd && isGroupMsg) return console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname), 'in', color(name), color(chat.id))
+        if (!isCmd && isGroupMsg) {
+                    const botNumber1 = await client.getHostNumber()
+                    const groupAdmins1 = isGroupMsg ? await client.getGroupAdmins(from) : ''
+                    const isGroupAdmins1 = isGroupMsg ? groupAdmins1.includes(sender.id) : false
+                    const isBotGroupAdmins1 = isGroupMsg ? groupAdmins1.includes(botNumber1 + '@c.us') : false
+ 
+            console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname), 'in', color(name), color(chat.id))
+                 if (body.includes('chat.whatsapp.com') && rule.includes(from) && !isGroupAdmins1 && isBotGroupAdmins1) {
+                         await client.reply(from, 'You know the rules, and so do I 🎶️', id)
+                            await client.removeParticipant(from, author)
+                                   return
+                 }
+              }
         if (isCmd && !isGroupMsg) console.log(color('[EXEC]'), color(time, 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname))
         if (isCmd && isGroupMsg) console.log(color('[EXEC]'), color(time, 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname), 'in', color(name))
 
         const botNumber = await client.getHostNumber()
-        //const isowner = owners.includes(sender.id)
+        const owners = ['9744375687@c.us', 'Sd']
+        const isowner = owners.includes(sender.id)
         const groupId = isGroupMsg ? chat.groupMetadata.id : ''
+        const isBanned = ban.includes(sender.id)
         const groupAdmins = isGroupMsg ? await client.getGroupAdmins(groupId) : ''
         const groupMembers = isGroupMsg ? await client.getGroupMembersId(groupId) : ''
         const isGroupAdmins = isGroupMsg ? groupAdmins.includes(sender.id) : false
         const isBotGroupAdmins = isGroupMsg ? groupAdmins.includes(botNumber + '@c.us') : false
-        // const botadmins = await client.getGroupAdmins('your bot group\'s id')
-        // const isbotadmin = botadmins.includes(sender.id)
+        const botadmins = await client.getGroupAdmins('919744375687-1599187760@g.us')
+        const isbotadmin = botadmins.includes(sender.id)
+
+        if (isowner && isbotadmin) {
+            const role = 'Owner'
+        } else if (isbotadmin) {
+            const role = 'Bot Admin | Helper'
+        } else if (isbotadmin == false) {
+            const role = 'User'
+        }
+
         // Checking function speed
         // const timestamp = moment()
         // const latensi = moment.duration(moment() - timestamp).asSeconds()
@@ -150,6 +170,10 @@ async function msgHandler(client, message) {
         const isMediaGiphy = url.match(new RegExp(/https?:\/\/media.giphy.com\/media/, 'gi'))
         const isGiphy = url.match(new RegExp(/https?:\/\/(www\.)?giphy.com/, 'gi'))
 
+
+    if (isBanned) {
+         client.reply(from, 'You are banned, Baka! >.<', id) 
+    } else {
         switch (command) {
             case 'tnc':
                 await client.sendText(from, 'This bot is an open-source program written in Javascript. \n\nBy using the bot you agreeing to our Terms and Conditions! \nWe do not store any of your data in our servers. We are not responsible for stickers that you create using bots, videos, images or other data that you get from this bot.')
@@ -163,6 +187,10 @@ My prefix is (#)
 
 🌟️ Command List 🌟️
 
+
+*_CMD: #add or #support_*
+*Description: DMs our support group link to you* 👑️
+
 *_CMD: #profile_*
 *Description: Displays the information of the user*
 
@@ -174,8 +202,12 @@ My prefix is (#)
 Usage: #sticker as caption of picture
 
 *_CMD: #gsticker <giphy URL>_*
-*Description: Turns gifs into stickers*🔖️
+*Description: Turns gifs into stickers* 🌠️
 Usage: #gsticker https://giphy.com/... 
+
+*_CMD: #sauce_*
+*Description: Give's the title of the picture specified* ❤️
+Usage: #sauce as the caption or reply of any picture
 
 *_CMD: #pokemon_*
 *Description: Returns picture of a random Pokemon* 😺️
@@ -184,9 +216,21 @@ Usage: #gsticker https://giphy.com/...
 *Description: Returns picture of a random waifu* 💌️
 
 *_CMD: #anime <anime name>_*
-*Description: Returns the information of the given anime* 📺️
+Description: Returns the information of the given anime* 📺️
 Usage: #anime sakura trick
 
+*_#tts <language-code> <text>_*
+*Description: Converts text to speech* 🗣️
+Usage: #tts en I love Zelda
+
+*_quotemaker | quote | author |_*
+*Description: Convert the given quote to an image*
+Usage: #qm | Courage need not to be remembered, for it is never forgotten | Zelda 🌌️
+
+*_#lyrics <song name>_*
+*Description: Displays the lyricsof the given song* 🎶️
+Usage: #lyrics Shinzou wo sasageyo
+            
 *_CMD: #neko_*
 *Description: Displays picture of a random cat* 🐈️
 
@@ -208,7 +252,7 @@ Usage: #covid Japan
 *Description: Displays a post from the given subreddit* 💻️
 Usage: #sr zelda
 
-*_CMD: #quotes_*
+*_CMD: #quotes_* [Disabled]
 *Description: Returns a quote that will either give you existential crises or wisdom* 🌠️
 
 *_CMD: #groupinfo_*
@@ -221,6 +265,16 @@ Usage: #sr zelda
 *Description: Flips a coin* 🟡
 
 Admin Commands 📙️
+
+Only group admins can execute this command
+
+*_CMD: #ping <text>_*
+*Description: Tags all members in the group* 🔊️
+Usage: #ping Well, in that case
+
+*_CMD: #delete_*
+Description: Deletes the Bot's message* 💔️
+Usage: Send #delete as reply to the bot's message
 
 To execute the following commands the bot and the author needs to be admin
 
@@ -244,7 +298,7 @@ Hope you have a great day!`
                     break
                 }
             case 'info':
-                client.reply(from, '👋️Hi there, I\'m Emilia\nThis project is open source, built using Javascript || Node.js and ~is available at GitHub https:\/\/bit.ly\/39Ld2L8~(Discontinued).\n\n *Creators*👑️\n\n_Alen Yohannan (Ban Takahiro)_ \n _Somnath Das (Takeshi Stark)_ \n\n*Developers*✨\n \n _Alen Yohannan_ \n_Somnath Das_\n_Dominik Heiing_\n\n*Contributors*💫\n\n_Miliana Blue_\n_Aman Sakuya_\n_Mystery_\n_ShellTear_', id)
+                client.reply(from, '👋️Hi there, I\'m Emilia\nThis project is open source, built using Javascript || Node.js and is available at GitHub https:\/\/bit.ly\/39Ld2L8 (Updated).\n\n *Creators*👑️\n\n_Alen Yohannan (Ban Takahiro)_ \n _Somnath Das (Takeshi Stark)_ \n\n*Developers*✨\n \n _Alen Yohannan_ \n_Somnath Das_\n_Dominik Heiing_\n\n*Contributors*💫\n\n_Miliana Blue_\n_Aman Sakuya_\n_Mystery_\n_ShellTear_', id)
                 break
                 // Sticker Creator
             case 'sticker':
@@ -285,6 +339,13 @@ Hope you have a great day!`
                     await client.reply(from, 'Something went wrong', id)
                 }
                 break
+           case 'delete':
+                    if (!isGroupAdmins) return client.reply(from, 'Failed, this command can only be used by group admins!', id)
+                    if (!quotedMsg) return client.reply(from, 'Sorry, the message format is wrong please check the menu', id)
+                    if (!quotedMsgObj.fromMe) return client.reply(from, 'Sorry, message format is wrong, please check menu. [Wrong Format]', id)
+                        client.deleteMessage(quotedMsgObj.chatId, quotedMsgObj.id, false)
+                           .then(() => client.reply(from, 'Successfully deleted message', id))
+                   break
             case 'groupinfo':
                 const grpic = await client.getProfilePicFromServer(chat.id)
                 const groupchat = await client.getChatById(from)
@@ -300,49 +361,6 @@ Hope you have a great day!`
                 await client.sendFileFromUrl(from, gp1, 'grp.png', '*' + name + '*\n\n Description:\n ' + `${desc}`)
                 break
                 // Other Commands
-                       case 'sauce':
-                if (isMedia) {
-                    const mediaData = await decryptMedia(message)
-                    const imageBase64 = `data:${mimetype};base64,${mediaData.toString('base64')}`
-                         
-                try {
-                   const raw = await fetch("https://trace.moe/api/search", {
-                   method: "POST",
-                   body: JSON.stringify({ image: imageBase64 }),
-                   headers: { "Content-Type": "application/json" }
-                   })
-
-                  const parsedResult = await raw.json()
-                  const { anime, episode, title_english } = parsedResult.docs[0]
-                  const content = `*Anime Found!* \n⛩️ *Japanese Title:* ${anime} \n✨️ *English Title:* ${title_english} \n💚️ *Source Episode:* ${episode} `
-                                       await client.sendImage(from, imageBase64, 'sauce.png', content, id)
-                                       console.log("Sent!")
-                                    } catch (err) {
-                                      await client.sendFileFromUrl(from, errorurl, 'error.png', '💔️ An Error Occured', id)
-                                         }
-                  } else if (quotedMsg && quotedMsg.type == 'image') {
-                    const mediaData = await decryptMedia(quotedMsg)
-                    const imageBase64 = `data:${quotedMsg.mimetype};base64,${mediaData.toString('base64')}`
-   
-                 try {
-                   const raw = await fetch("https://trace.moe/api/search", {
-                   method: "POST",
-                   body: JSON.stringify({ image: imageBase64 }),
-                   headers: { "Content-Type": "application/json" }
-                   })
-
-                  const parsedResult = await raw.json()
-                  const { anime, episode, title_english } = parsedResult.docs[0]
-
-                  const content = `*Anime Found!* \n⛩️ *Japanese Title:* ${anime} \n✨️ *English Title: ${title_english} \n💚️ *Source Episode:* ${episode} `
-                                       await client.sendImage(from, imageBase64, 'sauce.png', content, id)
-                                       console.log("Sent!")
-                                    } catch (err) {
-                                      throw new Error(err.message)
-                                      await client.sendFileFromUrl(from, errorurl, 'error.png', '💔️ An Error Occured', id)
-                                         }
-                   }
-             
             case 'translate':
                 arg = body.trim().split(' ')
                 if (quotedMsg) {
@@ -358,7 +376,7 @@ Hope you have a great day!`
                     break
                 }
             case 'iso':
-                client.reply(from, iso, id)
+                client.reply(from, '🌍️ *Language Codes for TTS* 🌐️ \n🇬🇧️ en - English\n🇯🇵️ jp - Japanese\n🇮🇳️ hi - Hindi\n🇮🇩️ id - Indonesian', id)
                 break
             case 'memes':
             case 'meme':
@@ -370,6 +388,19 @@ Hope you have a great day!`
                     await client.sendFileFromUrl(from, `${url}`, 'meme.jpg', `${title}`)
                     break
                 }
+            case 'support':
+            case 'add':
+                client.sendLinkWithAutoPreview(author, 'https://chat.whatsapp.com/DI6qXVdkqF2BBOeLD2sLqX', `👋️Hi *${pushname}* Here is our Support Group\' invite link. We hope you have fun ❤️ \n\n https://chat.whatsapp.com/DI6qXVdkqF2BBOeLD2sLqX`)
+                break
+                // Group Commands (group admin only)
+            case 'report':
+                arg = body.trim().split(' ')
+                var slicedArgs = Array.prototype.slice.call(arg, 1);
+                console.log(slicedArgs)
+                const text2 = await slicedArgs.join(' ')
+                await client.sendText('917638851613-1597737101@g.us', 'Bug:' + text2 + '\n\nFrom:' + author + ` ${pushname} in ${name}` + chat.id + '')
+                await client.reply(from, '✨️ Thank you for reporting', id)
+                break
             case 'kick':
                 if (!isGroupMsg) return client.reply(from, 'This command can only be used in groups, Baka!', id)
                 if (!isGroupAdmins) return client.reply(from, 'You are not an admin, Baka!', id)
@@ -394,6 +425,19 @@ Hope you have a great day!`
                     console.log(slicedArgs)
                     const text1 = await slicedArgs.join(' ')
                     await client.sendTextWithMentions(from, `*${pushname}* says *` + text1 + '* ' + arr4)
+                }
+                break
+            case 'admins':
+                {
+                    var arr = groupadmins
+                    const arr2 = await arr.map(i => '@' + i);
+                    const arr3 = await arr2.map(i => i.replace('@c.us', ''))
+                    const arr4 = await arr3.join(' ')
+                    arg = body.trim().split(' ')
+                    var slicedArgs = Array.prototype.slice.call(arg, 1);
+                    console.log(slicedArgs)
+                    const text1 = await slicedArgs.join(' ')
+                    await client.sendTextWithMentions(from, `*${pushname}* says ` + text1 + ' ' + arr4)
                 }
                 break
             case 'fb':
@@ -480,8 +524,43 @@ Hope you have a great day!`
                     client.removeParticipant(from, author)
                 }
                 break
+
+            case 'ban':
+          if(!isbotadmin) return client.reply(from, 'Only Bot admins can use this command', message.id)
+            for (let i = 0; i < mentionedJidList.length; i++) {
+                ban.push(mentionedJidList[i])
+                fs.writeFileSync('./lib/banned.json', JSON.stringify(ban))
+                client.reply(from, 'Banned User!', message.id)
+                 }
+                break
+
+            case 'unban':
+          if(!isbotadmin) return client.reply(from, 'Only bot admins can use this command', message.id)
+          
+              let inx = ban.indexOf(mentionedJidList[0])
+               ban.splice(inx, 1)
+               fs.writeFileSync('./lib/banned.json', JSON.stringify(ban))
+               client.reply(from, 'Unbanned User', message.id)
+               break
+            case 'rule-true':
+              if (!isGroupAdmins) return client.reply(from, 'Only group admins can use this command', message.id)
+              if (!isBotGroupAdmins) return client.reply(from, 'You need to make me admin to enable it' , id)
+                     rule.push(from)
+                       fs.writeFileSync('./lib/rule.json', JSON.stringify(rule))
+                        client.reply(from, 'kick for links is now active! ❤️', message.id)
+                 
+            case 'rule-false':
+                 if (!isGroupAdmins) return client.reply(from, 'Only group admins can use this command', message.id)
+                 if (!isBotGroupAdmins) return client.reply(from, 'You need to make me admin to enable it' , id)
+                     let inx2 = rule.indexOf(from)
+                       rule.splice(inx, 1)
+               fs.writeFileSync('./lib/rule.json', JSON.stringify(rule))
+               client.reply(from, 'Ki ck for links is now deactivated! 💔️', message.id)
+                break
+
             case 'join':
                 arg = body.trim().split(' ')
+                if (chat.id == invitegrp) {
                     const joingrp = await client.joinGroupViaLink(arg[1])
                     console.log(joingrp)
 
@@ -491,6 +570,16 @@ Hope you have a great day!`
                         await client.reply(from, 'You didn\'t give a invite link, Baka >.<', id)
                     } else {
                         await client.reply(from, '*Joined* ✨️', id)
+                        await client.getGroupMembersId(joingrp)
+                        .then((ids) => {
+                            console.log('[CLIENT]', color(`Invited to Group. [ ${name} : ${ids.length}]`, 'yellow'))
+                            var num = ids.length
+                          })
+                        if (num <= 15) {
+                             await client.sendText(joingrp, 'Sorry, the minimum group member is 15 user to use this bot. Bye~')
+                             await client.leaveGroup(joingrp)
+                              }
+                 
                         break
                     }
                 } else {
@@ -500,7 +589,35 @@ Hope you have a great day!`
 
 
                 //fun commands
-            /* case 'nh':
+            case 'tts':
+        	if (args.length == 0) return client.reply(from, 'This is not the correct format, Use #help to see to see the correct format')
+        	const ttsEn = require('node-gtts')('en')
+	        const ttsJp = require('node-gtts')('ja')
+                const ttsHi = require('node-gtts')('hi')
+                const ttsId = require('node-gtts')('id')
+                const dataText = body.slice(8)
+                var dataBhs = body.slice(5, 7)
+	        if (dataBhs == 'en') {
+                    ttsEn.save('./tts/resEn.mp3', dataText, function () {
+                        client.sendPtt(from, './tts/resEn.mp3', message.id)
+                })
+                } else if (dataBhs == 'hi') {
+                    ttsJp.save('./tts/resHi.mp3', dataText, function () {
+                        client.sendPtt(from, './tts/resHi.mp3', message.id)
+                })
+                } else if (dataBhs == 'id') {
+                    ttsJp.save('./tts/resId.mp3', dataText, function () {
+                        client.sendPtt(from, './tts/resId.mp3', message.id)
+                })
+		} else if (dataBhs == 'jp') {
+                    ttsJp.save('./tts/resJp.mp3', dataText, function () {
+                        client.sendPtt(from, './tts/resJp.mp3', message.id)
+                })
+                 } else {
+		    client.reply(from, 'Currently only English and Japanese are supported', message.id)
+            }
+            break
+            case 'dujin':
                 if (args.length >= 1) {
                     const nuklir = body.split(' ')[1]
                     const nanap = require('nana-api')
@@ -534,52 +651,68 @@ Hope you have a great day!`
                             }
                         }
                     }))
-                } */
-                break
-            case 'profile':
-                if (isGroupAdmins) {
-                    var adminT = 'True'
-                } else if (!isGroupAdmins) {
-                    var adminT = 'False'
                 }
-        
-                    const pfp = await client.getProfilePicFromServer(author)
-                    console.log(pfp)
-                    const status1 = await client.getStatus(author)
-                    console.log(status1)
-                    const {
-                        status
-                    } = status1
+                break
+            case 'profile': {
+      let ban2 = JSON.parse(fs.readFileSync('./lib/banned.json'))
+    if (quotedMsg) {
+        var admin = groupAdmins.includes(quotedMsgObj.sender.id)
+        var namae = quotedMsgObj.sender.name
+        var badmin = botadmins.includes(quotedMsgObj.sender.id)
+        var pfp = await client.getProfilePicFromServer(quotedMsgObj.sender.id)
+        var sts = await client.getStatus(quotedMsgObj.sender.id)
+        var ban1 = ban2.includes(quotedMsgObj.sender.id)
+        const { status } = sts
+              if (badmin == true) {
+                var role = 'Royal Guard'
+              } else {
+                var role = 'User'
+              }
+              if (pfp == undefined) {
+                var picture = errorurl
+              } else {
+                var picture = pfp
+              }
+    } else if (!quotedMsg) {
+        var adm = groupAdmins.includes(sender.id)
+        var namae = `${pushname}`
+        var badmin = botadmins.includes(sender.id)
+        console.log(badmin)
+        var pfp = await client.getProfilePicFromServer(author)
+        var sts = await client.getStatus(sender.id)
+        var ban1 = ban2.includes(author)
+        var { status } = sts
+              if (badmin == true) {
+                var role = 'Royal Guard'
+              } else {
+                var role = 'User'
+              }
+              if (pfp == undefined) {
+                var picture = errorurl
+              } else {
+                var picture = pfp
+              }
+    }   
+    
+    
+    const caption = `✨️ *User Profile* ✨️
 
-                    if (pfp == undefined) {
-                        await client.sendFileFromUrl(from, errorurl, 'profile.png', `🔖️ *Username: ${pushname}*\n\n✨️ *Role: User *\n\n💌️ *User Info: ` + status + `*\n\n💔️ *Ban: False*\n\n🎆️ *Group: ${name}*\n\n👑️ *Admin: ` + adminT + '*')
-                        break
-                    } else {
-                        await client.sendFileFromUrl(from, pfp, 'profile.png', `🔖️ *Username: ${pushname}*\n\n✨️ *Role: User *\n\n💌️ *User Info: ` + status + `*\n\n💔️ *Ban: False*\n\n🎆️ *Group: ${name}*\n\n👑️ *Admin: ` + adminT + '*')
-                        break
-                    }
-                } else if (quotedMsg) {
+🔖️ *Username: ${namae}*
+
+✨️ *Role: ${role}*
+
+💌️ *User Info: ${status}*
+
+💔️ *Ban: ${ban1}*
+
+👑️ *Admin: ${adm}*`
+
+                   await client.sendFileFromUrl(from, picture, 'picture.jpg', caption)
  
+}
 
-                        if (await groupAdmins.includes(quotedMsgObj.sender.id)) {
-                            var admin2 = 'True'
-                        } else {
-                            var admin2 = 'False'
-                        }
+break
 
-                    const usr1 = quotedMsgObj.sender.formattedName
-                    const status2 = await client.getStatus(quotedMsgObj.sender.id)
-                    const {
-                        status
-                    } = status2
-                    const pfp2 = await client.getProfilePicFromServer(quotedMsgObj.sender.id)
-                    if (pfp2 == undefined) {
-                        await client.sendFileFromUrl(from, errorurl, 'profile.png', `🔖️ *Username: ` + usr1 + `*\n\n✨️ *Role: user\n\n💌️ *User Info: ` + status + `*\n\n💔️ *Ban: False*\n\n🎆️ *Group: ${name}*\n\n👑️ *Admin: ` + admin2 + '*')
-                    } else {
-                        await client.sendFileFromUrl(from, pfp2, 'profile.png', `🔖️ *Username: ` + usr1 + `*\n\n✨️ *Role: User*\n\n💌️ *User Info: ` + status + `*\n\n💔️ *Ban: False*\n\n🎆️ *Group: ${name}*\n\n👑️ *Admin: ` + admin2 + '*')
-                    }
-                }
-                break
             case 'slap':
                 arg = body.trim().split(' ')
                 const person = author.replace('@c.us', '')
@@ -590,7 +723,48 @@ Hope you have a great day!`
                 client.sendFileFromUrl(from, akaneko.neko(), 'neko.jpg', 'Neko *Nyaa*~')
                 break
             case 'sauce':
-                console.log(message)
+                if (isMedia) {
+                    const mediaData = await decryptMedia(message)
+                    const imageBase64 = `data:${mimetype};base64,${mediaData.toString('base64')}`
+                         
+                try {
+                   const raw = await fetch("https://trace.moe/api/search", {
+                   method: "POST",
+                   body: JSON.stringify({ image: imageBase64 }),
+                   headers: { "Content-Type": "application/json" }
+                   })
+
+                  const parsedResult = await raw.json()
+                  const { anime, episode, title_english } = parsedResult.docs[0]
+                  const content = `*Anime Found!* \n⛩️ *Japanese Title:* ${anime} \n✨️ *English Title:* ${title_english} \n💚️ *Source Episode:* ${episode} `
+                                       await client.sendImage(from, imageBase64, 'sauce.png', content, id)
+                                       console.log("Sent!")
+                                    } catch (err) {
+                                      await client.sendFileFromUrl(from, errorurl, 'error.png', '💔️ An Error Occured', id)
+                                         }
+                  } else if (quotedMsg && quotedMsg.type == 'image') {
+                    const mediaData = await decryptMedia(quotedMsg)
+                    const imageBase64 = `data:${quotedMsg.mimetype};base64,${mediaData.toString('base64')}`
+   
+                 try {
+                   const raw = await fetch("https://trace.moe/api/search", {
+                   method: "POST",
+                   body: JSON.stringify({ image: imageBase64 }),
+                   headers: { "Content-Type": "application/json" }
+                   })
+
+                  const parsedResult = await raw.json()
+                  const { anime, episode, title_english } = parsedResult.docs[0]
+
+                  const content = `*Anime Found!* \n⛩️ *Japanese Title:* ${anime} \n✨️ *English Title: ${title_english} \n💚️ *Source Episode:* ${episode} `
+                                       await client.sendImage(from, imageBase64, 'sauce.png', content, id)
+                                       console.log("Sent!")
+                                    } catch (err) {
+                                      throw new Error(err.message)
+                                      await client.sendFileFromUrl(from, errorurl, 'error.png', '💔️ An Error Occured', id)
+                                         }
+                   }
+             
                 break
             case 'Link':
                 {
@@ -605,6 +779,7 @@ Hope you have a great day!`
             case 'sr':
                 arg = body.trim().split(' ')
                 const sr = arg[1]
+             try {
                 const response1 = await axios.get('https://meme-api.herokuapp.com/gimme/' + sr + '/');
                 const {
                     postLink,
@@ -614,29 +789,93 @@ Hope you have a great day!`
                     nsfw,
                     spoiler
                 } = response1.data
-                await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}` + '\n\nPostlink:' + `${postLink}`)
+                        await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}` + '\n\nPostlink:' + `${postLink}`)
+               } catch(err) {
+                        await client.reply(from, 'There is no such subreddit, Baka!', id) 
+                            }
                 break
+           case 'bc' :
+         if(!isbotadmin) return client.reply(from, 'Only Bot admins can use this CMD!', message.id)
+            let msg = body.slice(4)
+            const chatz = await client.getAllChatIds()
+            for (let ids of chatz) {
+                var cvk = await client.getChatById(ids)
+                if (!cvk.isReadOnly) client.sendText(ids, `[ EWH Bot Broadcast ]\n\n${msg}`)
+            }
+            client.reply(from, 'Broadcast Success!', message.id)
+            break
             case 'anime':
                 {
-                    arg = body.trim().split(' ')
-                    console.log(...arg[1])
-                    var slicedArgs = Array.prototype.slice.call(arg, 1);
-                    console.log(slicedArgs)
-                    const anim = await slicedArgs.join(' ')
-                    const {
-                        title,
-                        picture,
-                        score,
-                        synopsis,
-                        episodes,
-                        aired,
-                        rating,
-                        status
-                    } = await malScraper.getInfoFromName(anim)
+      const keyword = message.body.replace('#anime', '')
+      try {
+        const data = await fetch(
+          `https://api.jikan.moe/v3/search/anime?q=${keyword}`
+        )
+        const parsed = await data.json()
+        if (!parsed) {
+          await cleint.sendFileFromUrl(from, errorurl2, 'error.png', '💔️ Sorry, Couldn\'t find the requested anime', id)
+          console.log("Sent!")
+          return null
+        }
 
-                    await client.sendFileFromUrl(from, `${picture}`, 'Anime.png', '⛩️Title:' + `${title}` + '\n\n🎼️Score:' + `${score}` + '\n\n📙️Status:' + `${status}` + '\n\n🖼️Episodes:' + `${episodes}` + '\n\n✨️Rating:' + `${rating}` + '\n\n🌠️Synopsis:' + `${synopsis}` + '\n\n📆️Aired:' + `${aired}` + '.')
-                }
+        const {
+          title,
+          synopsis,
+          episodes,
+          url,
+          rated,
+          score,
+          image_url
+        } = parsed.results[0]
+        const content = `*Anime Found!*
+✨️ *Title:* ${title}
+
+🎆️ *Episodes:* ${episodes}
+
+💌️ *Rating:* ${rated}
+
+❤️ *Score:* ${score}
+
+💚️ *Synopsis:* ${synopsis}
+
+🌐️ *URL*: ${url}`
+
+        const image = await bent("buffer")(image_url)
+        const base64 = `data:image/jpg;base64,${image.toString("base64")}`
+
+        client.sendImage(from, base64, title, content)
+      } catch (err) {
+        console.error(err.message)
+        await cleint.sendFileFromUrl(from, errorurl2, 'error.png', '💔️ Sorry, Couldn\'t find the requested anime')
+      }
+    }
+
+                
                 break
+            case 'lyrics':
+               if (args.length == 0) return client.reply(from, 'Wrong Format, Baka!, Correct format: #lyrics <song name> ', message.id)
+                const lagu = body.slice(8)
+                console.log(lagu)
+                const lirik = await liriklagu(lagu)
+                client.sendText(from, lirik)
+                     break
+            case 'quotemaker':
+            argw = body.trim().split('|')
+             if (argw.length >= 3) {
+                 client.reply(from, 'Processing...', message.id) 
+                 const quotes = argw[1]
+                 const author = argw[2]
+                 const theme = argw[3]
+                 try {
+                     const resolt = await quotemaker(quotes, author, theme)
+                     client.sendFile(from, resolt, 'quotesmaker.jpg','Here you go')
+                 } catch {
+                     client.reply(from, 'The image failed to process 💔️', message.id)
+                 }
+            } else {
+                client.reply(from, 'Usage: \n#quotemaker | text | author |theme', message.id)
+            }
+            break
             case 'covid':
                 arg = body.trim().split(' ')
                 console.log(...arg[1])
@@ -655,8 +894,12 @@ Hope you have a great day!`
                 await client.sendText(from, '🌎️Covid Info -' + country + ' 🌍️\n\n✨️Total Cases: ' + `${cases}` + '\n📆️Today\'s Cases: ' + `${todayCases}` + '\n☣️Total Deaths: ' + `${deaths}` + '\n☢️Today\'s Deaths: ' + `${todayDeaths}` + '\n⛩️Active Cases: ' + `${active}` + '.')
                 break
             case 'waifu':
-                q8 = q2 = Math.floor(Math.random() * 98) + 10
-                client.sendFileFromUrl(from, 'http://randomwaifu.altervista.org/images/00' + q8 + '.png', 'Waifu.png', 'How is she?', id) // UwU)/ Working Fine
+                const data = fs.readFileSync('./lib/waifu.json')
+                const dataJson = JSON.parse(data)
+                const randIndex = Math.floor(Math.random() * dataJson.length)
+                const randKey = dataJson[randIndex]
+                   client.sendFileFromUrl(from, randKey.image, 'Waifu.jpg', randKey.teks, id)
+            break
                 break
             case 'neko':
                 q2 = Math.floor(Math.random() * 900) + 300
@@ -673,7 +916,7 @@ Hope you have a great day!`
                 const an1 = await slicedArgs.join(' ')
                 console.log(an1)
                 const an2 = an1.replace(' ', '_')
-                await booru.search('kn', [an2], {
+                await booru.search('sb', [an2], {
                         limit: 1,
                         random: true
                     })
@@ -716,6 +959,7 @@ Hope you have a great day!`
 
 
         }
+      }
     } catch (err) {
         console.log(color('[ERROR]', 'red'), err)
     }

@@ -5,8 +5,6 @@
   <a href="https://github.com/SomnathDas/Whatsapp-Botto-Re/commit-activity" target="_blank">
     <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
   </a>
-  <a href="https://github.com/open-wa/wa-automate-nodejs" target="_blank">
-    <img alt="License: GNU-GPL v3.0" src="https://img.shields.io/github/license/AlenSaito1/Whatsapp-Botto-Re" />
 </p>
 
 > A whatsapp bot made using open-wa/wa-automate-nodejs library

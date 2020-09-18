@@ -1,47 +1,78 @@
-# Whatsapp-Botto-Re
-Hello fellow users, Whatsapp Botto: Re is whatsapp automation script or more like a bot that responds to particular keywords and few other features that we are working on.
+<h1 align="center">Welcome to Whatsapp-Botto-Re!<img src="https://github.com/TheDudeThatCode/TheDudeThatCode/blob/master/Assets/Hi.gif" width="29px"> </h1>
+<p>
+  <img src="https://img.shields.io/badge/npm-%3E%3D5.5.0-blue.svg" />
+  <img src="https://img.shields.io/badge/node-%3E%3D9.3.0-blue.svg" />
+  <a href="https://github.com/SomnathDas/Whatsapp-Botto-Re/commit-activity" target="_blank">
+    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
+  </a>
+  <a href="https://github.com/open-wa/wa-automate-nodejs" target="_blank">
+    <img alt="License: Apache--2.0" src="https://img.shields.io/github/license/AlenSaito1/Whatsapp-Botto-Re" />
+</p>
 
-This is an open-source program written in Javascript. 
-This project require NodeJS v12.
+> A whatsapp bot made using open-wa/wa-automate-nodejs library
 
-## Clone this project
-
-```bash
-> git clone https://github.com/SomnathDas/Whatsapp-Botto-Re.git
-```
-
-## Install the dependencies:
-Before running the below command, make sure you're in the project directory that
-you've just cloned!!
-
-```bash
-> npm i
-```
-
-### Usage
-Run the Whatsapp bot
-
-```bash
-> npm start
-```
-
-## Terms & Condition
-By using the bot you agreeing to our Terms and Conditions 
-### Terms and conditions
-Your texts and your whatsapp username will be stored on our servers as long as the bot is active, your data will be erased when the bot goes offline. We do NOT store the images, videos, audio files and documents you send. We will never ask you to sign up or ask you for any of your passwords, OTPs or PINs. Thank you, Have a great day! 
-
-### If you want to contribute more please contact us on Discord. 
-Support Channels coming soon!
+### 🏠 [Homepage](https://github.com/SomnathDas/Whatsapp-Botto-Re)
 
 ## Prerequisites
-1. Brain
-2. Node.js
 
-### Troubleshooting
-Make sure all the necessary dependencies are installed.
-https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md
+- npm >=5.5.0
+- node >=9.3.0
 
-## Special Thanks
-For Basic Implementation:
-1. Open-Wa : https://github.com/open-wa/wa-automate-nodejs.git
-2. imageToSticker : https://github.com/YogaSakti/imageToSticker
+## Install
+
+```sh
+npm install
+```
+
+## Usage
+
+```sh
+npm start
+```
+
+## Features 
+
+| Functions                     | Status |
+|:-----------------------------:|:------:|
+| Convert Images Into Stickers  | :heavy_check_mark: |
+| Retrive anime info            | :heavy_check_mark: |
+| Display group information     | :heavy_check_mark: |
+| Display user profile info     | :heavy_check_mark: |
+| Get anime wallpapers          | :heavy_check_mark: |
+| Get random meme               | :heavy_check_mark: |
+| Get random post for specifc subreddit| :heavy_check_mark: |
+| Remove group members          | :heavy_check_mark: |
+| Promote and demote users      | :heavy_check_mark: |
+| Ping all group members        | :heavy_check_mark: |
+| Get Waifu images              | :heavy_check_mark: |
+| Can return random doujin url  | :heavy_check_mark: |
+
+* Note: All features are not listed, some minor ones are left out
+
+
+## Authors uwu)/ 😳️
+
+👤 **Alen Yohannan** aka ***Hero of Hyrule***
+
+* Twitter: [@TakahiroBan](https://twitter.com/TakahiroBan)
+* Github: [@AlenSaito1](https://github.com/AlenSaito1)
+
+👤 **Somnath Das** aka ***Neko, God Of Culture***
+
+* Twitter: [@aksd3247](https://twitter.com/aksd3247)
+* Github: [@SomnathDas](https://github.com/SomnathDas)
+* Instagram: [@samurai3247](https://www.instagram.com/samurai3247)
+
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/SomnathDas/Whatsapp-Botto-Re/issues). You can also take a look at the [contributing guide](https://github.com/SomnathDas/Whatsapp-Botto-Re/edit/master/CONTRIBUTING.md).
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
+
+## 📝 License
+
+This project is [Apache--2.0](https://github.com/SomnathDas/Whatsapp-Botto-Re/blob/master/LICENSE) licensed.
+
+***

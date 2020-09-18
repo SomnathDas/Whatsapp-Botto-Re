@@ -9,8 +9,12 @@ const { help, info, } = require('./lib/help')
 const quotedd = require('./lib/quote')
 const msgFilter = require('./lib/msgFilter')
 const akaneko = require('akaneko');
+const fetch = require('node-fetch');
+const bent = require('bent')
+const invitegrp = '919744375687-1599238855@g.us'
 const ban = JSON.parse(fs.readFileSync('./lib/banned.json'))
 const errorurl = 'https://steamuserimages-a.akamaihd.net/ugc/954087817129084207/5B7E46EE484181A676C02DFCAD48ECB1C74BC423/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false'
+const errorurl2 = 'https://steamuserimages-a.akamaihd.net/ugc/954087817129084207/5B7E46EE484181A676C02DFCAD48ECB1C74BC423/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false'
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -23,7 +27,7 @@ module.exports = msgHandler = async (client, message) => {
         const { name } = chat
         let { pushname, verifiedName } = sender
         const prefix = '#'
-        body = (type === 'chat' && body.startsWith(prefix)) ? body : ((type === 'image' || type === 'video' && caption) && caption.startsWith(prefix)) ? caption : ''
+        body = (type === 'chat' && body.startsWith(prefix)) ? body : ((type === 'image' && caption || type === 'video' && caption) && caption.startsWith(prefix)) ? caption : ''
         const command = body.slice(prefix.length).trim().split(/ +/).shift().toLowerCase()
         const args = body.slice(prefix.length).trim().split(/ +/).slice(1)
         const isCmd = body.startsWith(prefix)
@@ -42,7 +46,8 @@ module.exports = msgHandler = async (client, message) => {
         const isGroupAdmins = isGroupMsg ? groupAdmins.includes(sender.id) : false
         const isBotGroupAdmins = isGroupMsg ? groupAdmins.includes(botNumber + '@c.us') : false
         const isBanned = ban.includes(chatId)
-        const isowner = sender.id === '919744375687@c.us'
+        const botadmins = await client.getGroupAdmins('919744375687-1599187760@g.us')
+        const isbotadmin = sender.id.includes(botadmins)
 
         msgFilter.addFilter(from)
 
@@ -99,7 +104,7 @@ module.exports = msgHandler = async (client, message) => {
                         }
                         uploadToGiphy(postData).then((async (gifUrl) => {
                             console.log('Success upload : ' + gifUrl)
-                            await sleep(10000)
+                            await sleep(130000)
                             await client.sendGiphyAsSticker(from, gifUrl)
                         })).catch(err => {
                             client.reply(from, `Error : ${err}`, id)
@@ -150,7 +155,7 @@ module.exports = msgHandler = async (client, message) => {
             }
             break
         case 'bc':
-            if(!isowner) return client.reply(from, 'Only Bot admins!', message.id)
+            if(!isbotadmin) return client.reply(from, 'Only Bot admins!', message.id)
             let msg = body.slice(4)
             const chatz = await client.getAllChatIds()
             for (let ids of chatz) {
@@ -160,7 +165,7 @@ module.exports = msgHandler = async (client, message) => {
             client.reply(from, 'Broadcast Success!', message.id)
             break
         case 'ban':
-            if(!isowner) return client.reply(from, 'Only Bot admins can use this CMD!', message.id)
+            if(!isbotadmin) return client.reply(from, 'Only Bot admins can use this CMD!', message.id)
             for (let i = 0; i < mentionedJidList.length; i++) {
                 ban.push(mentionedJidList[i])
                 fs.writeFileSync('./lib/banned.json', JSON.stringify(ban))
@@ -204,7 +209,7 @@ module.exports = msgHandler = async (client, message) => {
             client.reply(from, 'Done!', message.id)
             break
         case 'clearall':
-            if (!isowner) return client.reply(from, 'Owner only', message.id)
+            if (!isbotadmin) return client.reply(from, 'Owner only', message.id)
             const allChatz = await client.getAllChats()
             for (let dchat of allChatz) {
                 await client.deleteChat(dchat.id)
@@ -212,7 +217,7 @@ module.exports = msgHandler = async (client, message) => {
             client.reply(from, 'Done', message.id)
             break
         case 'unban':
-            if(!isowner) return client.reply(from, 'Only bot admins can use this CMD', message.id)
+            if(!isbotadmin) return client.reply(from, 'Only bot admins can use this CMD', message.id)
             let inx = ban.indexOf(mentionedJidList[0])
             ban.splice(inx, 1)
             fs.writeFileSync('./lib/banned.json', JSON.stringify(ban))
@@ -228,6 +233,12 @@ module.exports = msgHandler = async (client, message) => {
                 if (groupAdmins.includes(mentionedJidList[i])) return await client.reply(from, '....', message.id)
                 await client.removeParticipant(groupId, mentionedJidList[i])
             }
+            break
+        case 'delete':
+            if (!isGroupAdmins) return client.reply(from, 'Only admins can use this command', id)
+            if (!quotedMsg) return client.reply(from, 'Wrong Format!', id)
+            if (!quotedMsgObj.fromMe) return client.reply(from, 'Wrong Format!', id)
+            client.deleteMessage(quotedMsgObj.chatId, quotedMsgObj.id, false)
             break
         case 'leave':
             if(!isGroupMsg) return client.reply(from, '...', message.id)
@@ -254,6 +265,7 @@ module.exports = msgHandler = async (client, message) => {
             await client.sendTextWithMentions(from, `Demoted @${mentionedJidList[0].replace('@c.us', '')}.`)
             break
         case 'join':
+            if (chat.id == invitegrp) {
             if (args.length == 0) return client.reply(from, 'Wrong Format', message.id)
             const link = body.slice(6)
             const minMem = 30
@@ -266,6 +278,7 @@ module.exports = msgHandler = async (client, message) => {
             }).catch(error => {
                 client.reply(from, 'An error occured 💔️', message.id)
             })
+            }
             break
         case 'sauce':
             if (isMedia) {
@@ -305,6 +318,24 @@ module.exports = msgHandler = async (client, message) => {
                }
             }
             break
+        case 'sr':
+             arg = body.trim().split(' ')
+             const sr = arg[1]
+             try {
+             const response1 = await axios.get('https://meme-api.herokuapp.com/gimme/' + sr + '/');
+             const {
+                    postLink,
+                    title,
+                    subreddit,
+                    url,
+                    nsfw,
+                    spoiler
+                } = response1.data
+                    await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}` + '\n\nPostlink:' + `${postLink}`)
+                } catch(err) {
+                    await client.reply(from, 'There is no such subreddit, Baka!', id) 
+                }
+                break
         case 'lyrics':
             if (args.length == 0) return client.reply(from, 'Wrong Format', message.id)
             const lagu = body.slice(7)
@@ -320,7 +351,7 @@ module.exports = msgHandler = async (client, message) => {
             )
             const parsed = await data.json()
             if (!parsed) {
-              await cleint.sendFileFromUrl(from, errorurl2, 'error.png', '💔️ Sorry, Couldn\'t find the requested anime', id)
+              await client.sendFileFromUrl(from, errorurl2, 'error.png', '💔️ Sorry, Couldn\'t find the requested anime', id)
               console.log("Sent!")
               return null
               }
@@ -343,7 +374,7 @@ module.exports = msgHandler = async (client, message) => {
             client.sendImage(from, base64, title, content)
            } catch (err) {
              console.error(err.message)
-             await cleint.sendFileFromUrl(from, errorurl2, 'error.png', '💔️ Sorry, Couldn\'t find the requested anime')
+             await client.sendFileFromUrl(from, errorurl2, 'error.png', '💔️ Sorry, Couldn\'t find the requested anime')
            }
           break
         case 'wallpaper':
@@ -447,7 +478,7 @@ module.exports = msgHandler = async (client, message) => {
         case 'snk':
             client.reply(from, snk, message.id)
         default:
-            console.log(color('[ERROR]', 'red'), color(time, 'yellow'), 'Unregistered Command from', color(pushname))
+            console.log(color('[UNLISTED]', 'red'), color(time, 'yellow'), 'Unregistered Command from', color(pushname))
             break
         }
     }

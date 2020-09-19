@@ -2,7 +2,7 @@
   "name": "whatsapp-botto-re",
   "version": "3.0.0",
   "description": "Anime Bot",
-  "main": "kntl.js",
+  "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "test": "node test.js"

@@ -45,7 +45,7 @@ module.exports = msgHandler = async (client, message) => {
         const isBotGroupAdmins = isGroupMsg ? groupAdmins.includes(botNumber + '@c.us') : false
         const isBanned = ban.includes(chatId)
         const owner = '919744375687' // eg 9190xxxxxxxx@
-        const isowner = sender.id+'@c.us' == owner 
+        const isowner = owner+'@c.us' == sender.id 
 
         msgFilter.addFilter(from)
 

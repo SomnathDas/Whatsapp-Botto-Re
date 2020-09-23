@@ -1,5 +1,6 @@
 const { create } = require('@open-wa/wa-automate')
 const msgHandler = require('./msgHandler')
+const fs = require('fs-extra')
 const serverOption = {
     headless: true,
     cacheEnabled: false,
@@ -17,7 +18,7 @@ const serverOption = {
 
 const opsys = process.platform
 if (opsys === 'win32' || opsys === 'win64') {
-    serverOption.executablePath = 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+    serverOption.executablePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
 } else if (opsys === 'linux') {
     serverOption.browserRevision = '737027'
 } else if (opsys === 'darwin') {
@@ -36,15 +37,7 @@ const startServer = async (client) => {
             msgHandler(client, message)
         })
 
-        client.onGlobalParicipantsChanged((x) => {
-            const { action, who , chat} = x
-            const groupPic = client.getProfilePicFromServer(chat.id)
-            const { desc } = chat.groupMetadata
-            console.log(x)
-            console.log(chat.id)
-            console.log(chat.groupMetadata)
-            if (action === 'add') return client.sendFileFromUrl(chat, groupPic, 'groupPic.jpg', `Hello New Member!, Welcome to *${chat.name}* Group description ✨️ \n ${desc}`)
-        })
+       
         
         client.onAddedToGroup((chat) => {
             let totalMem = chat.groupMetadata.participants.length

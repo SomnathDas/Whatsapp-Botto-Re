@@ -44,7 +44,7 @@ module.exports = msgHandler = async (client, message) => {
         const isGroupAdmins = isGroupMsg ? groupAdmins.includes(sender.id) : false
         const isBotGroupAdmins = isGroupMsg ? groupAdmins.includes(botNumber + '@c.us') : false
         const isBanned = ban.includes(chatId)
-        const owner = '919744375687' // eg 9190xxxxxxxx@
+        const owner = 'Your-phone-number' // eg 9190xxxxxxxx
         const isowner = owner+'@c.us' == sender.id 
 
         msgFilter.addFilter(from)
@@ -79,12 +79,6 @@ module.exports = msgHandler = async (client, message) => {
                     }
                 }
             break
-      /*  case 'tsticker' : 
-
-           Paid Feature
-
-                          */
-
         case 'gsticker':
             if (isMedia && type == 'video') {
                 if (mimetype === 'video/mp4' && message.duration < 30) {
@@ -97,7 +91,7 @@ module.exports = msgHandler = async (client, message) => {
                             return console.log(err)
                         }
                         var postData = {
-                            api_key: 'your_giphy_api_key', // https://devlopers.giphy.com
+                            api_key: 'giphy key', // paid
                             file: {
                                 value: fs.createReadStream(filename), 
                                 options: {
@@ -159,23 +153,6 @@ module.exports = msgHandler = async (client, message) => {
             client.reply(from, 'Usage: \n!quotemaker |text|watermark|theme\n\nEx :\n!quotemaker |...|...|random', message.id)
             }
             break
-        case 'bc':
-            if(!isowner) return client.reply(from, 'Only Bot admins!', message.id)
-            let msg = body.slice(4)
-            const chatz = await client.getAllChatIds()
-            for (let ids of chatz) {
-                var cvk = await client.getChatById(ids)
-                if (!cvk.isReadOnly) client.sendText(ids, `[ EWH BOT Broadcast ]\n\n${msg}`)
-            }
-            client.reply(from, 'Broadcast Success!', message.id)
-            break
-        case 'ban':
-            if(!isowner) return client.reply(from, 'Only Bot admins can use this CMD!', message.id)
-            for (let i = 0; i < mentionedJidList.length; i++) {
-                ban.push(mentionedJidList[i])
-                fs.writeFileSync('./lib/banned.json', JSON.stringify(ban))
-                client.reply(from, 'Succes ban target!', message.id)
-            }
             break
         case 'covid':
             arg = body.trim().split(' ')
@@ -221,6 +198,24 @@ module.exports = msgHandler = async (client, message) => {
             }
             client.reply(from, 'Done', message.id)
             break
+       
+        case 'sr':
+             arg = body.trim().split(' ')
+             const sr = arg[1]
+             try {
+             const response1 = await axios.get('https://meme-api.herokuapp.com/gimme/' + sr + '/');
+             const {
+                    postLink,
+                    title,
+                    subreddit,
+                    url,
+                    nsfw,
+                    spoiler
+                } = response1.data
+
+                await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}` + '\n\nPostlink:' + `${postLink}`)
+                    
+                break
         case 'unban':
             if(!isowner) return client.reply(from, 'Only bot admins can use this CMD', message.id)
             let inx = ban.indexOf(mentionedJidList[0])
@@ -321,24 +316,6 @@ module.exports = msgHandler = async (client, message) => {
                }
             }
             break
-        case 'sr':
-             arg = body.trim().split(' ')
-             const sr = arg[1]
-             try {
-             const response1 = await axios.get('https://meme-api.herokuapp.com/gimme/' + sr + '/');
-             const {
-                    postLink,
-                    title,
-                    subreddit,
-                    url,
-                    nsfw,
-                    spoiler
-                } = response1.data
-                    await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}` + '\n\nPostlink:' + `${postLink}`)
-                } catch(err) {
-                    await client.reply(from, 'There is no such subreddit, Baka!', id) 
-                }
-                break
         case 'lyrics':
             if (args.length == 0) return client.reply(from, 'Wrong Format', message.id)
             const lagu = body.slice(7)
@@ -443,7 +420,7 @@ module.exports = msgHandler = async (client, message) => {
             client.reply(from, help.replace(undefined, pushname), message.id)
             break
         case 'info':
-            client.sendLinkWithAutoPreview(from, 'https://github.com/SomnathDas/whatsapp-botto-re', info)
+            client.reply(from, info, id)
             break
         case 'profile':
             var role = 'None'

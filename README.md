@@ -46,7 +46,17 @@ npm start
 | Can return random doujin url  | :heavy_check_mark: |
 | Send stickers without background | https://gum.co/DxwKX |
 
-* Note: All features are not listed, some minor ones are left out
+## Premium Features 
+
+Buy the premium code: https://gum.co/sjBfz
+
+| Functions                     |  
+|:-----------------------------:|
+| Send Stickers without BG      |
+| Send Animated Stickers        |
+| Send Group info               |
+| Welcome new members           |
+| Enable and Disable NSFW       |
 
 
 ## Authors uwu)/ 😳️

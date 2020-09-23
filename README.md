@@ -44,6 +44,7 @@ npm start
 | Ping all group members        | :heavy_check_mark: |
 | Get Waifu images              | :heavy_check_mark: |
 | Can return random doujin url  | :heavy_check_mark: |
+| Send stickers without background | https://gum.co/DxwKX |
 
 * Note: All features are not listed, some minor ones are left out
 

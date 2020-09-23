@@ -79,6 +79,12 @@ module.exports = msgHandler = async (client, message) => {
                     }
                 }
             break
+      /*  case 'tsticker' : 
+
+           Paid Feature
+
+                          */
+
         case 'gsticker':
             if (isMedia && type == 'video') {
                 if (mimetype === 'video/mp4' && message.duration < 30) {
@@ -110,6 +116,7 @@ module.exports = msgHandler = async (client, message) => {
                     })
                 }
             }
+            
             break
         case 'donate':
             client.sendLinkWithAutoPreview(from, '...', '...')

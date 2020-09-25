@@ -3,6 +3,7 @@ const fs = require('fs-extra')
 const axios = require('axios')
 const moment = require('moment-timezone')
 const get = require('got')
+const { RemoveBgResult, removeBackgroundFromImageBase64, removeBackgroundFromImageFile } = require('remove.bg') //paid
 const color = require('./lib/color')
 const { liriklagu, quotemaker, wall } = require('./lib/functions')
 const { help, info, } = require('./lib/help')
@@ -10,6 +11,8 @@ const msgFilter = require('./lib/msgFilter')
 const akaneko = require('akaneko');
 const fetch = require('node-fetch');
 const bent = require('bent')
+const wel = JSON.parse(fs.readFileSync('./lib/welcome.json')) 
+const nsfwgrp = JSON.parse(fs.readFileSync('./lib/nsfw.json')) 
 const ban = JSON.parse(fs.readFileSync('./lib/banned.json'))
 const errorurl = 'https://steamuserimages-a.akamaihd.net/ugc/954087817129084207/5B7E46EE484181A676C02DFCAD48ECB1C74BC423/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false'
 const errorurl2 = 'https://steamuserimages-a.akamaihd.net/ugc/954087817129084207/5B7E46EE484181A676C02DFCAD48ECB1C74BC423/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false'
@@ -79,6 +82,23 @@ module.exports = msgHandler = async (client, message) => {
                     }
                 }
             break
+        case 'tsticker':
+            if (isMedia && type == 'image') {
+              try {
+                const mediaData = await decryptMedia(message, uaOverride)
+                const imageBase64 = `data:${mimetype};base64,${mediaData.toString('base64')}`
+                const base64img = imageBase64
+                const filename = "./media/pic.jpg";
+                //console.log(base64img)
+                const outFile = './media/noBg.png'
+                const result = await removeBackgroundFromImageBase64({ base64img, apiKey: 'your api key', size: 'auto', type: 'auto', outFile })
+                    await fs.writeFile(outFile, result.base64img)
+                    await client.sendImageAsSticker(from, `data:${mimetype};base64,${result.base64img}`)
+                } catch(err) {
+                    console.log(err)
+                }
+            }
+            break
         case 'gsticker':
             if (isMedia && type == 'video') {
                 if (mimetype === 'video/mp4' && message.duration < 30) {
@@ -91,7 +111,7 @@ module.exports = msgHandler = async (client, message) => {
                             return console.log(err)
                         }
                         var postData = {
-                            api_key: 'giphy key', // paid
+                            api_key: 'LBtGgqqQpp663mo1nIEADPcv1AddeLtb', // paid
                             file: {
                                 value: fs.createReadStream(filename), 
                                 options: {
@@ -153,6 +173,49 @@ module.exports = msgHandler = async (client, message) => {
             client.reply(from, 'Usage: \n!quotemaker |text|watermark|theme\n\nEx :\n!quotemaker |...|...|random', message.id)
             }
             break
+         // paid
+        case 'groupinfo' :
+            if (!isGroupMsg) return client.reply(from, '.', message.id) 
+            var totalMem = chat.groupMetadata.participants.length
+            var desc = chat.groupMetadata.desc
+            var groupname = name
+            var welgrp = wel.includes(chat.id)
+            var ngrp = nsfwgrp.includes(chat.id)
+            var grouppic = await client.getProfilePicFromServer(chat.id)
+            if (grouppic == undefined) {
+                 var pfp = errorurl
+            } else {
+                 var pfp = grouppic 
+            }
+            await client.sendFileFromUrl(from, pfp, 'group.png', `*${groupname}* 
+
+🌐️ *Members: ${totalMem}*
+
+💌️ *Welcome: ${welgrp}*
+
+⚜️ *NSFW: ${ngrp}*
+
+📃️ *Group Description* 
+
+${desc}`)
+        break
+        case 'bc':
+            if(!isowner) return client.reply(from, 'Only Bot admins!', message.id)
+            let msg = body.slice(4)
+            const chatz = await client.getAllChatIds()
+            for (let ids of chatz) {
+                var cvk = await client.getChatById(ids)
+                if (!cvk.isReadOnly) client.sendText(ids, `[ EWH BOT Broadcast ]\n\n${msg}`)
+            }
+            client.reply(from, 'Broadcast Success!', message.id)
+            break
+        case 'ban':
+            if(!isowner) return client.reply(from, 'Only Bot admins can use this CMD!', message.id)
+            for (let i = 0; i < mentionedJidList.length; i++) {
+                ban.push(mentionedJidList[i])
+                fs.writeFileSync('./lib/banned.json', JSON.stringify(ban))
+                client.reply(from, 'Succes ban target!', message.id)
+            }
             break
         case 'covid':
             arg = body.trim().split(' ')
@@ -198,6 +261,40 @@ module.exports = msgHandler = async (client, message) => {
             }
             client.reply(from, 'Done', message.id)
             break
+        case 'act':
+             arg = body.trim().split(' ')
+             if (!isGroupAdmins) return client.reply(from, 'Only Admins can use this command', id)
+             if (arg[1] == 'welcome') {
+                wel.push(chat.id)
+                fs.writeFileSync('./lib/welcome.json', JSON.stringify(wel))
+                client.reply(from, `Welcome is now registered on *${name}*`, message.id)
+             } else if (arg[1] == 'nsfw') {
+                nsfwgrp.push(chat.id)
+                fs.writeFileSync('./lib/nsfw.json', JSON.stringify(nsfwgrp))
+                client.reply(from, `NSFW is now registered on *${name}*`, message.id)
+             }
+             break
+        case 'deact':
+             arg = body.trim().split(' ')
+             if (!isGroupAdmins) return client.reply(from, 'Only Admins can use this command', id)
+             if (arg[1] == 'welcome') {
+                let inx = ban.indexOf(from)
+                wel.splice(inx, 1)
+                fs.writeFileSync('./lib/welcome.json', JSON.stringify(wel))
+                client.reply(from, `Welcome is now unregistered on *${name}*`, message.id)
+             } else if (arg[1] == 'nsfw') {
+                let inx = ban.indexOf(from)
+                nsfwgrp.splice(inx, 1)
+                fs.writeFileSync('./lib/nsfw.json', JSON.stringify(nsfwgrp))
+                client.reply(from, `NSFW is now unregistered on *${name}*`, message.id)
+             }
+            break
+       case 'cgc':
+            arg = body.trim().split(' ')
+            const gcname = arg[1]
+            client.createGroup(gcname, mentionedJidList)
+            client.sendText(from, 'Group Created ✨️')
+            break
        
         case 'sr':
              arg = body.trim().split(' ')
@@ -213,8 +310,20 @@ module.exports = msgHandler = async (client, message) => {
                     spoiler
                 } = response1.data
 
-                await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}` + '\n\nPostlink:' + `${postLink}`)
-                    
+                const isnsfw = nsfwgrp.includes(from)
+                if (nsfw == true) {
+                      if ((isGroupMsg) && (isnsfw)) {
+                                await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}` + '\n\nPostlink:' + `${postLink}`)
+                      } else if ((isGroupMsg) && (!isnsfw)) {
+                                await client.reply(from, `NSFW is not registered on *${name}*`, id)
+                      }
+                } else { 
+                      await client.sendFileFromUrl(from, `${url}`, 'Reddit.jpg', `${title}` + '\n\nPostlink:' + `${postLink}`)
+                }
+                } catch(err) {
+                    console.log(err)
+                    await client.reply(from, 'There is no such subreddit, Baka!', id) 
+                }
                 break
         case 'unban':
             if(!isowner) return client.reply(from, 'Only bot admins can use this CMD', message.id)

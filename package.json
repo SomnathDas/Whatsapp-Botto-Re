@@ -10,7 +10,7 @@
   "author": "EWH",
   "license": "Apache-2.0",
   "dependencies": {
-    "@open-wa/wa-automate": "^2.0.22",
+    "@open-wa/wa-automate": "^2.0.25",
     "@open-wa/wa-decrypt": "^2.0.1",
     "akaneko": "^3.3.0",
     "axios": "^0.19.2",

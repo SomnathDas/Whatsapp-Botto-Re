@@ -11,7 +11,7 @@
 
 ### 🏠 [Homepage](https://github.com/SomnathDas/Whatsapp-Botto-Re)
 
-## Donate https://www.paypal.com/bantakahiro
+### Donate https://www.paypal.com/paypalme/EtherealWaifuHub
 
 ## Prerequisites
 

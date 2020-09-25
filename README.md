@@ -11,6 +11,8 @@
 
 ### 🏠 [Homepage](https://github.com/SomnathDas/Whatsapp-Botto-Re)
 
+## Donate https://www.paypal.com/bantakahiro
+
 ## Prerequisites
 
 - npm >=2.0.32
@@ -44,22 +46,14 @@ npm start
 | Ping all group members        | :heavy_check_mark: |
 | Get Waifu images              | :heavy_check_mark: |
 | Can return random doujin url  | :heavy_check_mark: |
-| Send stickers without background | https://gum.co/DxwKX |
+| Send stickers without background | :heavy_check_mark: |
+| Send Stickers without BG      | :heavy_check_mark: |
+| Send Animated Stickers        | :heavy_check_mark: |
+| Send Group info               | :heavy_check_mark: |
+| Welcome new members           | :heavy_check_mark: |
+| Enable and Disable NSFW       | :heavy_check_mark: |
 
-## Premium Features 
-
-Buy the premium code: https://gum.co/sjBfz
-
-| Functions                     |  
-|:-----------------------------:|
-| Send Stickers without BG      |
-| Send Animated Stickers        |
-| Send Group info               |
-| Welcome new members           |
-| Enable and Disable NSFW       |
-
-
-## Authors uwu)/ 😳️
+## Authors
 
 👤 **Alen Yohannan** aka ***Hero of Hyrule***
 

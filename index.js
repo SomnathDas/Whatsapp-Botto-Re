@@ -58,6 +58,6 @@ const startServer = async (client) => {
         })
     }
 
-create('Zelda', serverOption)
+create('session', serverOption)
     .then(async (client) => startServer(client))
     .catch((error) => console.log(error))

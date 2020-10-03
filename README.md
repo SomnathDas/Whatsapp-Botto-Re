@@ -36,6 +36,7 @@ npm start
 
 | Functions                     | Status |
 |:-----------------------------:|:------:|
+| Convert GIFS/Videos into stickers in the correct format | [Premium](https://gum.co/XRQeF)
 | Convert Images Into Stickers  | :heavy_check_mark: |
 | Retrive anime info            | :heavy_check_mark: |
 | Display group information     | :heavy_check_mark: |

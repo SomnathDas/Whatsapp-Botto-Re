@@ -9,6 +9,7 @@ const { liriklagu, quotemaker, wall } = require('./lib/functions')
 const { help, info, } = require('./lib/help')
 const msgFilter = require('./lib/msgFilter')
 const akaneko = require('akaneko');
+const { exec } = require('child_process')
 const fetch = require('node-fetch');
 const bent = require('bent')
 const wel = JSON.parse(fs.readFileSync('./lib/welcome.json')) 
@@ -102,39 +103,15 @@ module.exports = msgHandler = async (client, message) => {
         case 'gsticker':
             if (isMedia && type == 'video') {
                 if (mimetype === 'video/mp4' && message.duration < 30) {
-                    const uploadToGiphy = require('./lib/giphy')
-                    const mediaData = await decryptMedia(message, uaOverride)
-                    client.reply(from, 'Hold on... This might take a while', id)
-                    const filename = './media/aswu.mp4'
-                    fs.writeFile(filename, mediaData, function (err) {
-                        if (err) {
-                            return console.log(err)
-                        }
-                        var postData = {
-                            api_key: 'LBtGgqqQpp663mo1nIEADPcv1AddeLtb', // paid
-                            file: {
-                                value: fs.createReadStream(filename), 
-                                options: {
-                                    filename: filename,
-                                    contentType: 'image/gif'
-                                }
-                            }
-                        }
-                        uploadToGiphy(postData).then((async (gifUrl) => {
-                            console.log('Success upload : ' + gifUrl)
-                            await sleep(130000)
-                            await client.sendGiphyAsSticker(from, gifUrl)
-                        })).catch(err => {
-                            client.reply(from, `Error : ${err}`, id)
-                        })
-                    })
+                const mediaData = await decryptMedia(message, uaOverride)
+               const filename = `./media/aswu.mp4`
+                await fs.writeFile(filename, mediaData)
+                await exec('ffmpeg -i ./media/aswu.mp4 -vf scale=512:-1 -r 10 -f image2pipe -framerate 24 -vcodec ppm - | convert -delay 0 -loop 0 - ./media/output.gif')
+                const contents = await fs.readFile('./media/output.gif', {encoding: 'base64'}) 
+                await client.sendImageAsSticker(from, `data:image/gif;base64,${contents.toString('base64')}`)
                 }
             }
-            
-            break
-        case 'donate':
-            client.sendLinkWithAutoPreview(from, '...', '...')
-            break
+            break 
        /* case 'tts':
         	if (args.length == 0) return client.reply(from, 'Wrong Fromat!')
                 const ttsEn = require('node-gtts')('en')

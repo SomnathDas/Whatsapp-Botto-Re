@@ -101,11 +101,24 @@ module.exports = msgHandler = async (client, message) => {
             }
             break
 			    
+	 case 'play':
+            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
+            axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
+            .then(async (res) => {
+                await aruga.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `Lagu ditemukan\n\nJudul: ${res.data[0].title}\nDurasi: ${res.data[0].duration}detik\nUploaded: ${res.data[0].uploadDate}\nView: ${res.data[0].viewCount}\n\nsedang dikirim`, id)
+                axios.get(`https://arugaz.herokuapp.com/api/yta?url=https://youtu.be/${res.data[0].id}`)
+                .then(async(rest) => {
+                    await aruga.sendPtt(from, `${rest.data.result}`, id)
+                })
+            })
+            break
+			    
 	case 'wiki':
             if (args.length == 0) return aruga.reply(from, `To search for a word from wikipedia, type: ${prefix} wiki [word]`, id)
             const wikip = body.slice(6)
             const wikis = await rugaapi.wiki(wikip)
 	    await client.reply(from, wikis, id)
+	    break
 			    
         case 'gsticker':
             if (isMedia && type == 'video') {
@@ -118,6 +131,7 @@ module.exports = msgHandler = async (client, message) => {
                 await client.sendImageAsSticker(from, `data:image/gif;base64,${contents.toString('base64')}`)
                 }
             }
+		break
        case 'tts': //You can add as many as you want, just find the language code and modify the code :)
             if (args.length === 1) return client.reply(from, '  *!tts [id, en, jp, ar, pt] [texto]*, Exemplo *!tts en olá pessoas*')
             const ttsId = require('node-gtts')('id');

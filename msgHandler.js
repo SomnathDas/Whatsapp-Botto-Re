@@ -111,28 +111,42 @@ module.exports = msgHandler = async (client, message) => {
                 await client.sendImageAsSticker(from, `data:image/gif;base64,${contents.toString('base64')}`)
                 }
             }
-            break 
-       /* case 'tts':
-        	if (args.length == 0) return client.reply(from, 'Wrong Fromat!')
-                const ttsEn = require('node-gtts')('en')
-	        const ttsJp = require('node-gtts')('ja')
+       case 'tts': //You can add as many as you want, just find the language code and modify the code :)
+            if (args.length === 1) return client.reply(from, '  *!tts [id, en, jp, ar, pt] [texto]*, Exemplo *!tts en olá pessoas*')
+            const ttsId = require('node-gtts')('id');
+            const ttsEn = require('node-gtts')('en');
+            const ttsPt = require('node-gtts')('pt');
+            const ttsJp = require('node-gtts')('ja');
+            const ttsAr = require('node-gtts')('ar');
+
             const dataText = body.slice(8)
-            if (dataText === '') return client.reply(from, 'Baka?', message.id)
-            if (dataText.length > 250) return client.reply(from, 'Unable to convert', message.id)
+            if (dataText === '') return client.reply(from, 'idiota!', id)
+            if (dataText.length > 500) return client.reply(from, 'O texto é muito longo!', id)
             var dataBhs = body.slice(5, 7)
-	        if (dataBhs == 'id') {
-		    } else if (dataBhs == 'en') {
-                ttsEn.save('./tts/resEn.mp3', dataText, function () {
-                    client.sendPtt(from, './tts/resEn.mp3', message.id)
+            if (dataBhs == 'id') {
+                ttsId.save('./media/tts/resId.mp3', dataText, function () {
+                    client.sendPtt(from, './media/tts/resId.mp3', id)
                 })
-		    } else if (dataBhs == 'jp') {
-                ttsJp.save('./tts/resJp.mp3', dataText, function () {
-                    client.sendPtt(from, './tts/resJp.mp3', message.id)
+            } else if (dataBhs == 'en') {
+                ttsEn.save('./media/tts/resEn.mp3', dataText, function () {
+                    client.sendPtt(from, './media/tts/resEn.mp3', id)
                 })
-		    } else {
-		        client.reply(from, 'Currently only English and Japanese are supported!', message.id)
+            } else if (dataBhs == 'jp') {
+                ttsJp.save('./media/tts/resJp.mp3', dataText, function () {
+                    client.sendPtt(from, './media/tts/resJp.mp3', id)
+                })
+            } else if (dataBhs == 'pt') {
+                ttsPt.save('./media/tts/resPt.mp3', dataText, ()=> {
+                    client.sendPtt(from, './media/tts/resPt.mp3');
+                })
+            } else if (dataBhs == 'ar') {
+                ttsAr.save('./media/tts/resAr.mp3', dataText, function () {
+                    client.sendPtt(from, './media/tts/resAr.mp3', id)
+                })
+            } else {
+                client.reply(from, 'Insira os dados do idioma: [id] para a Indonésia, [en] Para inglês, [jp] Para japão, [ar] Para Árabe, [pt] Para portugues', id)
             }
-            break */
+            break
         case 'quotemaker':
             arg = body.trim().split('|')
             if (arg.length >= 3) {
@@ -150,7 +164,12 @@ module.exports = msgHandler = async (client, message) => {
             client.reply(from, 'Usage: \n!quotemaker |text|watermark|theme\n\nEx :\n!quotemaker |...|...|random', message.id)
             }
             break
-         // paid
+			    
+	case 'aiquote' :
+            const aiquote = await axios.get("http://inspirobot.me/api?generate=true")
+            await client.sendFileFromUrl(from, aiquote.data, 'quote.jpg', 'Powered By http://inspirobot.me/ With ❤️' , id )
+            break
+			    
         case 'groupinfo' :
             if (!isGroupMsg) return client.reply(from, '.', message.id) 
             var totalMem = chat.groupMetadata.participants.length
@@ -159,6 +178,7 @@ module.exports = msgHandler = async (client, message) => {
             var welgrp = wel.includes(chat.id)
             var ngrp = nsfwgrp.includes(chat.id)
             var grouppic = await client.getProfilePicFromServer(chat.id)
+            var pkgame = pokarr.includes(chat.id)
             if (grouppic == undefined) {
                  var pfp = errorurl
             } else {
@@ -169,6 +189,10 @@ module.exports = msgHandler = async (client, message) => {
 🌐️ *Members: ${totalMem}*
 
 💌️ *Welcome: ${welgrp}*
+
+🎉️ *PokeGame* : *${pkgame}*
+
+🔮️ *Rule* : *${isRule}*
 
 ⚜️ *NSFW: ${ngrp}*
 
@@ -194,6 +218,13 @@ ${desc}`)
                 client.reply(from, 'Succes ban target!', message.id)
             }
             break
+			    
+	case 'mp3' :
+            yt.mp3(message)
+      	case 'mp4' :
+            break
+            yt.mp4(message)
+			   		   
         case 'covid':
             arg = body.trim().split(' ')
             console.log(...arg[1])
@@ -205,6 +236,7 @@ ${desc}`)
             const { cases, todayCases, deaths, todayDeaths, active } = response2.data
                 await client.sendText(from, '🌎️Covid Info -' + country + ' 🌍️\n\n✨️Total Cases: ' + `${cases}` + '\n📆️Today\'s Cases: ' + `${todayCases}` + '\n☣️Total Deaths: ' + `${deaths}` + '\n☢️Today\'s Deaths: ' + `${todayDeaths}` + '\n⛩️Active Cases: ' + `${active}` + '.')
             break
+			    
         case 'ping':
             if (!isGroupMsg) return client.reply(from, 'Sorry, This command can only be used in groups', message.id)
             if (!isGroupAdmins) return client.reply(from, 'Well, only admins can use this command', message.id)
@@ -217,6 +249,7 @@ ${desc}`)
             hehe += '----------------------'
             await client.sendTextWithMentions(from, hehe)
             break
+			    
         case 'kickall':
             const isGroupOwner = sender.id === chat.groupMetadata.owner
             if(!isGroupOwner) return client.reply(from, 'Sorry, Only group owner can use this CMD', message.id)
@@ -230,6 +263,7 @@ ${desc}`)
             }
             client.reply(from, 'Done!', message.id)
             break
+			    
         case 'clearall':
             if (!isowner) return client.reply(from, 'Owner only', message.id)
             const allChatz = await client.getAllChats()
@@ -238,6 +272,7 @@ ${desc}`)
             }
             client.reply(from, 'Done', message.id)
             break
+			    
         case 'act':
              arg = body.trim().split(' ')
              if (!isGroupAdmins) return client.reply(from, 'Only Admins can use this command', id)
@@ -251,6 +286,7 @@ ${desc}`)
                 client.reply(from, `NSFW is now registered on *${name}*`, message.id)
              }
              break
+			    
         case 'deact':
              arg = body.trim().split(' ')
              if (!isGroupAdmins) return client.reply(from, 'Only Admins can use this command', id)
@@ -266,6 +302,7 @@ ${desc}`)
                 client.reply(from, `NSFW is now unregistered on *${name}*`, message.id)
              }
             break
+			    
        case 'cgc':
             arg = body.trim().split(' ')
             const gcname = arg[1]

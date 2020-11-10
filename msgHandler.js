@@ -282,33 +282,59 @@ ${desc}`)
 			    
         case 'act':
              arg = body.trim().split(' ')
-             if (!isGroupAdmins) return client.reply(from, 'Only Admins can use this command', id)
-             if (arg[1] == 'welcome') {
-                wel.push(chat.id)
-                fs.writeFileSync('./lib/welcome.json', JSON.stringify(wel))
-                client.reply(from, `Welcome is now registered on *${name}*`, message.id)
-             } else if (arg[1] == 'nsfw') {
-                nsfwgrp.push(chat.id)
-                fs.writeFileSync('./lib/nsfw.json', JSON.stringify(nsfwgrp))
-                client.reply(from, `NSFW is now registered on *${name}*`, message.id)
-             }
+             if (!isGroupAdmins) return client.reply(from, 'Only Admins can use this command, Baka >.<', id)
+             		if (arg[1].toLowerCase() == 'welcome') {
+	     			if (wel.includes(chat.id)) {
+	       				client.reply(from, `Welcome is already registered on *${name}*`, message.id)
+	     			} else {
+               				wel.push(chat.id)
+                			fs.writeFileSync('./lib/welcome.json', JSON.stringify(wel))
+                			client.reply(from, `Welcome is now registered on *${name}*`, message.id)
+	     			}
+             		} else if (arg[1].toLowerCase() == 'nsfw') {
+	       			if (nsfwgrp.includes(chat.id)) {
+				client.reply(from, `NSFW is already registered on *${name}*`, message.id)
+	     			} else {
+                		nsfwgrp.push(chat.id)
+                		fs.writeFileSync('./lib/nsfw.json', JSON.stringify(nsfwgrp))
+                		client.reply(from, `NSFW is now registered on *${name}*`, message.id)
+				}
+			} else if (arg[1].toLowerCase() == 'rule') {
+				if (!isBotGroupAdmins) return client.reply(from, 'You need to make me admin to use this CMD', message.id)
+				if (ruleArr.includes(chat.id)) {
+					 client.reply(from, `Rule is already registered on *${name}*`, message.id)
+				} else {
+                			ruleArr.push(chat.id)
+                			fs.writeFileSync('./lib/rule.json', JSON.stringify(ruleArr))
+                			client.reply(from, `Rule is now registered on *${name}*`, message.id)
+             			}
+			}
              break
-			    
         case 'deact':
              arg = body.trim().split(' ')
-             if (!isGroupAdmins) return client.reply(from, 'Only Admins can use this command', id)
-             if (arg[1] == 'welcome') {
+             if (!isGroupAdmins) return client.reply(from, 'Only Admins can use this command, Baka >.<', id)
+             if (arg[1].toLowerCase() == 'welcome') {
                 let inx = ban.indexOf(from)
                 wel.splice(inx, 1)
                 fs.writeFileSync('./lib/welcome.json', JSON.stringify(wel))
                 client.reply(from, `Welcome is now unregistered on *${name}*`, message.id)
-             } else if (arg[1] == 'nsfw') {
+             } else if (arg[1].toLowerCase() == 'nsfw') {
                 let inx = ban.indexOf(from)
                 nsfwgrp.splice(inx, 1)
                 fs.writeFileSync('./lib/nsfw.json', JSON.stringify(nsfwgrp))
                 client.reply(from, `NSFW is now unregistered on *${name}*`, message.id)
-             }
-            break
+             } else if (arg[1].toLowerCase() == 'pokegame') {
+                let inx = pokarr.indexOf(from)
+                pokarr.splice(inx, 1)
+                fs.writeFileSync('./lib/poke.json', JSON.stringify(pokarr))
+                client.reply(from, `PokeGame is now unregistered on *${name}*`, message.id)
+             } else if (arg[1].toLowerCase() == 'rule') {
+                let inx = ruleArr.indexOf(from)
+                ruleArr.splice(inx, 1)
+                fs.writeFileSync('./lib/rule.json', JSON.stringify(ruleArr))
+                client.reply(from, `Rule is now unregistered on *${name}*`, message.id)
+             }      
+             break
 			    
        case 'cgc':
             arg = body.trim().split(' ')

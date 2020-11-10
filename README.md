@@ -22,9 +22,15 @@
 
 ## Install
 
+Also if any module is missing then install it by either searching for that npm package or npm i [package name]
+
 ```sh
 npm install
 ```
+
+## Install ffmpeg
+
+* ffmpeg site: [ffmpeg](https://ffmpeg.org/)
 
 ## Usage
 

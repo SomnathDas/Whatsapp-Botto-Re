@@ -100,6 +100,13 @@ module.exports = msgHandler = async (client, message) => {
                 }
             }
             break
+			    
+	case 'wiki':
+            if (args.length == 0) return aruga.reply(from, `To search for a word from wikipedia, type: ${prefix} wiki [word]`, id)
+            const wikip = body.slice(6)
+            const wikis = await rugaapi.wiki(wikip)
+	    await client.reply(from, wikis, id)
+			    
         case 'gsticker':
             if (isMedia && type == 'video') {
                 if (mimetype === 'video/mp4' && message.duration < 30) {

@@ -46,6 +46,7 @@ npm start
 | Display user profile info     | :heavy_check_mark: |
 | Get anime wallpapers          | :heavy_check_mark: |
 | Get random meme               | :heavy_check_mark: |
+| Get covid info              | :heavy_check_mark: |
 | Get random post for specifc subreddit| :heavy_check_mark: |
 | Remove group members          | :heavy_check_mark: |
 | Promote and demote users      | :heavy_check_mark: |
@@ -58,6 +59,7 @@ npm start
 | Send Group info               | :heavy_check_mark: |
 | Welcome new members           | :heavy_check_mark: |
 | Enable and Disable NSFW       | :heavy_check_mark: |
+and much more
 
 ## Authors
 

@@ -11,9 +11,9 @@
 
 ### 🏠 [Homepage](https://github.com/SomnathDas/Whatsapp-Botto-Re)
 
-### :green_book: [Whatsapp Group](https://chat.whatsapp.com/DI6qXVdkqF2BBOeLD2sLqX)
+### :green_book: [Whatsapp Group](https://chat.whatsapp.com/Fi7V7g2q2lNHFq4OWl3eXX)
 
-### :page_with_curl: [Donate](https://www.paypal.com/paypalme/EtherealWaifuHub)
+### :page_with_curl: [Donate| COMING SOON OR CONTACT US]
 
 ## Prerequisites
 

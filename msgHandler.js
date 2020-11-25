@@ -12,6 +12,7 @@ const msgFilter = require('./lib/msgFilter')
 const akaneko = require('akaneko');
 const { exec } = require('child_process')
 const fetch = require('node-fetch');
+const ruleArr = JSON.parse(fs.readFileSync('./lib/rule.json'))
 const bent = require('bent')
 const wel = JSON.parse(fs.readFileSync('./lib/welcome.json')) 
 const nsfwgrp = JSON.parse(fs.readFileSync('./lib/nsfw.json')) 
@@ -34,13 +35,14 @@ module.exports = msgHandler = async (client, message) => {
         const command = body.slice(prefix.length).trim().split(/ +/).shift().toLowerCase()
         const args = body.slice(prefix.length).trim().split(/ +/).slice(1)
         const isCmd = body.startsWith(prefix)
-
+	const isRule = ruleArr.includes(chat.id)
         const time = moment(t * 1000).format('DD/MM HH:mm:ss')
 
         if (isCmd && msgFilter.isFiltered(from) && !isGroupMsg) return console.log(color('[SPAM!]', 'red'), color(time, 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname))
         if (isCmd && msgFilter.isFiltered(from) && isGroupMsg) return console.log(color('[SPAM!]', 'red'), color(time, 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname), 'in', color(name))
         if (!isCmd && !isGroupMsg) return console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname))
         if (!isCmd && isGroupMsg) return console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname), 'in', color(name))
+	if (isGroupMsg && isRule && (type === 'chat' && message.body.includes('chat.whatsapp.com') && isBotGroupAdmins) && !isGroupAdmins) return await client.removeParticipant(chat.id, author)
         if (isCmd && !isGroupMsg) console.log(color('[EXEC]'), color(time, 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname))
         if (isCmd && isGroupMsg) console.log(color('[EXEC]'), color(time, 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname), 'in', color(name))
         const botNumber = await client.getHostNumber()

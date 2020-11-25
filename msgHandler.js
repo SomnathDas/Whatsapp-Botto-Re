@@ -4,9 +4,9 @@ const axios = require('axios')
 const moment = require('moment-timezone')
 const sendSticker = require('./sendSticker')
 const get = require('got')
-const { RemoveBgResult, removeBackgroundFromImageBase64, removeBackgroundFromImageFile } = require('remove.bg') //paid
+const { RemoveBgResult, removeBackgroundFromImageBase64, removeBackgroundFromImageFile } = require('remove.bg') 
 const color = require('./lib/color')
-const { liriklagu, quotemaker, wall } = require('./lib/functions')
+const { wallpaperanime, liriklagu, quotemaker, wall } = require('./lib/functions')
 const { help, info, } = require('./lib/help')
 const msgFilter = require('./lib/msgFilter')
 const akaneko = require('akaneko');
@@ -498,10 +498,8 @@ ${desc}`)
           break
         case 'wallpaper':
             if (args.length == 0) return client.reply(from, 'Wrong Format!', id)
-            const query = body.slice(6)
-            const walls = await wall(query)
-            console.log(walls)
-            await client.sendFileFromUrl(from, walls, 'walls.jpg', '', id)
+            const result = await wallpaperanime()
+            client.sendFileFromUrl(from, result).catch(err => console.log('[ERROR] send image'))
             break
         case 'waifu': 
             const data = fs.readFileSync('./lib/waifu.json')

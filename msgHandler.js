@@ -436,43 +436,25 @@ ${desc}`)
             })
             break
         case 'sauce':
-            if (isMedia) {
-            const mediaData = await decryptMedia(message)
-            const imageBase64 = `data:${mimetype};base64,${mediaData.toString('base64')}`
-             try {
-                const raw = await fetch("https://trace.moe/api/search", {
-                method: "POST",
-                body: JSON.stringify({ image: imageBase64 }),
-                headers: { "Content-Type": "application/json" }
-                })
-                const parsedResult = await raw.json()
-                const { anime, episode, title_english } = parsedResult.docs[0]
-                const content = `*Anime Found!* \n⛩️ *Japanese Title:* ${anime} \n✨️ *English Title:* ${title_english} \n💚️ *Source Episode:* ${episode} `
-                await client.sendImage(from, imageBase64, 'sauce.png', content, id)
-                console.log("Sent!")
-             } catch (err) {
-                await client.sendFileFromUrl(from, errorurl, 'error.png', '💔️ An Error Occured', id)
+             if (isMedia) {
+                 if (type == 'image') {
+                 const buffer = await decryptMedia(message, uaOverride)
+                 const filename = `./media/images/sauce.${mime.extension(message.mimetype)}`
+                 await fs.writeFile(filename, buffer)
+                 await source.sauce(filename, message)
+                 } else { 
+                 client.reply(from, 'Only Images are supported', id)
+                 }
+             } else if (quotedMsg && quotedMsg.type == 'image') {
+                 const buffer = await decryptMedia(quotedMsg, uaOverride)
+                 const filename = `./media/images/sauce.${mime.extension(quotedMsg.mimetype)}`
+                 await fs.writeFile(filename, buffer)
+                 await source.sauce(filename, quotedMsgObj)
+             } else { 
+                 client.reply(from, 'Only Images are supported', id)
              }
-            } else if (quotedMsg && quotedMsg.type == 'image') {
-                const mediaData = await decryptMedia(quotedMsg)
-                const imageBase64 = `data:${quotedMsg.mimetype};base64,${mediaData.toString('base64')}`
-                try {
-                 const raw = await fetch("https://trace.moe/api/search", {
-                 method: "POST",
-                 body: JSON.stringify({ image: imageBase64 }),
-                 headers: { "Content-Type": "application/json" }
-                 })
-                 const parsedResult = await raw.json()
-                 const { anime, episode, title_english } = parsedResult.docs[0]
-                 const content = `*Anime Found!* \n⛩️ *Japanese Title:* ${anime} \n✨️ *English Title: ${title_english} \n💚️ *Source Episode:* ${episode} `
-                 await client.sendImage(from, imageBase64, 'sauce.png', content, id)
-                 console.log("Sent!")
-               } catch (err) {
-                 throw new Error(err.message)
-                 await client.sendFileFromUrl(from, errorurl, 'error.png', '💔️ An Error Occured', id)
-               }
-            }
-            break
+             break
+			    
         case 'lyrics':
             if (args.length == 0) return client.reply(from, 'Wrong Format', message.id)
             const lagu = body.slice(7)

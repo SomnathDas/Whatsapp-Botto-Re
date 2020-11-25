@@ -2,6 +2,7 @@ const { decryptMedia } = require('@open-wa/wa-decrypt')
 const fs = require('fs-extra')
 const axios = require('axios')
 const moment = require('moment-timezone')
+const sendSticker = require('./sendSticker')
 const get = require('got')
 const { RemoveBgResult, removeBackgroundFromImageBase64, removeBackgroundFromImageFile } = require('remove.bg') //paid
 const color = require('./lib/color')
@@ -59,47 +60,31 @@ module.exports = msgHandler = async (client, message) => {
             switch (command) {
             case 'sticker':
             case 'stiker':
-                if (isMedia) {
-                    const mediaData = await decryptMedia(message)
-                    const imageBase64 = `data:${mimetype};base64,${mediaData.toString('base64')}`
-                    await client.sendImageAsSticker(from, imageBase64)
-                } else if (quotedMsg && quotedMsg.type == 'image') {
-                    const mediaData = await decryptMedia(quotedMsg)
-                    const imageBase64 = `data:${quotedMsg.mimetype};base64,${mediaData.toString('base64')}`
-                    await client.sendImageAsSticker(from, imageBase64)
-                } else if (args.length >= 1) {
-                    const url = args[1]
-                    if (url.match(isUrl)) {
-                        await client.sendStickerfromUrl(from, url, { method: 'get' })
-                            .catch(err => console.log('Caught exception: ', err))
-                    } else {
-                        client.sendText(from, 'Invalid URL')
-                    }
-                } else {
-                    if(isGroupMsg) {
-                        client.sendTextWithMentions(from, `@${message.author} You did not tag a picture`)
-                    } else {
-                        client.reply(from, 'You did not tag a picture', message)
-                    }
-                }
-            break
-        case 'tsticker':
-            if (isMedia && type == 'image') {
-              try {
-                const mediaData = await decryptMedia(message, uaOverride)
-                const imageBase64 = `data:${mimetype};base64,${mediaData.toString('base64')}`
-                const base64img = imageBase64
-                const filename = "./media/pic.jpg";
-                //console.log(base64img)
-                const outFile = './media/noBg.png'
-                const result = await removeBackgroundFromImageBase64({ base64img, apiKey: 'your api key', size: 'auto', type: 'auto', outFile })
-                    await fs.writeFile(outFile, result.base64img)
-                    await client.sendImageAsSticker(from, `data:${mimetype};base64,${result.base64img}`)
-                } catch(err) {
-                    console.log(err)
-                }
-            }
-            break
+                        if (isMedia && type == 'video') {
+                        	if (message.duration < 15) {
+                        		sendSticker.sendAnimatedSticker(message)
+                       		} else {
+                       			await client.reply(from, 'The given file is too large for converting', id)
+				}
+                        } else if (isMedia && type == 'image') {
+                      		const mediaData = await decryptMedia(message)
+                      		const imageBase64 = `data:${mimetype};base64,${mediaData.toString('base64')}`
+                      		const baseImg = imageBase64.replace('video/mp4','image/gif')
+                      		await client.sendImageAsSticker(from, baseImg)
+                    	} else if (quotedMsg && quotedMsg.type == 'image') {
+                    		const mediaData = await decryptMedia(quotedMsg)
+                    		const imageBase64 = `data:${quotedMsg.mimetype};base64,${mediaData.toString('base64')}`
+                    		await client.sendImageAsSticker(from, imageBase64)
+                	} else if (quotedMsg && quotedMsg.type == 'video') {
+                           		if (quotedMsg.duration < 15) {
+                          		sendSticker.sendAnimatedSticker(quotedMsgObj)
+                          		} else {
+                          		await client.reply(from, 'The given file is too large for converting', id)
+                          		} 
+	                } else {
+                  		client.reply(from, 'You did not tag a picture or video, Baka', message.id)
+                    	}
+                	break
 			    
 	 case 'play':
             if (args.length == 0) return client.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)

@@ -42,7 +42,7 @@ npm start
 
 | Functions                     | Status |
 |:-----------------------------:|:------:|
-| Convert GIFS/Videos into stickers in the correct format | BUGGY xD |
+| Convert GIFS/Videos into stickers in the correct format | :heavy_check_mark: |
 | Convert Images Into Stickers  | :heavy_check_mark: |
 | Retrive anime info            | :heavy_check_mark: |
 | Download mp3               | :heavy_check_mark: |

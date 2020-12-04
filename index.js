@@ -26,6 +26,15 @@ if (opsys === 'win32' || opsys === 'win64') {
 }
 
 const startServer = async (client) => {
+        global.sclient = client
+	sendingSticker = []
+    	queueSticker = []
+    	global.sendingAnimatedSticker = []
+    	global.queueAnimatedSticker = []
+    	global.amdownloaden = []
+    	global.queuemp3 = []
+    	global.queuemp4 = []
+    	spamarr = []
         console.log('[SERVER] Server Started!')
         // Force it to keep the current session
         client.onStateChanged((state) => {

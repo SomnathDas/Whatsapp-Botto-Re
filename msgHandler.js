@@ -6,7 +6,7 @@ const sendSticker = require('./sendSticker')
 const get = require('got')
 const { RemoveBgResult, removeBackgroundFromImageBase64, removeBackgroundFromImageFile } = require('remove.bg') 
 const color = require('./lib/color')
-const { wallpaperanime, liriklagu, quotemaker, wall } = require('./lib/functions')
+const { liriklagu, quotemaker, wall } = require('./lib/functions')
 const { help, info, } = require('./lib/help')
 const msgFilter = require('./lib/msgFilter')
 const akaneko = require('akaneko');
@@ -19,7 +19,7 @@ const nsfwgrp = JSON.parse(fs.readFileSync('./lib/nsfw.json'))
 const ban = JSON.parse(fs.readFileSync('./lib/banned.json'))
 const errorurl = 'https://steamuserimages-a.akamaihd.net/ugc/954087817129084207/5B7E46EE484181A676C02DFCAD48ECB1C74BC423/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false'
 const errorurl2 = 'https://steamuserimages-a.akamaihd.net/ugc/954087817129084207/5B7E46EE484181A676C02DFCAD48ECB1C74BC423/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false'
-
+const { profile } = require('./lib/profile.js')
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -30,7 +30,7 @@ module.exports = msgHandler = async (client, message) => {
         let { body } = message
         const { name } = chat
         let { pushname, verifiedName } = sender
-        const prefix = '#'
+        const prefix = '='
         body = (type === 'chat' && body.startsWith(prefix)) ? body : ((type === 'image' && caption || type === 'video' && caption) && caption.startsWith(prefix)) ? caption : ''
         const command = body.slice(prefix.length).trim().split(/ +/).shift().toLowerCase()
         const args = body.slice(prefix.length).trim().split(/ +/).slice(1)
@@ -38,21 +38,24 @@ module.exports = msgHandler = async (client, message) => {
 	const isRule = ruleArr.includes(chat.id)
         const time = moment(t * 1000).format('DD/MM HH:mm:ss')
 
+	const botNumber = await client.getHostNumber()
+	const groupId = isGroupMsg ? chat.groupMetadata.id : ''
+	const groupAdmins = isGroupMsg ? await client.getGroupAdmins(groupId) : ''
+	const isGroupAdmins = isGroupMsg ? groupAdmins.includes(sender.id) : false
+        const isBotGroupAdmins = isGroupMsg ? groupAdmins.includes(botNumber + '@c.us') : false
+
+	if (isGroupMsg && isRule && (type === 'chat' && message.body.includes('chat.whatsapp.com') && isBotGroupAdmins) && !isGroupAdmins) return await client.removeParticipant(chat.id, author)
         if (isCmd && msgFilter.isFiltered(from) && !isGroupMsg) return console.log(color('[SPAM!]', 'red'), color(time, 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname))
         if (isCmd && msgFilter.isFiltered(from) && isGroupMsg) return console.log(color('[SPAM!]', 'red'), color(time, 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname), 'in', color(name))
         if (!isCmd && !isGroupMsg) return console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname))
         if (!isCmd && isGroupMsg) return console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname), 'in', color(name))
-	if (isGroupMsg && isRule && (type === 'chat' && message.body.includes('chat.whatsapp.com') && isBotGroupAdmins) && !isGroupAdmins) return await client.removeParticipant(chat.id, author)
         if (isCmd && !isGroupMsg) console.log(color('[EXEC]'), color(time, 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname))
         if (isCmd && isGroupMsg) console.log(color('[EXEC]'), color(time, 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname), 'in', color(name))
-        const botNumber = await client.getHostNumber()
-        const groupId = isGroupMsg ? chat.groupMetadata.id : ''
-        const groupAdmins = isGroupMsg ? await client.getGroupAdmins(groupId) : ''
-        const isGroupAdmins = isGroupMsg ? groupAdmins.includes(sender.id) : false
-        const isBotGroupAdmins = isGroupMsg ? groupAdmins.includes(botNumber + '@c.us') : false
+
+
         const isBanned = ban.includes(sender.id)
-        const owner = 'Your-phone-number' // eg 9190xxxxxxxx
-        const isowner = owner+'@c.us' == sender.id 
+        const owners = ['919744375687@c.us'] // eg [9190xxxxxxxx, 49xxxxxxxx] replace my number also 
+        const isowner = owners.includes(sender.id) 
 
         msgFilter.addFilter(from)
 
@@ -61,13 +64,9 @@ module.exports = msgHandler = async (client, message) => {
         if (!isBanned) {
             switch (command) {
             case 'sticker':
-            case 'stiker':
+			//console.log(type)
                         if (isMedia && type == 'video') {
-                        	if (message.duration < 15) {
-                        		sendSticker.sendAnimatedSticker(message)
-                       		} else {
-                       			await client.reply(from, 'The given file is too large for converting', id)
-				}
+                        		return await sendSticker.sendAnimatedSticker(message)
                         } else if (isMedia && type == 'image') {
                       		const mediaData = await decryptMedia(message)
                       		const imageBase64 = `data:${mimetype};base64,${mediaData.toString('base64')}`
@@ -86,41 +85,9 @@ module.exports = msgHandler = async (client, message) => {
 	                } else {
                   		client.reply(from, 'You did not tag a picture or video, Baka', message.id)
                     	}
-                	break
-			    
-	 case 'play':
-            if (args.length == 0) return client.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-            axios.get(`https://arugaytdl.herokuapp.com/search?q=${body.slice(6)}`)
-            .then(async (res) => {
-                await client.sendFileFromUrl(from, `${res.data[0].thumbnail}`, ``, `Lagu ditemukan\n\nJudul: ${res.data[0].title}\nDurasi: ${res.data[0].duration}detik\nUploaded: ${res.data[0].uploadDate}\nView: ${res.data[0].viewCount}\n\nsedang dikirim`, id)
-                axios.get(`https://arugaz.herokuapp.com/api/yta?url=https://youtu.be/${res.data[0].id}`)
-                .then(async(rest) => {
-                    await client.sendPtt(from, `${rest.data.result}`, id)
-                })
-            })
-            break
-			    
-	case 'wiki':
-            if (args.length == 0) return client.reply(from, `To search for a word from wikipedia, type: ${prefix} wiki [word]`, id)
-            const wikip = body.slice(6)
-            const wikis = await rugaapi.wiki(wikip)
-	    await client.reply(from, wikis, id)
-	    break
-			    
-        case 'gsticker':
-            if (isMedia && type == 'video') {
-                if (mimetype === 'video/mp4' && message.duration < 30) {
-                const mediaData = await decryptMedia(message, uaOverride)
-               const filename = `./media/aswu.mp4`
-                await fs.writeFile(filename, mediaData)
-                await exec('ffmpeg -i ./media/aswu.mp4 -vf scale=512:-1 -r 10 -f image2pipe -framerate 24 -vcodec ppm - | convert -delay 0 -loop 0 - ./media/output.gif')
-                const contents = await fs.readFile('./media/output.gif', {encoding: 'base64'}) 
-                await client.sendImageAsSticker(from, `data:image/gif;base64,${contents.toString('base64')}`)
-                }
-            }
 		break
        case 'tts': //You can add as many as you want, just find the language code and modify the code :)
-            if (args.length === 1) return client.reply(from, '  *!tts [id, en, jp, ar, pt] [texto]*, Exemplo *!tts en olá pessoas*')
+            if (args.length === 1) return client.reply(from, '  *Usage #tts language text*')
             const ttsId = require('node-gtts')('id');
             const ttsEn = require('node-gtts')('en');
             const ttsPt = require('node-gtts')('pt');
@@ -152,7 +119,7 @@ module.exports = msgHandler = async (client, message) => {
                     client.sendPtt(from, './media/tts/resAr.mp3', id)
                 })
             } else {
-                client.reply(from, 'Insira os dados do idioma: [id] para a Indonésia, [en] Para inglês, [jp] Para japão, [ar] Para Árabe, [pt] Para portugues', id)
+                client.reply(from, 'Language not supported!', id)
             }
             break
         case 'quotemaker':
@@ -186,7 +153,6 @@ module.exports = msgHandler = async (client, message) => {
             var welgrp = wel.includes(chat.id)
             var ngrp = nsfwgrp.includes(chat.id)
             var grouppic = await client.getProfilePicFromServer(chat.id)
-            var pkgame = pokarr.includes(chat.id)
             if (grouppic == undefined) {
                  var pfp = errorurl
             } else {
@@ -197,8 +163,6 @@ module.exports = msgHandler = async (client, message) => {
 🌐️ *Members: ${totalMem}*
 
 💌️ *Welcome: ${welgrp}*
-
-🎉️ *PokeGame* : *${pkgame}*
 
 🔮️ *Rule* : *${isRule}*
 
@@ -225,14 +189,7 @@ ${desc}`)
                 fs.writeFileSync('./lib/banned.json', JSON.stringify(ban))
                 client.reply(from, 'Succes ban target!', message.id)
             }
-            break
-			    
-	case 'mp3' :
-            yt.mp3(message)
-      	case 'mp4' :
-            break
-            yt.mp4(message)
-			   		   
+            break  		   
         case 'covid':
             arg = body.trim().split(' ')
             console.log(...arg[1])
@@ -499,15 +456,12 @@ ${desc}`)
         case 'wallpaper':
             if (args.length == 0) return client.reply(from, 'Wrong Format!', id)
             const query = body.slice(6)
-            const walls = await func.wall(query)
+            const walls = await wall(query)
             await client.sendFileFromUrl(from, walls, 'walls.jpg', '', id)
-            break
-        case 'waifu': 
-            const data = fs.readFileSync('./lib/waifu.json')
-            const dataJson = JSON.parse(data)
-            const randIndex = Math.floor(Math.random() * dataJson.length)
-            const randKey = dataJson[randIndex]
-            client.sendFileFromUrl(from, randKey.image, 'Waifu.jpg', randKey.teks, id)
+	    break
+        case 'haigusha': 
+        	const waifu = await waifuclient.getCharacter(no)
+        	await sclient.sendFileFromUrl(message.from, waifu.data.display_picture, 'haugusha.jpg', `❤️ *Name : ${waifu.data.name}*\n\n💎️ Description : ${waifu.data.description}\n\n💚️ Source : ${waifu.data.series.name}\n\n✨️ URL: ${waifu.data.url}`, message.id)
             break
         case 'animeneko':
             client.sendFileFromUrl(from, akaneko.neko(), 'neko.jpg', 'Neko *Nyaa*~')
@@ -541,9 +495,21 @@ ${desc}`)
             client.sendTextWithMentions(from, '@' + person + ' *slapped* ' + arg[1])
             break
         case 'pokemon':
-            q7 = Math.floor(Math.random() * 890) + 1;
-            client.sendFileFromUrl(from, 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/'+q7+'.png','Pokemon.png','.', id)
-            break
+            	await axios.get(`https://pokeapi.co/api/v2/pokemon/${message.body.slice(6)}`)
+        	var pkurl = pkmnz.data.sprites.other['official-artwork'].front_default
+		if (pkurl == null) {
+ 			var pkurl = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pkmnz.data.id}.png`
+		}
+	
+	var text = `👑️ Name: ${await capitalize(pkmnz.data.species.name)}
+
+⭐️ ${await pkmntype(pkmnz.data)}
+
+🎉️ ${await pkmnabi(pkmnz.data)}
+
+💎️ ${await pkmnstats(pkmnz.data)}`
+        
+	return client.sendFileFromUrl(from, pkurl, 'pkmn.png', text, id)
         case 'rpaper' :
             const walnime = ['https://cdn.nekos.life/wallpaper/QwGLg4oFkfY.png','https://cdn.nekos.life/wallpaper/bUzSjcYxZxQ.jpg','https://cdn.nekos.life/wallpaper/j49zxzaUcjQ.jpg','https://cdn.nekos.life/wallpaper/YLTH5KuvGX8.png','https://cdn.nekos.life/wallpaper/Xi6Edg133m8.jpg','https://cdn.nekos.life/wallpaper/qvahUaFIgUY.png','https://cdn.nekos.life/wallpaper/leC8q3u8BSk.jpg','https://cdn.nekos.life/wallpaper/tSUw8s04Zy0.jpg','https://cdn.nekos.life/wallpaper/sqsj3sS6EJE.png','https://cdn.nekos.life/wallpaper/HmjdX_s4PU4.png','https://cdn.nekos.life/wallpaper/Oe2lKgLqEXY.jpg','https://cdn.nekos.life/wallpaper/GTwbUYI-xTc.jpg','https://cdn.nekos.life/wallpaper/nn_nA8wTeP0.png','https://cdn.nekos.life/wallpaper/Q63o6v-UUa8.png','https://cdn.nekos.life/wallpaper/ZXLFm05K16Q.jpg','https://cdn.nekos.life/wallpaper/cwl_1tuUPuQ.png','https://cdn.nekos.life/wallpaper/wWhtfdbfAgM.jpg','https://cdn.nekos.life/wallpaper/3pj0Xy84cPg.jpg','https://cdn.nekos.life/wallpaper/sBoo8_j3fkI.jpg','https://cdn.nekos.life/wallpaper/gCUl_TVizsY.png','https://cdn.nekos.life/wallpaper/LmTi1k9REW8.jpg','https://cdn.nekos.life/wallpaper/sbq_4WW2PUM.jpg','https://cdn.nekos.life/wallpaper/QOSUXEbzDQA.png','https://cdn.nekos.life/wallpaper/khaqGIHsiqk.jpg','https://cdn.nekos.life/wallpaper/iFtEXugqQgA.png','https://cdn.nekos.life/wallpaper/deFKIDdRe1I.jpg','https://cdn.nekos.life/wallpaper/OHZVtvDm0gk.jpg','https://cdn.nekos.life/wallpaper/YZYa00Hp2mk.jpg','https://cdn.nekos.life/wallpaper/R8nPIKQKo9g.png','https://cdn.nekos.life/wallpaper/_brn3qpRBEE.jpg','https://cdn.nekos.life/wallpaper/ADTEQdaHhFI.png','https://cdn.nekos.life/wallpaper/MGvWl6om-Fw.jpg','https://cdn.nekos.life/wallpaper/YGmpjZW3AoQ.jpg','https://cdn.nekos.life/wallpaper/hNCgoY-mQPI.jpg','https://cdn.nekos.life/wallpaper/3db40hylKs8.png','https://cdn.nekos.life/wallpaper/iQ2FSo5nCF8.jpg','https://cdn.nekos.life/wallpaper/meaSEfeq9QM.png','https://cdn.nekos.life/wallpaper/CmEmn79xnZU.jpg','https://cdn.nekos.life/wallpaper/MAL18nB-yBI.jpg','https://cdn.nekos.life/wallpaper/FUuBi2xODuI.jpg','https://cdn.nekos.life/wallpaper/ez-vNNuk6Ck.jpg','https://cdn.nekos.life/wallpaper/K4-z0Bc0Vpc.jpg','https://cdn.nekos.life/wallpaper/Y4JMbswrNg8.jpg','https://cdn.nekos.life/wallpaper/ffbPXIxt4-0.png','https://cdn.nekos.life/wallpaper/x63h_W8KFL8.jpg','https://cdn.nekos.life/wallpaper/lktzjDRhWyg.jpg','https://cdn.nekos.life/wallpaper/j7oQtvRZBOI.jpg','https://cdn.nekos.life/wallpaper/MQQEAD7TUpQ.png','https://cdn.nekos.life/wallpaper/lEG1-Eeva6Y.png','https://cdn.nekos.life/wallpaper/Loh5wf0O5Aw.png','https://cdn.nekos.life/wallpaper/yO6ioREenLA.png','https://cdn.nekos.life/wallpaper/4vKWTVgMNDc.jpg','https://cdn.nekos.life/wallpaper/Yk22OErU8eg.png','https://cdn.nekos.life/wallpaper/Y5uf1hsnufE.png','https://cdn.nekos.life/wallpaper/xAmBpMUd2Zw.jpg','https://cdn.nekos.life/wallpaper/f_RWFoWciRE.jpg','https://cdn.nekos.life/wallpaper/Y9qjP2Y__PA.jpg','https://cdn.nekos.life/wallpaper/eqEzgohpPwc.jpg','https://cdn.nekos.life/wallpaper/s1MBos_ZGWo.jpg','https://cdn.nekos.life/wallpaper/PtW0or_Pa9c.png','https://cdn.nekos.life/wallpaper/32EAswpy3M8.png','https://cdn.nekos.life/wallpaper/Z6eJZf5xhcE.png','https://cdn.nekos.life/wallpaper/xdiSF731IFY.jpg','https://cdn.nekos.life/wallpaper/Y9r9trNYadY.png','https://cdn.nekos.life/wallpaper/8bH8CXn-sOg.jpg','https://cdn.nekos.life/wallpaper/a02DmIFzRBE.png','https://cdn.nekos.life/wallpaper/MnrbXcPa7Oo.png','https://cdn.nekos.life/wallpaper/s1Tc9xnugDk.jpg','https://cdn.nekos.life/wallpaper/zRqEx2gnfmg.jpg','https://cdn.nekos.life/wallpaper/PtW0or_Pa9c.png','https://cdn.nekos.life/wallpaper/0ECCRW9soHM.jpg','https://cdn.nekos.life/wallpaper/kAw8QHl_wbM.jpg','https://cdn.nekos.life/wallpaper/ZXcaFmpOlLk.jpg','https://cdn.nekos.life/wallpaper/WVEdi9Ng8UE.png','https://cdn.nekos.life/wallpaper/IRu29rNgcYU.png','https://cdn.nekos.life/wallpaper/LgIJ_1AL3rM.jpg','https://cdn.nekos.life/wallpaper/DVD5_fLJEZA.jpg','https://cdn.nekos.life/wallpaper/siqOQ7k8qqk.jpg','https://cdn.nekos.life/wallpaper/CXNX_15eGEQ.png','https://cdn.nekos.life/wallpaper/s62tGjOTHnk.jpg','https://cdn.nekos.life/wallpaper/tmQ5ce6EfJE.png','https://cdn.nekos.life/wallpaper/Zju7qlBMcQ4.jpg','https://cdn.nekos.life/wallpaper/CPOc_bMAh2Q.png','https://cdn.nekos.life/wallpaper/Ew57S1KtqsY.jpg','https://cdn.nekos.life/wallpaper/hVpFbYJmZZc.jpg','https://cdn.nekos.life/wallpaper/sb9_J28pftY.jpg','https://cdn.nekos.life/wallpaper/JDoIi_IOB04.jpg','https://cdn.nekos.life/wallpaper/rG76AaUZXzk.jpg','https://cdn.nekos.life/wallpaper/9ru2luBo360.png','https://cdn.nekos.life/wallpaper/ghCgiWFxGwY.png','https://cdn.nekos.life/wallpaper/OSR-i-Rh7ZY.png','https://cdn.nekos.life/wallpaper/65VgtPyweCc.jpg','https://cdn.nekos.life/wallpaper/3vn-0FkNSbM.jpg','https://cdn.nekos.life/wallpaper/u02Y0-AJPL0.jpg','https://cdn.nekos.life/wallpaper/_-Z-0fGflRc.jpg','https://cdn.nekos.life/wallpaper/3VjNKqEPp58.jpg','https://cdn.nekos.life/wallpaper/NoG4lKnk6Sc.jpg','https://cdn.nekos.life/wallpaper/xiTxgRMA_IA.jpg','https://cdn.nekos.life/wallpaper/yq1ZswdOGpg.png','https://cdn.nekos.life/wallpaper/4SUxw4M3UMA.png','https://cdn.nekos.life/wallpaper/cUPnQOHNLg0.jpg','https://cdn.nekos.life/wallpaper/zczjuLWRisA.jpg','https://cdn.nekos.life/wallpaper/TcxvU_diaC0.png','https://cdn.nekos.life/wallpaper/7qqWhEF_uoY.jpg','https://cdn.nekos.life/wallpaper/J4t_7DvoUZw.jpg','https://cdn.nekos.life/wallpaper/xQ1Pg5D6J4U.jpg','https://cdn.nekos.life/wallpaper/aIMK5Ir4xho.jpg','https://cdn.nekos.life/wallpaper/6gneEXrNAWU.jpg','https://cdn.nekos.life/wallpaper/PSvNdoISWF8.jpg','https://cdn.nekos.life/wallpaper/SjgF2-iOmV8.jpg','https://cdn.nekos.life/wallpaper/vU54ikOVY98.jpg','https://cdn.nekos.life/wallpaper/QjnfRwkRU-Q.jpg','https://cdn.nekos.life/wallpaper/uSKqzz6ZdXc.png','https://cdn.nekos.life/wallpaper/AMrcxZOnVBE.jpg','https://cdn.nekos.life/wallpaper/N1l8SCMxamE.jpg','https://cdn.nekos.life/wallpaper/n2cBaTo-J50.png','https://cdn.nekos.life/wallpaper/ZXcaFmpOlLk.jpg','https://cdn.nekos.life/wallpaper/7bwxy3elI7o.png','https://cdn.nekos.life/wallpaper/7VW4HwF6LcM.jpg','https://cdn.nekos.life/wallpaper/YtrPAWul1Ug.png','https://cdn.nekos.life/wallpaper/1p4_Mmq95Ro.jpg','https://cdn.nekos.life/wallpaper/EY5qz5iebJw.png','https://cdn.nekos.life/wallpaper/aVDS6iEAIfw.jpg','https://cdn.nekos.life/wallpaper/veg_xpHQfjE.jpg','https://cdn.nekos.life/wallpaper/meaSEfeq9QM.png','https://cdn.nekos.life/wallpaper/Xa_GtsKsy-s.png','https://cdn.nekos.life/wallpaper/6Bx8R6D75eM.png','https://cdn.nekos.life/wallpaper/zXOGXH_b8VY.png','https://cdn.nekos.life/wallpaper/VQcviMxoQ00.png','https://cdn.nekos.life/wallpaper/CJnRl-PKWe8.png','https://cdn.nekos.life/wallpaper/zEWYfFL_Ero.png','https://cdn.nekos.life/wallpaper/_C9Uc5MPaz4.png','https://cdn.nekos.life/wallpaper/zskxNqNXyG0.jpg','https://cdn.nekos.life/wallpaper/g7w14PjzzcQ.jpg','https://cdn.nekos.life/wallpaper/KavYXR_GRB4.jpg','https://cdn.nekos.life/wallpaper/Z_r9WItzJBc.jpg','https://cdn.nekos.life/wallpaper/Qps-0JD6834.jpg','https://cdn.nekos.life/wallpaper/Ri3CiJIJ6M8.png','https://cdn.nekos.life/wallpaper/ArGYIpJwehY.jpg','https://cdn.nekos.life/wallpaper/uqYKeYM5h8w.jpg','https://cdn.nekos.life/wallpaper/h9cahfuKsRg.jpg','https://cdn.nekos.life/wallpaper/iNPWKO8d2a4.jpg','https://cdn.nekos.life/wallpaper/j2KoFVhsNig.jpg','https://cdn.nekos.life/wallpaper/z5Nc-aS6QJ4.jpg','https://cdn.nekos.life/wallpaper/VUFoK8l1qs0.png','https://cdn.nekos.life/wallpaper/rQ8eYh5mXN8.png','https://cdn.nekos.life/wallpaper/D3NxNISDavQ.png','https://cdn.nekos.life/wallpaper/Z_CiozIenrU.jpg','https://cdn.nekos.life/wallpaper/np8rpfZflWE.jpg','https://cdn.nekos.life/wallpaper/ED-fgS09gik.jpg','https://cdn.nekos.life/wallpaper/AB0Cwfs1X2w.jpg','https://cdn.nekos.life/wallpaper/DZBcYfHouiI.jpg','https://cdn.nekos.life/wallpaper/lC7pB-GRAcQ.png','https://cdn.nekos.life/wallpaper/zrI-sBSt2zE.png','https://cdn.nekos.life/wallpaper/_RJhylwaCLk.jpg','https://cdn.nekos.life/wallpaper/6km5m_GGIuw.png','https://cdn.nekos.life/wallpaper/3db40hylKs8.png','https://cdn.nekos.life/wallpaper/oggceF06ONQ.jpg','https://cdn.nekos.life/wallpaper/ELdH2W5pQGo.jpg','https://cdn.nekos.life/wallpaper/Zun_n5pTMRE.png','https://cdn.nekos.life/wallpaper/VqhFKG5U15c.png','https://cdn.nekos.life/wallpaper/NsMoiW8JZ60.jpg','https://cdn.nekos.life/wallpaper/XE4iXbw__Us.png','https://cdn.nekos.life/wallpaper/a9yXhS2zbhU.jpg','https://cdn.nekos.life/wallpaper/jjnd31_3Ic8.jpg','https://cdn.nekos.life/wallpaper/Nxanxa-xO3s.png','https://cdn.nekos.life/wallpaper/dBHlPcbuDc4.jpg','https://cdn.nekos.life/wallpaper/6wUZIavGVQU.jpg','https://cdn.nekos.life/wallpaper/_-Z-0fGflRc.jpg','https://cdn.nekos.life/wallpaper/H9OUpIrF4gU.jpg','https://cdn.nekos.life/wallpaper/xlRdH3fBMz4.jpg','https://cdn.nekos.life/wallpaper/7IzUIeaae9o.jpg','https://cdn.nekos.life/wallpaper/FZCVL6PyWq0.jpg','https://cdn.nekos.life/wallpaper/5dG-HH6d0yw.png','https://cdn.nekos.life/wallpaper/ddxyA37HiwE.png','https://cdn.nekos.life/wallpaper/I0oj_jdCD4k.jpg','https://cdn.nekos.life/wallpaper/ABchTV97_Ts.png','https://cdn.nekos.life/wallpaper/58C37kkq39Y.png','https://cdn.nekos.life/wallpaper/HMS5mK7WSGA.jpg','https://cdn.nekos.life/wallpaper/1O3Yul9ojS8.jpg','https://cdn.nekos.life/wallpaper/hdZI1XsYWYY.jpg','https://cdn.nekos.life/wallpaper/h8pAJJnBXZo.png','https://cdn.nekos.life/wallpaper/apO9K9JIUp8.jpg','https://cdn.nekos.life/wallpaper/p8f8IY_2mwg.jpg','https://cdn.nekos.life/wallpaper/HY1WIB2r_cE.jpg','https://cdn.nekos.life/wallpaper/u02Y0-AJPL0.jpg','https://cdn.nekos.life/wallpaper/jzN74LcnwE8.png','https://cdn.nekos.life/wallpaper/IeAXo5nJhjw.jpg','https://cdn.nekos.life/wallpaper/7lgPyU5fuLY.jpg','https://cdn.nekos.life/wallpaper/f8SkRWzXVxk.png','https://cdn.nekos.life/wallpaper/ZmDTpGGeMR8.jpg','https://cdn.nekos.life/wallpaper/AMrcxZOnVBE.jpg','https://cdn.nekos.life/wallpaper/ZhP-f8Icmjs.jpg','https://cdn.nekos.life/wallpaper/7FyUHX3fE2o.jpg','https://cdn.nekos.life/wallpaper/CZoSLK-5ng8.png','https://cdn.nekos.life/wallpaper/pSNDyxP8l3c.png','https://cdn.nekos.life/wallpaper/AhYGHF6Fpck.jpg','https://cdn.nekos.life/wallpaper/ic6xRRptRes.jpg','https://cdn.nekos.life/wallpaper/89MQq6KaggI.png','https://cdn.nekos.life/wallpaper/y1DlFeHHTEE.png']
             let walnimek = walnime[Math.floor(Math.random() * walnime.length)]
@@ -555,48 +521,18 @@ ${desc}`)
             await client.sendFileFromUrl(from, `${url}`, 'meme.jpg', `${title}`)
             break
         case 'help':
-            client.reply(from, help.replace(undefined, pushname), message.id)
+            client.reply(from, help(prefix, pushname), message.id)
             break
         case 'info':
             client.reply(from, info, id)
             break
         case 'profile':
-            var role = 'None'
-            if (isGroupMsg) {
-              if (!quotedMsg) {
-              var block = ban.includes(author)
-              var pic = await client.getProfilePicFromServer(author)
-              var namae = pushname
-              var sts = await client.getStatus(author)
-              var adm = isGroupAdmins
-              const { status } = sts
-               if (pic == undefined) {
-               var pfp = errorurl 
-               } else {
-               var pfp = pic
-               } 
-             await client.sendFileFromUrl(from, pfp, 'pfp.jpg', `*User Profile* ✨️ \n\n 🔖️ *Username: ${namae}*\n\n💌️ *User Info: ${status}*\n\n*💔️ Ban: ${block}*\n\n✨️ *Role: ${role}*\n\n 👑️ *Admin: ${adm}*`)
-             } else if (quotedMsg) {
-             var qmid = quotedMsgObj.sender.id
-             var block = ban.includes(qmid)
-             var pic = await client.getProfilePicFromServer(qmid)
-             var namae = quotedMsgObj.sender.name
-             var sts = await client.getStatus(qmid)
-             var adm = isGroupAdmins
-             const { status } = sts
-              if (pic == undefined) {
-              var pfp = errorurl 
-              } else {
-              var pfp = pic
-              } 
-             await client.sendFileFromUrl(from, pfp, 'pfo.jpg', `*User Profile* ✨️ \n\n 🔖️ *Username: ${namae}*\n💌️ *User Info: ${status}*\n*💔️ Ban: ${block}*\n✨️ *Role: ${role}*\n 👑️ *Admin: ${adm}*`)
-             }
-            }
+            if (quotedMsg) return profile(quotedMsgObj.sender.id, message, fs, groupAdmins, client)
+	    if (mentionedJidList.length >= 1) return profile(mentionedJidList[1], message, fs, groupAdmins, client)
+	    return profile(sender.id, message, fs, groupAdmins, client)
             break
-        case 'snk':
-            client.reply(from, snk, message.id)
         default:
-            console.log(color('[UNLISTED]', 'red'), color(time, 'yellow'), 'Unregistered Command from', color(pushname))
+            console.log(color('[PREFIX-CALL]', 'green'), color(time, 'yellow'), 'Command from', color(pushname))
             break
         }
     }

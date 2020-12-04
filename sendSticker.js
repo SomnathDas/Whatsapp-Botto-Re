@@ -7,6 +7,50 @@ const gifFrames = require('gif-frames')
 const Jimp = require('jimp')
 const { GifFrame, GifUtil, GifCodec } = require('gifwrap')
 const queuejs = require('./queue')
+//make sure you have imagemagick and ffpmeg
+
+exports.sendSticker = async function (message) {
+  //console.log(sendingSticker)
+  if (sendingSticker.indexOf(message.from) > -1) {
+    queueSticker.push(message)
+    return
+  } else {
+  }
+  sendingSticker.push(message.from)
+  const buffer = await decryptMedia(message)
+  const fileName = `./media/sticker/temp${message.from}.${mime.extension(message.mimetype)}`
+  fs.writeFile(fileName, buffer, function (err) {})
+  await nrc.run('convert ./media/sticker/temp' + message.from + '.jpeg ./media/sticker/' + message.from + '.png')
+  var dimensions = await sizeOf('./media/sticker/' + message.from + '.png')
+  //console.log(dimensions.width + '  ' + dimensions.height)
+  if (dimensions.width < dimensions.height) {
+    await nrc.run('mogrify -bordercolor transparent -border ' + (dimensions.height - dimensions.width) / 2 + 'x0 ./media/sticker/' + message.from + '.png')
+  } else if (dimensions.width > dimensions.height) {
+    await nrc.run('mogrify -bordercolor transparent -border 0x' + (dimensions.width - dimensions.height) / 2 + ' ./media/sticker/' + message.from + '.png')
+  } else {
+  }
+	
+	//'sticker/' + message.from + '.png'
+  await nrc.run(`cwebp ./media/sticker/${message.from}.png -o ./media/sticker/${message.from}.webp`)
+  await nrc.run(`webpmux -set exif ./media/sticker/data.exif ./media/sticker/${message.from}.webp -o ./media/sticker/${message.from}.webp`)
+  const b64 = await fs.readFile(`./media/sticker/${message.from}.webp`, { encoding: 'base64'})
+  await sclient.sendRawWebpAsSticker(message.from, b64)
+   fs.unlinkSync(`./media/sticker/${message.from}.webp`)
+  for (let index = 0; index < sendingSticker.length; index++) {
+    if (sendingSticker[index] == message.from) {
+      sendingSticker.splice([index], 1)
+    }
+  }
+  if (queueSticker.length != 0) {
+    queuejs.sendSticker(message)
+  }
+  delete require.cache[require.resolve('./queue')]
+}
+
+
+
+
+
 
 exports.sendAnimatedSticker = async function (message) {
  try {

@@ -13,32 +13,33 @@
 
 ### :green_book: [Whatsapp Group](https://chat.whatsapp.com/KTOTeE4LKj3FUPKJbRyVF3)
 
-### :page_with_curl: [Donate| COMING SOON OR CONTACT US]
 
 ## Prerequisites
 
 - npm >=2.0.32
 - node >=12.18.3
 
-## Install
+## Install the node modules
 
 Also if any module is missing then install it by either searching for that npm package or npm i [package name]
 
 ```sh
-npm install
+> npm install
 ```
 
-## Install ffmpeg
+## Install the needed programs
 
-* ffmpeg site: [ffmpeg](https://ffmpeg.org/)
+* FFmepeg: [Download](https://ffmpeg.org/download.html)
+* Imagemagick: [Download](https://imagemagick.org/script/download.php)
+* Libwebp: [Download](https://developers.google.com/speed/webp/download)
 
-## Usage
+## Starting the server
 
 ```sh
-npm start
+> npm start
 ```
 
-## Features 
+## Features [Main]
 
 | Functions                     | Status |
 |:-----------------------------:|:------:|
@@ -66,24 +67,12 @@ npm start
 | Send Group info               | :heavy_check_mark: |
 | Welcome new members           | :heavy_check_mark: |
 | Enable and Disable NSFW       | :heavy_check_mark: |
-and much more
 
-## Authors
 
-👤 **Alen Yohannan** aka ***Hero of Hyrule***
-
-* Twitter: [@TakahiroBan](https://twitter.com/TakahiroBan)
-* Github: [@AlenSaito1](https://github.com/AlenSaito1)
-
-👤 **Somnath Das** aka ***Neko, God Of Culture***
-
-* Twitter: [@aksd3247](https://twitter.com/aksd3247)
-* Github: [@SomnathDas](https://github.com/SomnathDas)
-* Instagram: [@samurai3247](https://www.instagram.com/samurai3247)
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/SomnathDas/Whatsapp-Botto-Re/issues). You can also take a look at the [contributing guide](https://github.com/SomnathDas/Whatsapp-Botto-Re/edit/master/CONTRIBUTING.md).
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/SomnathDas/Whatsapp-Botto-Re/issues). 
 
 ## Show your support
 

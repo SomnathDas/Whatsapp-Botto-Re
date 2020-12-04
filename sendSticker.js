@@ -8,9 +8,9 @@ const Jimp = require('jimp')
 const { GifFrame, GifUtil, GifCodec } = require('gifwrap')
 const queuejs = require('./queue')
 
-exports.sendAnimatedSticker = async function (message) {
+module.exports.sendAnimatedSticker = async function (message) {
  try {
-  // console.log(sendingAnimatedSticker)
+   console.log(sendingAnimatedSticker)
   if (sendingAnimatedSticker.indexOf(message.from) > -1) {
     queueAnimatedSticker.push(message)
     return
@@ -72,11 +72,11 @@ exports.sendAnimatedSticker = async function (message) {
         image.write('./media/sticker/firstframe' + message.from + '.png')
       })
       .catch((err) => {
-        // console.log('ERROR: ' + err)
+        console.log('ERROR: ' + err)
       })
   }
   await Sleep(1000)
-  // console.log(dimensions.width + '  ' + dimensions.height)
+  console.log(dimensions.width + '  ' + dimensions.height)
   if (dimensions.width < dimensions.height) {
     await nrc.run('mogrify -bordercolor transparent -border ' + (dimensions.height - dimensions.width) / 2 + 'x0 ./media/sticker/' + message.from + '.gif')
     await nrc.run('mogrify -bordercolor transparent -border ' + (dimensions.height - dimensions.width) / 2 + 'x0 ./media/sticker/firstframe' + message.from + '.png')
@@ -87,7 +87,7 @@ exports.sendAnimatedSticker = async function (message) {
   }
   await nrc.run('convert ' + './media/sticker/firstframe' + message.from + '.png' + ' ./media/sticker/' + message.from + '.gif -resize 256x256' + ' ./media/sticker/' + message.from + '.gif')
   stats = fs.statSync('./media/sticker/' + message.from + '.gif')
-  // console.log(stats['size'])
+  console.log(stats['size'])
   try {
     await nrc.run(`gif2webp ./media/sticker/${message.from}.gif -o ./media/sticker/${message.from}.webp`)
     await nrc.run(`webpmux -set exif ./media/sticker/data.exif ./media/sticker/${message.from}.webp -o ./media/sticker/${message.from}.webp`)
@@ -111,7 +111,7 @@ exports.sendAnimatedSticker = async function (message) {
   delete require.cache[require.resolve('./queue')]
 
   } catch(err) {
-	// console.log(err)
+     console.log(err)
 }
 }
 

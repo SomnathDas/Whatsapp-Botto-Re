@@ -29,9 +29,10 @@ Also if any module is missing then install it by either searching for that npm p
 
 ## Install the needed programs
 
+Needed for creating animated stickers
 * FFmepeg: [Download](https://ffmpeg.org/download.html)
 * Imagemagick: [Download](https://imagemagick.org/script/download.php)
-* Libwebp: [Download](https://developers.google.com/speed/webp/download)
+* Libwebp: [Download](https://developers.google.com/speed/webp/download) 
 
 ## Starting the server
 

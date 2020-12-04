@@ -11,7 +11,7 @@
 
 ### 🏠 [Homepage](https://github.com/SomnathDas/Whatsapp-Botto-Re)
 
-### :green_book: [Whatsapp Group](https://chat.whatsapp.com/DSz1dsJ4mLjBAhj1a6Dsaf)
+### :green_book: [Whatsapp Group](https://chat.whatsapp.com/DSz1dsJ4mLjBAhj1a6Dsaf) !
 
 
 ## Prerequisites
@@ -68,7 +68,6 @@ Needed for creating animated stickers
 | Send Group info               | :heavy_check_mark: |
 | Welcome new members           | :heavy_check_mark: |
 | Enable and Disable NSFW       | :heavy_check_mark: |
-
 
 
 ## 🤝 Contributing

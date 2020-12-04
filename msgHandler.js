@@ -498,8 +498,9 @@ ${desc}`)
           break
         case 'wallpaper':
             if (args.length == 0) return client.reply(from, 'Wrong Format!', id)
-            const result = await wallpaperanime()
-            client.sendFileFromUrl(from, result).catch(err => console.log('[ERROR] send image'))
+            const query = body.slice(6)
+            const walls = await func.wall(query)
+            await client.sendFileFromUrl(from, walls, 'walls.jpg', '', id)
             break
         case 'waifu': 
             const data = fs.readFileSync('./lib/waifu.json')

@@ -51,7 +51,7 @@ module.exports = msgHandler = async (client, message) => {
 	const groupAdmins = isGroupMsg ? await client.getGroupAdmins(groupId) : ''
 	const isGroupAdmins = isGroupMsg ? groupAdmins.includes(sender.id) : false
         const isBotGroupAdmins = isGroupMsg ? groupAdmins.includes(botNumber + '@c.us') : false
-
+	if (isCmd && ban.includes(sender.id)) return client.reply(from, 'You\'re banned!', id)
 	if ((message.type == 'sticker') && (stickerArr.includes(message.filehash))) return await sticker.stickerHandler(message, client, isGroupAdmins, isBotGroupAdmins, groupAdmins, color, time)
 	if (isGroupMsg && isRule && (type === 'chat' && message.body.includes('chat.whatsapp.com') && isBotGroupAdmins) && !isGroupAdmins) return await client.removeParticipant(chat.id, author)
         if (isCmd && msgFilter.isFiltered(from) && !isGroupMsg) return console.log(color('[SPAM!]', 'red'), color(time, 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname))
@@ -61,8 +61,6 @@ module.exports = msgHandler = async (client, message) => {
         if (isCmd && !isGroupMsg) console.log(color('[EXEC]'), color(time, 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname))
         if (isCmd && isGroupMsg) console.log(color('[EXEC]'), color(time, 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname), 'in', color(name))
 
-
-        const isBanned = ban.includes(sender.id)
         const owners = ['919744375687@c.us'] // eg [9190xxxxxxxx, 49xxxxxxxx] replace my number also 
         const isowner = owners.includes(sender.id) 
 
@@ -70,7 +68,6 @@ module.exports = msgHandler = async (client, message) => {
 
         const uaOverride = 'WhatsApp/2.2029.4 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
         const isUrl = new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/gi)
-        if (!isBanned) {
             switch (command) {
             case 'sticker':
 			//console.log(type)
@@ -104,8 +101,8 @@ module.exports = msgHandler = async (client, message) => {
             const ttsAr = require('node-gtts')('ar');
 
             const dataText = body.slice(8)
-            if (dataText === '') return client.reply(from, 'idiota!', id)
-            if (dataText.length > 500) return client.reply(from, 'O texto é muito longo!', id)
+            if (dataText === '') return client.reply(from, '....', id)
+            if (dataText.length > 500) return client.reply(from, 'Text?', id)
             var dataBhs = body.slice(5, 7)
             if (dataBhs == 'id') {
                 ttsId.save('./media/tts/resId.mp3', dataText, function () {
@@ -539,9 +536,9 @@ ${desc}`)
             break
         default:
             console.log(color('[PREFIX-CALL]', 'green'), color(time, 'yellow'), 'Command from', color(pushname))
+ 	    return client.reply(from, 'No such Command!', id)
             break
         }
-    }
     } catch (err) {
         console.log(color('[ERROR]', 'red'), err)
     }

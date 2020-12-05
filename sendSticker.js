@@ -91,8 +91,12 @@ module.exports.sendAnimatedSticker = async function (message) {
   try {
     await nrc.run(`gif2webp ./media/sticker/${message.from}.gif -o ./media/sticker/${message.from}.webp`)
     await nrc.run(`webpmux -set exif ./media/sticker/data.exif ./media/sticker/${message.from}.webp -o ./media/sticker/${message.from}.webp`)
+    if (fs.existsSync(`./media/sticker/${message.from}.webp`)) {
     const contents = await fs.readFile(`./media/sticker/${message.from}.webp`, {encoding: 'base64'}) 
     await sclient.sendRawWebpAsSticker(message.from, contents)
+    } else {
+    const gifData = await fs.readFile(`./media/sticker/${message.from}.webp`, {encoding: 'base64'})
+    await sclient.sendImageAsSticker(message.from, `data:image/gif;base64,${gifData}`)
   } catch (error) {
     console.log(error)
     if (String(error) == 'Error: Processed image is too large for the WebP format') {

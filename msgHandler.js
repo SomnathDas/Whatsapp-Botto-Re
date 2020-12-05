@@ -534,6 +534,7 @@ ${desc}`)
             break
         default:
             console.log(color('[PREFIX-CALL]', 'green'), color(time, 'yellow'), 'Command from', color(pushname))
+	    return client.reply(from, 'No such command!', id)
             break
         }
     }

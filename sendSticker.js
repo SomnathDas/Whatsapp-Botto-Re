@@ -97,6 +97,7 @@ module.exports.sendAnimatedSticker = async function (message) {
     } else {
     const gifData = await fs.readFile(`./media/sticker/${message.from}.webp`, {encoding: 'base64'})
     await sclient.sendImageAsSticker(message.from, `data:image/gif;base64,${gifData}`)
+    }
   } catch (error) {
     console.log(error)
     if (String(error) == 'Error: Processed image is too large for the WebP format') {

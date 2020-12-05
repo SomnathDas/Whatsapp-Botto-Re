@@ -11,7 +11,7 @@
 
 ### 🏠 [Homepage](https://github.com/SomnathDas/Whatsapp-Botto-Re)
 
-### :green_book: [Whatsapp Group](https://chat.whatsapp.com/DSz1dsJ4mLjBAhj1a6Dsaf) !
+### :green_book: [Whatsapp Group](https://chat.whatsapp.com/DSz1dsJ4mLjBAhj1a6Dsaf) (Updated)!
 
 
 ## Prerequisites

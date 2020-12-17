@@ -13,11 +13,12 @@
 
 ### :green_book: [Whatsapp Group](https://chat.whatsapp.com/DSz1dsJ4mLjBAhj1a6Dsaf) (Updated)!
 
-
 ## Prerequisites
 
 - npm >=2.0.32
 - node >=12.18.3
+
+
 
 ## Install the node modules
 
@@ -26,6 +27,9 @@ Also if any module is missing then install it by either searching for that npm p
 ```sh
 > npm install
 ```
+## Easy Installer By [@shubham8550](https://github.com/shubham8550)
+
+### [Repo](https://github.com/shubham8550/Botto-Re-Whats-app-Bot-installer-Scripts)
 
 ## Install the needed programs
 

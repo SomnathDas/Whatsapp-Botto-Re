@@ -92,6 +92,13 @@ module.exports = msgHandler = async (client, message) => {
                   		client.reply(from, 'You did not tag a picture or video, Baka', message.id)
                     	}
 		break
+       case 'toimg':
+       	if(!quotedMsg) return client.reply(from, '.', id)
+       	if(quotedMsg) {
+	const mediaData = await decryptMedia(quotedMsg)
+	const imageBase64 = `data:${quotedMsg.mimetype};base64,${mediaData.toString('base64')}`
+	await client.sendFile(from, imageBase64, 'img.jpg')}
+			break
        case 'tts': //You can add as many as you want, just find the language code and modify the code :)
             if (args.length === 1) return client.reply(from, '  *Usage #tts language text*')
             const ttsId = require('node-gtts')('id');
@@ -457,6 +464,70 @@ ${desc}`)
            } catch (err) {
              console.error(err.message)
              await client.sendFileFromUrl(from, errorurl2, 'error.png', '💔️ Sorry, Couldn\'t find the requested anime')
+           }
+          break
+	case 'manga':
+	const keywrd = (args)
+            try {
+            const data = await fetch(
+           `https://api.jikan.moe/v3/search/manga?q=${keywrd}`
+            )
+            const parsed = await data.json()
+            if (!parsed) {
+              await client.sendFileFromUrl(from, errorurl2, 'error.png', 'Sorry, Couldn\'t find the requested manga', id)
+              console.log("Sent!")
+              return null
+              }
+            const { title, synopsis, chapters, url, volumes, score, image_url } = parsed.results[0]
+            const content = `*Manga found*
+
+*Title:* ${title}
+
+*Chapters:* ${chapters}
+
+*Volumes:* ${volumes}
+
+*Score:* ${score}
+
+*Synopsis:* ${synopsis}
+
+*Link*: ${url}`
+
+            const image = await bent("buffer")(image_url)
+            const base64 = `data:image/jpg;base64,${image.toString("base64")}`
+            client.sendImage(from, base64, title, content)
+           } catch (err) {
+             console.error(err.message)
+             await client.sendFileFromUrl(from, errorurl2, 'error.png', 'Sorry, Couldn\'t find the requested manga')
+           }
+          break
+		  
+	case 'chara':
+            try {
+            const data = await fetch(
+           `https://api.jikan.moe/v3/search/character?q=${keywrd}`
+            )
+            const parsed = await data.json()
+            if (!parsed) {
+              await client.sendFileFromUrl(from, errorurl2, 'error.png', 'Sorry, Couldn\'t find the requested character', id)
+              console.log("Sent!")
+              return null
+              }
+            const { name, alternative_names, url, image_url } = parsed.results[0]
+            const content = `*Character found!*
+
+*Name:* ${name}
+
+*Nickname:* ${alternative_names}
+
+*Link*: ${url}`
+
+            const image = await bent("buffer")(image_url)
+            const base64 = `data:image/jpg;base64,${image.toString("base64")}`
+            client.sendImage(from, base64, name, content)
+           } catch (err) {
+             console.error(err.message)
+             await client.sendFileFromUrl(from, errorurl2, 'error.png', 'Sorry, Couldn\'t find the requested character')
            }
           break
         case 'wallpaper':

@@ -503,9 +503,10 @@ ${desc}`)
           break
 		  
 	case 'chara':
+ 	    const keywr = (args)
             try {
             const data = await fetch(
-           `https://api.jikan.moe/v3/search/character?q=${keywrd}`
+           `https://api.jikan.moe/v3/search/character?q=${keywr}`
             )
             const parsed = await data.json()
             if (!parsed) {

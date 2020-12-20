@@ -94,11 +94,14 @@ module.exports = msgHandler = async (client, message) => {
 		break
        case 'toimg':
        	if(!quotedMsg) return client.reply(from, '.', id)
-       	if(quotedMsg) {
+		else if (quotedMsg && quotedMsg.type == 'video'){
+		return client.reply(from, 'that\'s not a sticker, Baka', id)
+		} if(quotedMsg) {
 	const mediaData = await decryptMedia(quotedMsg)
 	const imageBase64 = `data:${quotedMsg.mimetype};base64,${mediaData.toString('base64')}`
-	await client.sendFile(from, imageBase64, 'img.jpg')}
-			break
+	await client.sendFile(from, imageBase64, 'img.jpg')
+		}
+		break
        case 'tts': //You can add as many as you want, just find the language code and modify the code :)
             if (args.length === 1) return client.reply(from, '  *Usage #tts language text*')
             const ttsId = require('node-gtts')('id');

@@ -94,7 +94,7 @@ Give a ⭐️ if this project helped you!
 
 🌺 **Alen Yohannan** 
 * Twitter: 
-* GitHub: 
+* GitHub: [@AlenSaito1](https://github.com/AlenSaito1)
 * Instagram:
 
 This project is [GNU General Public License v3.0](https://github.com/SomnathDas/Whatsapp-Botto-Re/blob/master/LICENSE) licensed.

@@ -11,7 +11,7 @@
 
 ### 🏠 [Homepage](https://github.com/SomnathDas/Whatsapp-Botto-Re)
 
-### :green_book: [Whatsapp Group](https://chat.whatsapp.com/DSz1dsJ4mLjBAhj1a6Dsaf) (Updated)!
+### :green_book: [Whatsapp Group](https://chat.whatsapp.com/JGR7ESRfNHjHScRYfglQcg) (Updated)!
 
 ## Prerequisites
 
@@ -83,6 +83,19 @@ Contributions, issues and feature requests are welcome!<br />Feel free to check 
 Give a ⭐️ if this project helped you!
 
 ## 📝 License
+
+##Original Authors 
+
+🐧 **Somnath Das**
+
+* Twitter: [@aksd3247](https://twitter.com/aksd3247)
+* Github: [@SomnathDas](https://github.com/SomnathDas)
+* Instagram: [@samurai3247](https://www.instagram.com/samurai3247/)
+
+🌺 **Alen Yohannan** 
+* Twitter: 
+* GitHub: 
+* Instagram:
 
 This project is [GNU General Public License v3.0](https://github.com/SomnathDas/Whatsapp-Botto-Re/blob/master/LICENSE) licensed.
 

@@ -75,7 +75,7 @@ Edit `config.json` to customize the bot as needed
 > npm install
 ```
 
-## Starting the server
+# Starting the server
 
 ```sh
 > npm start

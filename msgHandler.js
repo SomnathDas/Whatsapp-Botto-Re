@@ -38,12 +38,11 @@ module.exports = msgHandler = async (client, message) => {
         let { body } = message
         const { name } = chat
         let { pushname, verifiedName } = sender
-        const prefix = '='
         body = (type === 'chat' && body.startsWith(prefix)) ? body : ((type === 'image' && caption || type === 'video' && caption) && caption.startsWith(prefix)) ? caption : ''
         const command = body.slice(prefix.length).trim().split(/ +/).shift().toLowerCase()
         const args = body.slice(prefix.length).trim().split(/ +/).slice(1)
         const isCmd = body.startsWith(prefix)
-	const isRule = ruleArr.includes(chat.id)
+	    const isRule = ruleArr.includes(chat.id)
         const time = moment(t * 1000).format('DD/MM HH:mm:ss')
 
 	const botNumber = await client.getHostNumber()
@@ -60,9 +59,8 @@ module.exports = msgHandler = async (client, message) => {
         if (!isCmd && isGroupMsg) return msg(message, color, false, time)
         if (isCmd && !isGroupMsg) console.log(color('[EXEC]'), color(time, 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname))
         if (isCmd && isGroupMsg) console.log(color('[EXEC]'), color(time, 'yellow'), color(`${command} [${args.length}]`), 'from', color(pushname), 'in', color(name))
-
-        const owners = ['919744375687@c.us'] // eg [9190xxxxxxxx, 49xxxxxxxx] replace my number also 
-        const isowner = owners.includes(sender.id) 
+        // eg [9190xxxxxxxx, 49xxxxxxxx] replace my number also 
+        const isowner = botadmins.includes(sender.id) 
 
         msgFilter.addFilter(from)
 

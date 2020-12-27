@@ -1,10 +1,11 @@
 const { create } = require('@open-wa/wa-automate')
 const msgHandler = require('./msgHandler')
 const fs = require('fs-extra')
+const config = JSON.parse(fs.readFileSync('./config.json'))
 const serverOption = {
     headless: true,
     cacheEnabled: false,
-    useChrome: false,
+    useChrome: true,
     chromiumArgs: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
@@ -27,8 +28,11 @@ if (opsys === 'win32' || opsys === 'win64') {
 
 const startServer = async (client) => {
         global.sclient = client
-	sendingSticker = []
-    	queueSticker = []
+	    sendingSticker = []
+        queueSticker = []
+        botadmins = config.botadmins
+        prefix = config.prefix
+        botname = config.botname
     	global.sendingAnimatedSticker = []
     	global.queueAnimatedSticker = []
     	global.amdownloaden = []
@@ -67,6 +71,18 @@ const startServer = async (client) => {
         })
     }
 
-create('session', serverOption)
+create({"headless": true,
+        "cacheEnabled": false,
+        "useChrome": true,
+        "chromiumArgs": [
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--aggressive-cache-discard",
+            "--disable-cache",
+            "--disable-application-cache",
+            "--disable-offline-load-stale-cache",
+            "--disk-cache-size=0"
+        ]
+    })
     .then(async (client) => startServer(client))
     .catch((error) => console.log(error))

@@ -25,7 +25,15 @@
 
 </div>
 
-# Config
+# Prerequisites
+
+- git
+- npm >=2.0.32
+- node >=12.18.3
+
+# Setup
+
+## ✍️ Editing The Config
 
 Edit `config.json` to customize the bot as needed
 ```JSON
@@ -44,33 +52,24 @@ Edit `config.json` to customize the bot as needed
 `uaOverride`: Your user Agent<br>
 `botname`: The name of your bot<br>
 
-
-# Prerequisites
-
-- git
-- npm >=2.0.32
-- node >=12.18.3
-
-
-
-# Installation
+## 🔍 Installation
 
 * [Ffmpeg](https://ffmpeg.org/download.html)
 * [ImageMagick](https://imagemagick.org/script/download.php)
 * [Libwebp](https://developers.google.com/speed/webp/download) (optional)
 
-## Windows
+### Windows
 
 [Windows Easy Installer](https://github.com/shubham8550)
 
-## Linux
+### Linux
 
-Clone the repo 
+#### Clone the repo 
 
 ```sh
 >git clone https://github.com/SomnathDas/Whatsapp-botto-re
 ```
-Install the NPM Packages
+#### Install the NPM Packages
 
 ```sh
 > npm install

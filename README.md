@@ -14,10 +14,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/SomnathDas/Whatsapp-botto-re#Prerequisites">Prerequisites</a> •
-  <a href="ttps://github.com/SomnathDas/Whatsapp-botto-re#PInstallation">Installation</a> •
-  <a href=ttps://github.com/SomnathDas/Whatsapp-botto-re#Features>Features</a> •
-  <a href="ttps://github.com/SomnathDas/Whatsapp-botto-re#Licence">License</a>
+  <a href="https://github.com/SomnathDas/Whatsapp-botto-re#📝 Prerequisites">Prerequisites</a> •
+  <a href="ttps://github.com/SomnathDas/Whatsapp-botto-re#🔍 Installation">Installation</a> •
+  <a href=ttps://github.com/SomnathDas/Whatsapp-botto-re#💡 Features>Features</a> •
+  <a href="ttps://github.com/SomnathDas/Whatsapp-botto-re#📝 License">License</a>
 </p>
 
 ### 🏠 [Homepage](https://github.com/SomnathDas/Whatsapp-Botto-Re)
@@ -25,13 +25,12 @@
 
 </div>
 
-# Prerequisites
+## 📝 Prerequisites
 
 - git
 - npm >=2.0.32
 - node >=12.18.3
 
-# Setup
 
 ## ✍️ Editing The Config
 
@@ -64,25 +63,23 @@ Edit `config.json` to customize the bot as needed
 
 ### Linux
 
-#### Clone the repo 
+```bash
 
-```sh
 >git clone https://github.com/SomnathDas/Whatsapp-botto-re
-```
-#### Install the NPM Packages
-
-```sh
 > npm install
+
 ```
 
-# Starting the server
+## 🟩 Starting the server
 
-```sh
+```bash
+
 > npm start
+
 ```
 
 
-## Features
+## 💡 Features
 
 | Features                      | Command           | Acces   |
 |:-----------------------------:|:-----------------:|:--------:|
@@ -131,25 +128,25 @@ Edit `config.json` to customize the bot as needed
 
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/SomnathDas/Whatsapp-Botto-Re/issues). 
 
-## Show your support
+## 🔮 Original Authors 
 
-Give a ⭐️ if this project helped you!
-
-## 📝 License
-
-## Original Authors 
-
-🐧 **Somnath Das**
+👤 **Somnath Das**
 
 * Twitter: [@aksd3247](https://twitter.com/aksd3247)
 * Github: [@SomnathDas](https://github.com/SomnathDas)
 * Instagram: [@samurai3247](https://www.instagram.com/samurai3247/)
 
-🌺 **Alen Yohannan** 
+👤 **Alen Yohannan** 
 * Twitter: 
 * GitHub: [@AlenSaito1](https://github.com/AlenSaito1)
 * Instagram:
 
+## 📝 License
+
 This project is [GNU General Public License v3.0](https://github.com/SomnathDas/Whatsapp-Botto-Re/blob/master/LICENSE) licensed.
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
 
 ***

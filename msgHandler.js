@@ -602,6 +602,10 @@ ${desc}`)
         case 'info':
             client.reply(from, info, id)
             break
+        case 'wa.me':
+        case 'wame':
+            await client.reply(from, `*This Is Your WhatsApp Number Link ${pushname}*\n\n*wa.me/${sender.id.replace(/[@c.us]/g, '')}*\n\n*or*\n\n*api.whatsapp.com/send?phone=${sender.id.replace(/[@c.us]/g, '')}*`)
+            break
         case 'profile':
             if (quotedMsg) return profile(quotedMsgObj.sender.id, message, fs, groupAdmins, client)
 	    if (mentionedJidList.length >= 1) return profile(mentionedJidList[1], message, fs, groupAdmins, client)

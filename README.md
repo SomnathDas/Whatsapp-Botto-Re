@@ -81,6 +81,8 @@ Edit `config.json` to customize the bot as needed
 
 ## 💡 Features
 
+### Prefix = #
+
 | Features                      | Command           | Acces   |
 |:-----------------------------:|:-----------------:|:--------:|
 | Convert Images into stickers  | #sticker          | Everyone |
@@ -99,17 +101,6 @@ Edit `config.json` to customize the bot as needed
 | Promote members               | #promote @user    | Admins   |
 | Demote admins                 | #demote @user     | Admins   |
 | Display User profile          | #profile          | Everyone |
-
-
-### Poll commands 
- 
-| Action            | Command            | Acess       |
-|:-----------------:|:------------------:|:-----------:|
-| Create/Reset Poll | #resetpoll title   | Admins      |
-| Add Candidates    | #add candidate name| Admins      |
-| Vote              | #vote candidate no | Everyone    |
-| see the status/result | #poll          | Everyone    |
-
 
 ### Random results
 

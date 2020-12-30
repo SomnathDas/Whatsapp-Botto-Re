@@ -111,8 +111,8 @@ module.exports = msgHandler = async (client, message) => {
         
         try {
             const ttsget = require('node-gtts')(dataBhs.toLowerCase())
-            ttsget.save('./tts/restts.mp3', dataText, () => 
-                            client.sendPtt(from, './tts/restts.mp3', id))
+            ttsget.save('./media/tts/restts.mp3', dataText, () => 
+                            client.sendPtt(from, './media/tts/restts.mp3', id))
         } catch (error) {
             return client.reply(from, 'Failed to get tts, is the given language code valid?', id)
         }

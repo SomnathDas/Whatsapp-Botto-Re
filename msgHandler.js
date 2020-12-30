@@ -100,42 +100,25 @@ module.exports = msgHandler = async (client, message) => {
 	await client.sendFile(from, imageBase64, 'img.jpg')
 		}
 		break
-       case 'tts': //You can add as many as you want, just find the language code and modify the code :)
-            if (args.length === 1) return client.reply(from, '  *Usage #tts language text*')
-            const ttsId = require('node-gtts')('id');
-            const ttsEn = require('node-gtts')('en');
-            const ttsPt = require('node-gtts')('pt');
-            const ttsJp = require('node-gtts')('ja');
-            const ttsAr = require('node-gtts')('ar');
-
+        
+	case 'tts':
+        if (args.length === 1) return client.reply(from, '  *Usage #tts language text*')
+            const dataBhs = body.slice(5, 7)
             const dataText = body.slice(8)
-            if (dataText === '') return client.reply(from, '....', id)
-            if (dataText.length > 500) return client.reply(from, 'Text?', id)
-            var dataBhs = body.slice(5, 7)
-            if (dataBhs == 'id') {
-                ttsId.save('./media/tts/resId.mp3', dataText, function () {
-                    client.sendPtt(from, './media/tts/resId.mp3', id)
-                })
-            } else if (dataBhs == 'en') {
-                ttsEn.save('./media/tts/resEn.mp3', dataText, function () {
-                    client.sendPtt(from, './media/tts/resEn.mp3', id)
-                })
-            } else if (dataBhs == 'jp') {
-                ttsJp.save('./media/tts/resJp.mp3', dataText, function () {
-                    client.sendPtt(from, './media/tts/resJp.mp3', id)
-                })
-            } else if (dataBhs == 'pt') {
-                ttsPt.save('./media/tts/resPt.mp3', dataText, ()=> {
-                    client.sendPtt(from, './media/tts/resPt.mp3');
-                })
-            } else if (dataBhs == 'ar') {
-                ttsAr.save('./media/tts/resAr.mp3', dataText, function () {
-                    client.sendPtt(from, './media/tts/resAr.mp3', id)
-                })
-            } else {
-                client.reply(from, 'Language not supported!', id)
-            }
-            break
+
+        if (dataText === '') return client.reply(from, '....', id)
+        if (dataText.length > 500) return client.reply(from, 'Text?', id)
+        
+        try {
+            const ttsget = require('node-gtts')(dataBhs.toLowerCase())
+            ttsget.save('./tts/restts.mp3', dataText, () => 
+                            client.sendPtt(from, './tts/restts.mp3', id))
+        } catch (error) {
+            return client.reply(from, 'Failed to get tts, is the given language code valid?', id)
+        }
+
+        break
+			    
         case 'quotemaker':
             arg = body.trim().split('|')
             if (arg.length >= 3) {

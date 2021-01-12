@@ -20,8 +20,8 @@
   <a href="ttps://github.com/SomnathDas/Whatsapp-botto-re#📝 License">License</a>
 </p>
 
-### 🏠 [Homepage](https://github.com/SomnathDas/Whatsapp-Botto-Re)
-[Whatsapp Group](https://chat.whatsapp.com/DchcgNLvkluIUe0DMf13QR) (Updated)!
+### 🏠 [Homepage](https://ewh-dev.herokuapp.com/index.html)
+### [Whatsapp Group](https://chat.whatsapp.com/DchcgNLvkluIUe0DMf13QR) 
 
 </div>
 
